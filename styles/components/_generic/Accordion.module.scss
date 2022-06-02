@@ -1,0 +1,25 @@
+@use "../../variables.scss";
+
+.accordion {
+    width: auto;
+}
+
+.panelHeader {
+    padding: variables.$space-medium;
+    background-color: variables.$color-light-gray;
+    transition: variables.$transition-quick;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.panelHeader:hover {
+    background-color: rgba(variables.$color-light-gray, 0.7)
+}
+.primaryHeaderText {
+    font-weight: bold;
+}
+
+.content {
+    padding: variables.$space-medium;
+}

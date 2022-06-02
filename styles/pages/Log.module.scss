@@ -1,0 +1,13 @@
+@use "../variables.scss";
+
+.excercisesTable > tr > td {
+    border: none;
+    padding: variables.$space-small variables.$space-large;
+}
+
+.buttonsDemoRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: variables.$space-medium;
+}

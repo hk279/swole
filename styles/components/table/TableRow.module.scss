@@ -1,0 +1,6 @@
+@use "../../variables.scss";
+
+.expandable {
+    cursor: pointer;
+    transition: variables.$transition-quick;
+}

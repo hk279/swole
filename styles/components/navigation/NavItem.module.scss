@@ -1,0 +1,21 @@
+@use "../../variables.scss";
+
+.navItem {
+    display: inline;
+    text-align: center;
+    padding: 1em;
+    background-color: variables.$color-light-gray;
+    width: fit-content;
+    cursor: pointer;
+    transition: variables.$transition-quick;
+}
+
+.navItem:hover {
+    background-color: rgba(variables.$color-light-gray, 0.7)
+}
+
+.navItem.active {
+    background-color: variables.$color-primary;
+    color: white;
+    border-bottom: 4px solid black;
+}

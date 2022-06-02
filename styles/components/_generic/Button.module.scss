@@ -1,0 +1,62 @@
+@use "../../variables.scss";
+
+.button {
+    border: 2px solid;
+    border-radius: variables.$space-medium;
+    padding: variables.$space-medium;
+    transition: variables.$transition-quick;
+    font-size: variables.$font-size-medium;
+    cursor: pointer;
+}
+.button:hover {
+    opacity: 70%;
+}
+
+/* Type */
+.primary {
+    background-color: variables.$color-primary;
+    border-color: variables.$color-primary;
+    color: white;
+}
+.secondary {
+    background: none;
+    border-color: variables.$color-gray;
+}
+.secondary:hover {
+    color: variables.$color-primary;
+    border-color: variables.$color-primary;
+}
+
+/* Size */
+.small {
+    font-size: variables.$font-size-small;
+    padding: variables.$space-small;
+    border-radius: variables.$space-small;
+}
+.large {
+    font-size: variables.$font-size-large;
+    padding: variables.$space-large;
+    border-radius: variables.$space-medium;
+}
+
+/* Color */
+.danger.primary {
+    color: white;
+    background-color: variables.$color-error;
+    border-color: variables.$color-error;
+}
+.danger.secondary {
+    background: none;
+    color: variables.$color-error;
+    border-color: variables.$color-error;
+}
+.success.primary {
+    color: white;
+    background-color: variables.$color-success;
+    border-color: variables.$color-success;
+}
+.success.secondary {
+    background: none;
+    color: variables.$color-success;
+    border-color: variables.$color-success;
+}

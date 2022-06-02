@@ -1,0 +1,12 @@
+.header {
+    padding: 2em;
+}
+
+.title {
+    display: inline-block;
+    width: 20vw;
+}
+
+.nav {
+    display: inline;
+}
