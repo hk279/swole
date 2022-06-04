@@ -1,0 +1,26 @@
+@use "../../variables.scss";
+
+.input {
+    border: 1px solid black;
+    border-radius: variables.$space-small;
+    padding: variables.$space-small;
+}
+
+.label {
+    margin-right: variables.$space-medium;
+}
+
+.disabled {
+    cursor: not-allowed;
+    border-color: variables.$color-gray;
+    background-color: variables.$color-light-gray;
+}
+
+.invalid {
+    border-color: variables.$color-error;
+    background-color: rgba(variables.$color-error, 0.1);
+}
+
+.invalid:focus-visible {
+    outline-color: variables.$color-error;
+}

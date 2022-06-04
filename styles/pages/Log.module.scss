@@ -11,3 +11,9 @@
     justify-content: space-between;
     margin-bottom: variables.$space-medium;
 }
+
+.inputsDemo {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+}

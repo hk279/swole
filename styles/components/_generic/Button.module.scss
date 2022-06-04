@@ -11,6 +11,10 @@
 .button:hover {
     opacity: 70%;
 }
+.button:focus-visible {
+    outline: 2px double;
+    outline-offset: 2px;
+}
 
 /* Type */
 .primary {
@@ -20,7 +24,6 @@
 }
 .secondary {
     background: none;
-    border-color: variables.$color-gray;
 }
 .secondary:hover {
     color: variables.$color-primary;
@@ -59,4 +62,18 @@
     background: none;
     color: variables.$color-success;
     border-color: variables.$color-success;
+}
+
+/* Focus */
+.secondary:focus-visible {
+    outline-color: currentColor;
+}
+.primary:focus-visible {
+    outline-color: variables.$color-primary;
+}
+.danger.primary:focus-visible {
+    outline-color: variables.$color-error;
+}
+.success.primary:focus-visible {
+    outline-color: variables.$color-success;
 }

@@ -3,6 +3,7 @@ import Layout from "../components/layout/Layout";
 import TableCell from "../components/table/TableCell";
 import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
+import Input from "../components/_generic/Input";
 import styles from "../styles/pages/Log.module.scss";
 
 const exampleWorkouts: any = [
@@ -80,6 +81,17 @@ const Log: NextPage = () => {
                     <Button text="Normal button" success={true} />
                     <Button text="Large button" size="large" danger={true} />
                 </div>
+            </div>
+
+            <hr></hr>
+
+            <div className={styles.inputsDemo}>
+                <Input label="Name" />
+                <Input label="Weight" type="number" />
+                <Input label="Disabled" disabled={true} />
+                <Input label="MinLength" minLength={5} placeholder="Minimum length is 5" />
+                <Input label="MaxLength" maxLength={10} placeholder="Maximum length is 10" />
+                <Input label="MinAndMaxLength" minLength={5} maxLength={10} />
             </div>
         </Layout>
     );
