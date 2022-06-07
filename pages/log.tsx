@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
 import TableCell from "../components/table/TableCell";
+import TableRow from "../components/table/TableRow";
 import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
@@ -8,6 +9,7 @@ import styles from "../styles/pages/Log.module.scss";
 
 const exampleWorkouts: any = [
     {
+        id: "1",
         date: "1.2.2022",
         excercises: [
             { name: "Curls", sets: 3, weight: 20 },
@@ -18,6 +20,7 @@ const exampleWorkouts: any = [
         ],
     },
     {
+        id: "2",
         date: "2.3.2022",
         excercises: [
             { name: "Shoulder press", sets: 3, weight: 20 },
@@ -37,17 +40,20 @@ const Log: NextPage = () => {
                             <Accordion.Panel
                                 primaryHeader={workout.date}
                                 secondaryHeader={workout.excercises.length + " excercises"}
+                                key={workout.id}
                             >
                                 <table className={styles.excercisesTable}>
-                                    {workout.excercises.map((excercise: any) => {
-                                        return (
-                                            <tr>
-                                                <TableCell>{excercise.name}</TableCell>
-                                                <TableCell>{excercise.sets} sets</TableCell>
-                                                <TableCell>{excercise.weight}kg</TableCell>
-                                            </tr>
-                                        );
-                                    })}
+                                    <tbody>
+                                        {workout.excercises.map((excercise: any, index: number) => {
+                                            return (
+                                                <TableRow key={workout.id + "-" + index}>
+                                                    <TableCell>{excercise.name}</TableCell>
+                                                    <TableCell>{excercise.sets} sets</TableCell>
+                                                    <TableCell>{excercise.weight}kg</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </tbody>
                                 </table>
                             </Accordion.Panel>
                         );

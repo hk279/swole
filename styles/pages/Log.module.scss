@@ -1,6 +1,6 @@
 @use "../variables.scss";
 
-.excercisesTable > tr > td {
+.excercisesTable > tbody> tr > td {
     border: none;
     padding: variables.$space-small variables.$space-large;
 }
