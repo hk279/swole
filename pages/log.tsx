@@ -5,6 +5,7 @@ import TableRow from "../components/table/TableRow";
 import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
+import Select from "../components/_generic/Select";
 import styles from "../styles/pages/Log.module.scss";
 
 const exampleWorkouts: any = [
@@ -58,6 +59,11 @@ const Log: NextPage = () => {
                             </Accordion.Panel>
                         );
                     })}
+                    <Accordion.Panel primaryHeader={"Test"} secondaryHeader={"Example"} iconType="plusminus">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum repellat fugiat qui quo
+                        repudiandae assumenda odio totam nostrum deleniti praesentium! Facere ullam harum neque, sed
+                        dolor explicabo accusamus! Obcaecati, delectus?
+                    </Accordion.Panel>
                 </Accordion>
             </div>
 
@@ -98,6 +104,20 @@ const Log: NextPage = () => {
                 <Input label="MinLength" minLength={5} placeholder="Minimum length is 5" />
                 <Input label="MaxLength" maxLength={10} placeholder="Maximum length is 10" />
                 <Input label="MinAndMaxLength" minLength={5} maxLength={10} />
+            </div>
+
+            <hr></hr>
+
+            <div className={styles.selectDemo}>
+                <Select label="Example">
+                    <Select.Option value="First">First</Select.Option>
+                    <Select.Option value="Second">Second</Select.Option>
+                    <Select.Option value="Third">Second</Select.Option>
+                </Select>
+
+                <Select label="Disabled example" disabled={true}>
+                    <Select.Option value="First">First</Select.Option>
+                </Select>
             </div>
         </Layout>
     );
