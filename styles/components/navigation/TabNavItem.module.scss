@@ -1,21 +1,22 @@
 @use "../../variables.scss";
 
-.navItem {
+.tabNavItem {
     display: inline;
     text-align: center;
     padding: 1em;
-    background-color: variables.$color-light-gray;
+    background-color: variables.$color-gray;
     width: fit-content;
     cursor: pointer;
     transition: variables.$transition-quick;
+    flex: 1;
 }
 
-.navItem:hover {
-    background-color: rgba(variables.$color-light-gray, 0.7)
+.tabNavItem:hover {
+    background-color: variables.$color-light-gray;
 }
 
-.navItem.active {
+.tabNavItem.active {
     background-color: variables.$color-primary;
     color: white;
-    border-bottom: 4px solid black;
+    border-top: 4px solid black;
 }

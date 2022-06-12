@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import styles from "../../styles/components/navigation/NavItem.module.scss";
+import styles from "../../styles/components/navigation/TabNavItem.module.scss";
 
 type Props = { label: string; route: string; disabled?: boolean };
 
-function NavItem({ label, route, disabled = false }: Props) {
+function TabNavItem({ label, route, disabled = false }: Props) {
     const router = useRouter();
 
     return (
         <li
-            className={`${styles.navItem} ${router.pathname === route && styles.active}`}
+            className={`${styles.tabNavItem} ${router.pathname === route && styles.active}`}
             onClick={() => router.push(route)}
         >
             {label}
@@ -16,4 +16,4 @@ function NavItem({ label, route, disabled = false }: Props) {
     );
 }
 
-export default NavItem;
+export default TabNavItem;

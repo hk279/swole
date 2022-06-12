@@ -1,14 +1,14 @@
-import NavItem from "./NavItem";
+import NavBarItem from "./NavBarItem";
 import styles from "../../styles/components/navigation/NavBar.module.css";
 
-function NavBar() {
+const NavBar = () => {
     return (
         <ul className={styles.navBar}>
-            <NavItem label="Log" route="/log" />
-            <NavItem label="Excercises" route="/excercises" />
-            <NavItem label="Stats" route="/stats" />
+            <NavBarItem label="Log" route="/log" />
+            <NavBarItem label="Excercises" route="/excercises" />
+            <NavBarItem label="Stats" route="/stats" />
         </ul>
     );
-}
+};
 
 export default NavBar;
