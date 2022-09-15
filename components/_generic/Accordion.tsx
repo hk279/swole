@@ -20,10 +20,10 @@ interface PanelProps {
 }
 
 Accordion.Panel = ({ children, primaryHeader, secondaryHeader, iconType = "chevron" }: PanelProps) => {
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const handleRowClick = (): void => {
-        setIsExpanded(!isExpanded);
+        setIsOpen(!isOpen);
     };
 
     const handleEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
@@ -36,9 +36,9 @@ Accordion.Panel = ({ children, primaryHeader, secondaryHeader, iconType = "chevr
         let iconDefinition: IconDefinition;
 
         if (iconType === "chevron") {
-            iconDefinition = isExpanded ? faChevronUp : faChevronDown;
+            iconDefinition = isOpen ? faChevronUp : faChevronDown;
         } else {
-            iconDefinition = isExpanded ? faMinus : faPlus;
+            iconDefinition = isOpen ? faMinus : faPlus;
         }
 
         return <FontAwesomeIcon icon={iconDefinition} />;
@@ -56,7 +56,7 @@ Accordion.Panel = ({ children, primaryHeader, secondaryHeader, iconType = "chevr
                 {secondaryHeader && <span>{secondaryHeader}</span>}
                 {getIcon()}
             </div>
-            {isExpanded && <div className={styles.content}>{children}</div>}
+            {isOpen && <div className={styles.content}>{children}</div>}
         </div>
     );
 };

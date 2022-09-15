@@ -7,6 +7,7 @@
     transition: variables.$transition-quick;
     font-size: variables.$font-size-medium;
     cursor: pointer;
+    white-space: nowrap;
 }
 .button:hover {
     opacity: 70%;
@@ -14,6 +15,16 @@
 .button:focus-visible {
     outline: 2px double;
     outline-offset: 2px;
+}
+.buttonIconWithText {
+    aspect-ratio: 1;
+    margin-right: variables.$space-medium;
+}
+.buttonIconWithoutText {
+    aspect-ratio: 1;
+}
+.small.buttonIcon {
+    margin-right: variables.$space-small;
 }
 
 /* Type */
@@ -76,4 +87,41 @@
 }
 .success.primary:focus-visible {
     outline-color: variables.$color-success;
+}
+
+/* Dropdown */
+.dropdown {
+    width: min-content;
+    display: inline-block;
+    position: relative;
+}
+.dropdownMenu {
+    border: 1px solid variables.$color-gray;
+    position: absolute;
+    background-color: white;
+    z-index: 1;
+    box-sizing: border-box;
+    width: 100%;
+}
+.dropdownItem {
+    padding: variables.$space-medium;
+    cursor: pointer;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.hideMenu {
+    display: none;
+}
+.dropdownItem:hover {
+    background-color: variables.$color-light-gray;
+}
+.dropdownButtonIcon {
+    margin-left: variables.$space-medium;
+}
+.dropdownItemLarge > .dropdownButtonIcon {
+    margin-left: variables.$space-large;
+}
+.dropdownItem > .small,
+.dropdownItem > .large {
+    border-radius: none;
 }

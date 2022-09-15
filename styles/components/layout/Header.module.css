@@ -1,5 +1,8 @@
 .header {
-    padding: 2em;
+    margin: 0 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .title {

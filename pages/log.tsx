@@ -1,4 +1,6 @@
 import type { NextPage } from "next";
+import { useAuth0 } from "@auth0/auth0-react";
+import { faTrash, faCheck, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout/Layout";
 import TableCell from "../components/table/TableCell";
 import TableRow from "../components/table/TableRow";
@@ -32,6 +34,12 @@ const exampleWorkouts: any = [
 ];
 
 const Log: NextPage = () => {
+    const { isAuthenticated } = useAuth0();
+
+    if (!isAuthenticated) {
+        return <Layout pageTitle="Log"></Layout>;
+    }
+
     return (
         <Layout pageTitle="Log">
             <div style={{ width: "50vw" }}>
@@ -83,15 +91,21 @@ const Log: NextPage = () => {
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
-                    <Button text="Small button" size="small" primary={true} />
-                    <Button text="Normal button" success={true} primary={true} />
-                    <Button text="Large button" size="large" danger={true} primary={true} />
+                    <Button text="Small button" size="small" primary={true} icon={faInfoCircle} />
+                    <Button text="Normal button" success={true} primary={true} icon={faCheck} />
+                    <Button text="Large button" size="large" danger={true} primary={true} icon={faTrash} />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
-                    <Button text="Small button" size="small" />
-                    <Button text="Normal button" success={true} />
-                    <Button text="Large button" size="large" danger={true} />
+                    <Button text="Small button" size="small" icon={faInfoCircle} />
+                    <Button text="Normal button" success={true} icon={faCheck} />
+                    <Button text="Large button" size="large" danger={true} icon={faTrash} />
+                </div>
+
+                <div className={styles.buttonsDemoRow}>
+                    <Button size="small" icon={faInfoCircle} />
+                    <Button success={true} icon={faCheck} />
+                    <Button size="large" danger={true} icon={faTrash} />
                 </div>
             </div>
 

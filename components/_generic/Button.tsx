@@ -1,17 +1,34 @@
 import styles from "../../styles/components/_generic/Button.module.scss";
 import classnames from "classnames/bind";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-type Props = {
-    text: string;
+interface Props {
+    text?: string;
+    icon?: IconDefinition;
+    className?: string;
+    onClick?: (e: React.MouseEvent<HTMLElement>) => any;
     primary?: boolean;
     disabled?: boolean;
     size?: "small" | "medium" | "large";
     danger?: boolean;
     success?: boolean;
-};
+}
 
-function Button({ text, primary = false, disabled = false, size = "medium", danger = false, success = false }: Props) {
-    var cx = classnames.bind(styles);
+const Button = ({
+    text,
+    icon,
+    className,
+    onClick,
+    primary = false,
+    disabled = false,
+    size = "medium",
+    danger = false,
+    success = false,
+}: Props) => {
+    const cx = classnames.bind(styles);
+
+    const iconOnly = icon != null && text == null;
 
     const classNames: string = cx(
         "button",
@@ -21,14 +38,22 @@ function Button({ text, primary = false, disabled = false, size = "medium", dang
         { small: size === "small" },
         { large: size === "large" },
         { danger: danger },
-        { success: success }
+        { success: success },
+        { iconOnly: iconOnly },
+        className
     );
 
     return (
-        <button disabled={disabled} className={classNames}>
+        <button disabled={disabled} className={classNames} onClick={onClick}>
+            {icon && (
+                <FontAwesomeIcon
+                    className={`${!iconOnly ? styles.buttonIconWithText : styles.buttonIconWithoutText}`}
+                    icon={icon}
+                />
+            )}
             {text}
         </button>
     );
-}
+};
 
 export default Button;

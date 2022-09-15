@@ -1,0 +1,10 @@
+@use "../variables.scss";
+
+.excercise {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.excerciseAction {
+    margin-left: variables.$space-large
+}
