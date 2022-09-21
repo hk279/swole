@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import { useAuth0 } from "@auth0/auth0-react";
 import { faTrash, faCheck, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout/Layout";
 import TableCell from "../components/table/TableCell";
@@ -34,12 +33,6 @@ const exampleWorkouts: any = [
 ];
 
 const Log: NextPage = () => {
-    const { isAuthenticated } = useAuth0();
-
-    if (!isAuthenticated) {
-        return <Layout pageTitle="Log"></Layout>;
-    }
-
     return (
         <Layout pageTitle="Log">
             <div style={{ width: "50vw" }}>

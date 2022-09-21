@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactNode } from "react";
 import styles from "../../styles/components/_generic/Select.module.scss";
 
 interface Props {

@@ -1,9 +1,11 @@
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
+import ExcerciseInputBlock from "../components/pages/log/excerciseInputBlock";
 import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
 import styles from "../styles/pages/Excercises.module.scss";
+import { ExerciseType } from "../types/exercise";
 
 const groupedMockData = [
     [
@@ -13,6 +15,11 @@ const groupedMockData = [
     [{ name: "Squats", category: "Legs" }],
     [{ name: "Curls", type: "Strength", category: "Arms" }],
     [{ name: "Pulldown", category: "Back" }],
+];
+
+const exercisesMockData: ExerciseType[] = [
+    { id: "1", userId: "1", name: "curls", categories: ["arms"] },
+    { id: "2", userId: "1", name: "bench", categories: ["chest"] },
 ];
 
 const Excercises: NextPage = () => {
@@ -45,6 +52,10 @@ const Excercises: NextPage = () => {
                 </Accordion>
                 <hr></hr>
                 <Button text="New excercise" primary={true} icon={faPlus} />
+            </div>
+            <hr></hr>
+            <div>
+                <ExcerciseInputBlock exercises={exercisesMockData}></ExcerciseInputBlock>
             </div>
         </Layout>
     );

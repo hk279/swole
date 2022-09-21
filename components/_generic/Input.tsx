@@ -1,16 +1,29 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, ChangeEventHandler } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 
 interface Props {
     label?: string;
     type?: "text" | "number";
+    name?: string;
+    value?: string | number | undefined;
     disabled?: boolean;
     placeholder?: string;
     minLength?: number;
     maxLength?: number;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Input = ({ label, type = "text", disabled = false, placeholder, minLength, maxLength }: Props) => {
+const Input = ({
+    label,
+    type = "text",
+    name,
+    value,
+    disabled = false,
+    placeholder,
+    minLength,
+    maxLength,
+    onChange = () => {},
+}: Props) => {
     const validateLength = (e: ChangeEvent<HTMLInputElement>) => {
         const value: string | null = e.target.value;
 
@@ -29,6 +42,11 @@ const Input = ({ label, type = "text", disabled = false, placeholder, minLength,
         }
     };
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        validateLength(e);
+        onChange(e);
+    };
+
     return (
         <>
             {label && (
@@ -41,8 +59,9 @@ const Input = ({ label, type = "text", disabled = false, placeholder, minLength,
                 disabled={disabled}
                 placeholder={placeholder}
                 type={type}
-                name={label}
-                onChange={(e) => validateLength(e)}
+                name={name}
+                value={value}
+                onChange={(e) => handleChange(e)}
             ></input>
         </>
     );
