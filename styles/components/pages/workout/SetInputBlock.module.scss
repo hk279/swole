@@ -1,0 +1,7 @@
+@use "../../../variables.scss";
+
+.setInputBlock {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: variables.$font-size-medium;
+}

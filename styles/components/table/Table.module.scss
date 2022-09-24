@@ -1,0 +1,9 @@
+@use "../../variables.scss";
+
+.table {
+    border-collapse: collapse;
+}
+
+.borderless > tr > td {
+    border: none;
+}

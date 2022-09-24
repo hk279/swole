@@ -4,10 +4,12 @@ import TableCell from "./TableCell";
 
 interface Props {
     children: ReactNode;
+    header?: boolean;
 }
 
-const TableRow = ({ children }: Props) => {
-    return <tr>{children}</tr>;
+const TableRow = ({ children, header = false }: Props) => {
+    if (header) return <tr className={styles.headerRow}>{children}</tr>;
+    return <tr className={styles.tableRow}>{children}</tr>;
 };
 
 interface ExpandableProps {
@@ -25,7 +27,7 @@ TableRow.Expandable = ({ children, cells, expanded = false }: ExpandableProps) =
 
     return (
         <>
-            <tr className={styles.expandable} onClick={() => handleRowClick()}>
+            <tr className={`${styles.expandable} ${styles.tableRow}`} onClick={() => handleRowClick()}>
                 {cells}
                 <TableCell>icon</TableCell>
             </tr>

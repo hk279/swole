@@ -6,8 +6,10 @@ const NavBar = () => {
         <>
             <ul className={styles.navBar}>
                 <NavBarItem label="Log" route="/log" />
-                <NavBarItem label="Excercises" route="/excercises" />
+                <NavBarItem label="Exercises" route="/exercises" />
                 <NavBarItem label="Stats" route="/stats" />
+                <NavBarItem label="Testing" route="/testing" />
+                <NavBarItem label="Workout" route="/workout" />
             </ul>
         </>
     );

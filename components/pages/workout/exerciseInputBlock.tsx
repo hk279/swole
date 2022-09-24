@@ -1,11 +1,13 @@
 import { ChangeEvent, useState } from "react";
 import Button from "../../_generic/Button";
 import Select from "../../_generic/Select";
-import Exercise from "../../../types/exercise";
+import { ExerciseType } from "../../../types/exercise";
 import SetInputBlock from "./setInputBlock";
+import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
+import Table from "../../table/Table";
 
 type Props = {
-    exercises: Exercise[];
+    exercises: ExerciseType[];
 };
 
 type SetData = {
@@ -13,7 +15,7 @@ type SetData = {
     reps?: number;
 };
 
-const ExcerciseInputBlock = ({ exercises }: Props) => {
+const ExerciseInputBlock = ({ exercises }: Props) => {
     const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
 
     const addSet = () => {
@@ -46,26 +48,28 @@ const ExcerciseInputBlock = ({ exercises }: Props) => {
         <>
             <div style={{ maxWidth: "50vw" }}>
                 <Select>
-                    {exercises.map((exercise: Exercise) => (
+                    {exercises.map((exercise: ExerciseType) => (
                         <Select.Option value={exercise.id}>{exercise.name}</Select.Option>
                     ))}
                 </Select>
-                <Button size="small" text="Add set" primary onClick={addSet} />
-                <hr></hr>
-                {sets.map((set, index) => (
-                    <SetInputBlock
-                        index={index}
-                        copySet={copySet}
-                        deleteSet={deleteSet}
-                        weightValue={set.weight}
-                        repsValue={set.reps}
-                        changeWeight={changeSetWeight}
-                        changeReps={changeSetReps}
-                    />
-                ))}
+                <Button className={styles.addSetButton} size="small" text="Add set" primary onClick={addSet} />
+                <p></p>
+                <Table borderless>
+                    {sets.map((set, index) => (
+                        <SetInputBlock
+                            index={index}
+                            copySet={copySet}
+                            deleteSet={deleteSet}
+                            weightValue={set.weight}
+                            repsValue={set.reps}
+                            changeWeight={changeSetWeight}
+                            changeReps={changeSetReps}
+                        />
+                    ))}
+                </Table>
             </div>
         </>
     );
 };
 
-export default ExcerciseInputBlock;
+export default ExerciseInputBlock;

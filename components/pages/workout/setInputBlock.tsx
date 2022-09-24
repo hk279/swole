@@ -2,6 +2,9 @@ import { ChangeEvent } from "react";
 import Button from "../../_generic/Button";
 import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
+import styles from "../../../styles/components/pages/workout/SetInputBlock.module.scss";
+import TableRow from "../../table/TableRow";
+import TableCell from "../../table/TableCell";
 
 type Props = {
     index: number;
@@ -15,8 +18,8 @@ type Props = {
 
 const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, repsValue, changeReps }: Props) => {
     return (
-        <div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <TableRow>
+            <TableCell>
                 <Input
                     value={weightValue}
                     name="weight"
@@ -24,6 +27,8 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
                     placeholder="Weight"
                     onChange={(event) => changeWeight(index, event)}
                 />
+            </TableCell>
+            <TableCell>
                 <Input
                     value={repsValue}
                     name="reps"
@@ -31,10 +36,14 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
                     placeholder="Reps"
                     onChange={(event) => changeReps(index, event)}
                 />
-                <Button size="small" icon={faTrash} onClick={() => deleteSet(index)} />
+            </TableCell>
+            <TableCell cellType="action">
+                <Button size="small" icon={faTrash} onClick={() => deleteSet(index)} danger />
+            </TableCell>
+            <TableCell cellType="action">
                 <Button size="small" icon={faCopy} onClick={() => copySet(index)} />
-            </div>
-        </div>
+            </TableCell>
+        </TableRow>
     );
 };
 

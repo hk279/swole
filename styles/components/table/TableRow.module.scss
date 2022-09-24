@@ -1,6 +1,14 @@
 @use "../../variables.scss";
 
+.tableRow:hover {
+    background-color: variables.$color-light-gray;
+}
+
 .expandable {
     cursor: pointer;
     transition: variables.$transition-quick;
+}
+
+.headerRow {
+    font-weight: bold;
 }
