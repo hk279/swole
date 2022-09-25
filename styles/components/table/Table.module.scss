@@ -4,14 +4,14 @@
     border-collapse: collapse;
 }
 
-.borderless > tr > td {
+.borderless > tbody > tr > td {
     border: none;
 }
 
-.loose > tr > td {
+.loose > tbody > tr > td {
     padding: variables.$space-medium;
 }
 
-.condensed > tr > td {
+.condensed > tbody > tr > td {
     padding: variables.$space-small;
 }

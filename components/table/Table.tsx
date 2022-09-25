@@ -10,7 +10,11 @@ interface Props {
 const Table = ({ children, borderless = false, tableStyle = "loose" }: Props) => {
     const cssClasses = `${styles.table} ${borderless && styles.borderless} ${styles[tableStyle]}`;
 
-    return <table className={cssClasses}>{children}</table>;
+    return (
+        <table className={cssClasses}>
+            <tbody>{children}</tbody>
+        </table>
+    );
 };
 
 export default Table;

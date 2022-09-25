@@ -48,7 +48,6 @@ const Workout: NextPage = () => {
     };
 
     const saveWorkout = () => {
-        console.log(exercisesList);
         console.table(exercisesList);
     };
 
