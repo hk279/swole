@@ -17,7 +17,7 @@ const exercisesMockData: ExerciseType[] = [
 const Excercises: NextPage = () => {
     return (
         <Layout pageTitle="Excercises">
-            <div style={{ width: "50vw" }}>
+            <div>
                 <Table>
                     <TableRow header>
                         <TableCell>Name</TableCell>

@@ -1,1 +1,21 @@
 @use "../variables.scss";
+
+.saveButton {
+    margin-left: variables.$space-medium;
+}
+
+.container {
+    width: 50%;
+}
+
+@media only screen and (max-width: variables.$breakpoint-800) {
+    .container {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: variables.$breakpoint-1200) {
+    .container {
+        width: 75%
+      }
+}

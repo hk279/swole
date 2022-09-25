@@ -4,10 +4,13 @@ import styles from "../../styles/components/table/Table.module.scss";
 interface Props {
     children: ReactNode[];
     borderless?: boolean;
+    tableStyle?: "loose" | "condensed";
 }
 
-const Table = ({ children, borderless = false }: Props) => {
-    return <table className={`${styles.table} ${borderless && styles.borderless}`}>{children}</table>;
+const Table = ({ children, borderless = false, tableStyle = "loose" }: Props) => {
+    const cssClasses = `${styles.table} ${borderless && styles.borderless} ${styles[tableStyle]}`;
+
+    return <table className={cssClasses}>{children}</table>;
 };
 
 export default Table;

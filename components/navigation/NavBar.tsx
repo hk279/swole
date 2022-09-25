@@ -8,8 +8,7 @@ const NavBar = () => {
                 <NavBarItem label="Log" route="/log" />
                 <NavBarItem label="Exercises" route="/exercises" />
                 <NavBarItem label="Stats" route="/stats" />
-                <NavBarItem label="Testing" route="/testing" />
-                <NavBarItem label="Workout" route="/workout" />
+                <NavBarItem label="New Workout" route="/workout" />
             </ul>
         </>
     );

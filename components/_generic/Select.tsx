@@ -1,14 +1,15 @@
-import { ReactNode } from "react";
+import { ChangeEventHandler, ReactNode } from "react";
 import styles from "../../styles/components/_generic/Select.module.scss";
 
 interface Props {
     children: ReactNode;
+    value?: string | number | undefined;
     label?: string;
+    onChange?: ChangeEventHandler<HTMLSelectElement>;
     disabled?: boolean;
-    searchable?: boolean;
 }
 
-const Select = ({ children, label, disabled = false, searchable = false }: Props) => {
+const Select = ({ children, value, label, onChange = () => {}, disabled = false }: Props) => {
     return (
         <>
             {label && (
@@ -17,16 +18,14 @@ const Select = ({ children, label, disabled = false, searchable = false }: Props
                 </label>
             )}
 
-            {searchable ? (
-                <>
-                    <input className={`${styles.select} ${disabled && styles.disabled}`} disabled={disabled}></input>
-                    <datalist>{children}</datalist>
-                </>
-            ) : (
-                <select className={`${styles.select} ${disabled && styles.disabled}`} disabled={disabled}>
-                    {children}
-                </select>
-            )}
+            <select
+                value={value}
+                onChange={(e) => onChange(e)}
+                className={`${styles.select} ${disabled && styles.disabled}`}
+                disabled={disabled}
+            >
+                {children}
+            </select>
         </>
     );
 };

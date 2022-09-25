@@ -5,8 +5,9 @@ const NavBar = () => {
     return (
         <ul className={styles.tabNav}>
             <TabNavItem label="Log" route="/log" />
-            <TabNavItem label="Excercises" route="/excercises" />
+            <TabNavItem label="Exercises" route="/exercises" />
             <TabNavItem label="Stats" route="/stats" />
+            <TabNavItem label="New Workout" route="/workout" />
         </ul>
     );
 };

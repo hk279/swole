@@ -1,33 +1,43 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Button from "../../_generic/Button";
 import Select from "../../_generic/Select";
-import { ExerciseType } from "../../../types/exercise";
+import { ExerciseData, ExerciseType, SetData } from "../../../types/exercise";
 import SetInputBlock from "./setInputBlock";
 import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
 import Table from "../../table/Table";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
-    exercises: ExerciseType[];
+    exerciseTypes: ExerciseType[];
+    exerciseData: ExerciseData;
+    handleExerciseChange: (updatedExercise: ExerciseData) => void;
+    removeExercise: (id: string) => void;
 };
 
-type SetData = {
-    weight?: number;
-    reps?: number;
-};
-
-const ExerciseInputBlock = ({ exercises }: Props) => {
+const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
     const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
+    const [exerciseType, setExerciseType] = useState<ExerciseType>(exerciseTypes[0]);
+
+    useEffect(() => {
+        onExerciseChange();
+    }, [sets, exerciseType]);
 
     const addSet = () => {
         setSets([...sets, { weight: undefined, reps: undefined }]);
     };
 
-    const copySet = (index: number) => {};
+    const copySet = (index: number) => {
+        setSets([...sets, { ...sets[index] }]);
+    };
 
     const deleteSet = (index: number) => {
         const setInputs = [...sets];
         setInputs.splice(index, 1);
         setSets(setInputs);
+    };
+
+    const changeExerciseType = (event: ChangeEvent<HTMLSelectElement>) => {
+        setExerciseType(exerciseTypes.find((type) => type.id === event.target.value) ?? exerciseTypes[0]);
     };
 
     const changeSetWeight = (index: number, event: ChangeEvent<HTMLInputElement>) => {
@@ -44,19 +54,43 @@ const ExerciseInputBlock = ({ exercises }: Props) => {
         setSets(setInputs);
     };
 
+    const onExerciseChange = () => {
+        const updatedExerciseData: ExerciseData = {
+            id: exerciseData.id,
+            userId: exerciseData.userId,
+            exerciseType: exerciseType,
+            sets: sets,
+        };
+
+        handleExerciseChange(updatedExerciseData);
+    };
+
     return (
-        <>
-            <div style={{ maxWidth: "50vw" }}>
-                <Select>
-                    {exercises.map((exercise: ExerciseType) => (
-                        <Select.Option value={exercise.id}>{exercise.name}</Select.Option>
+        <div className={styles.exerciseBlock}>
+            <div className={styles.exerciseControls}>
+                <Select onChange={changeExerciseType} value={exerciseType.id}>
+                    {exerciseTypes.map((exerciseType: ExerciseType) => (
+                        <Select.Option
+                            key={"exercise-" + exerciseData.id + "-type-" + exerciseType.id}
+                            value={exerciseType.id}
+                        >
+                            {exerciseType.name}
+                        </Select.Option>
                     ))}
                 </Select>
-                <Button className={styles.addSetButton} size="small" text="Add set" primary onClick={addSet} />
-                <p></p>
-                <Table borderless>
+                <Button
+                    className={styles.deleteExerciseButton}
+                    size="small"
+                    icon={faTrash}
+                    danger
+                    onClick={() => removeExercise(exerciseData.id)}
+                />
+            </div>
+            <div className={styles.setsBlock}>
+                <Table borderless tableStyle="condensed">
                     {sets.map((set, index) => (
                         <SetInputBlock
+                            key={"exercise-" + exerciseData.id + "-set-" + index}
                             index={index}
                             copySet={copySet}
                             deleteSet={deleteSet}
@@ -68,7 +102,9 @@ const ExerciseInputBlock = ({ exercises }: Props) => {
                     ))}
                 </Table>
             </div>
-        </>
+            <Button size="small" icon={faPlus} text="Add Set" onClick={addSet} />
+            <hr></hr>
+        </div>
     );
 };
 

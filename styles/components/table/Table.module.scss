@@ -7,3 +7,11 @@
 .borderless > tr > td {
     border: none;
 }
+
+.loose > tr > td {
+    padding: variables.$space-medium;
+}
+
+.condensed > tr > td {
+    padding: variables.$space-small;
+}

@@ -1,0 +1,15 @@
+@use "../../variables.scss";
+
+.header {
+    margin: 0 variables.$space-xxlarge;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.title {
+    display: inline-block;
+}
+
+.nav {
+    display: inline;
+}

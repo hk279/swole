@@ -10,7 +10,7 @@
     white-space: nowrap;
 }
 .button:hover {
-    opacity: 70%;
+    opacity: 75%;
 }
 .button:focus-visible {
     outline: 2px double;
@@ -23,29 +23,15 @@
 .buttonIconWithoutText {
     aspect-ratio: 1;
 }
-.small.buttonIcon {
-    margin-right: variables.$space-small;
-}
-
-/* Type */
-.primary {
-    background-color: variables.$color-primary;
-    border-color: variables.$color-primary;
-    color: white;
-}
-.secondary {
-    background: none;
-}
-.secondary:hover {
-    color: variables.$color-primary;
-    border-color: variables.$color-primary;
-}
 
 /* Size */
 .small {
     font-size: variables.$font-size-small;
     padding: variables.$space-small;
     border-radius: variables.$space-small;
+}
+.small > .buttonIconWithText {
+    margin-right: variables.$space-small;
 }
 .large {
     font-size: variables.$font-size-large;
@@ -54,7 +40,19 @@
 }
 
 /* Color */
-.danger.primary {
+.primary,
+.secondary:hover {
+    background-color: variables.$color-primary;
+    border-color: variables.$color-primary;
+    color: white;
+}
+.secondary {
+    background: none;
+    color: variables.$color-primary;
+    border-color: variables.$color-primary;
+}
+.danger.primary,
+.danger.secondary:hover {
     color: white;
     background-color: variables.$color-error;
     border-color: variables.$color-error;
@@ -64,7 +62,8 @@
     color: variables.$color-error;
     border-color: variables.$color-error;
 }
-.success.primary {
+.success.primary,
+.success.secondary:hover {
     color: white;
     background-color: variables.$color-success;
     border-color: variables.$color-success;
@@ -77,15 +76,17 @@
 
 /* Focus */
 .secondary:focus-visible {
-    outline-color: currentColor;
+    outline-color: variables.$color-primary;
 }
 .primary:focus-visible {
     outline-color: variables.$color-primary;
 }
-.danger.primary:focus-visible {
+.danger.primary:focus-visible,
+.danger.secondary:focus-visible {
     outline-color: variables.$color-error;
 }
-.success.primary:focus-visible {
+.success.primary:focus-visible,
+.success.secondary:focus-visible {
     outline-color: variables.$color-success;
 }
 

@@ -15,6 +15,6 @@ export type ExerciseData = {
 }
 
 export type SetData = {
-    weight: number,
-    reps: number
+    weight?: number,
+    reps?: number
 }

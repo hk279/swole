@@ -72,9 +72,9 @@ const Log: NextPage = () => {
 
             <div style={{ width: "50vw" }}>
                 <div className={styles.buttonsDemoRow}>
-                    <Button text="Small button" size="small" primary={true} />
-                    <Button text="Normal button" primary={true} />
-                    <Button text="Large button" size="large" primary={true} />
+                    <Button text="Small button" size="small" primary />
+                    <Button text="Normal button" primary />
+                    <Button text="Large button" size="large" primary />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
@@ -84,21 +84,21 @@ const Log: NextPage = () => {
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
-                    <Button text="Small button" size="small" primary={true} icon={faInfoCircle} />
-                    <Button text="Normal button" success={true} primary={true} icon={faCheck} />
-                    <Button text="Large button" size="large" danger={true} primary={true} icon={faTrash} />
+                    <Button text="Small button" size="small" primary icon={faInfoCircle} />
+                    <Button text="Normal button" success primary icon={faCheck} />
+                    <Button text="Large button" size="large" danger primary icon={faTrash} />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Small button" size="small" icon={faInfoCircle} />
-                    <Button text="Normal button" success={true} icon={faCheck} />
-                    <Button text="Large button" size="large" danger={true} icon={faTrash} />
+                    <Button text="Normal button" success icon={faCheck} />
+                    <Button text="Large button" size="large" danger icon={faTrash} />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button size="small" icon={faInfoCircle} />
-                    <Button success={true} icon={faCheck} />
-                    <Button size="large" danger={true} icon={faTrash} />
+                    <Button success icon={faCheck} />
+                    <Button size="large" danger icon={faTrash} />
                 </div>
             </div>
 
@@ -107,7 +107,7 @@ const Log: NextPage = () => {
             <div className={styles.inputsDemo}>
                 <Input label="Name" />
                 <Input label="Weight" type="number" />
-                <Input label="Disabled" disabled={true} />
+                <Input label="Disabled" disabled />
                 <Input label="MinLength" minLength={5} placeholder="Minimum length is 5" />
                 <Input label="MaxLength" maxLength={10} placeholder="Maximum length is 10" />
                 <Input label="MinAndMaxLength" minLength={5} maxLength={10} />
@@ -122,7 +122,7 @@ const Log: NextPage = () => {
                     <Select.Option value="Third">Second</Select.Option>
                 </Select>
 
-                <Select label="Disabled example" disabled={true}>
+                <Select label="Disabled example" disabled>
                     <Select.Option value="First">First</Select.Option>
                 </Select>
             </div>

@@ -1,5 +1,17 @@
 @use "../../../variables.scss";
 
-.addSetButton {
+.exerciseBlock {
+    margin-bottom: variables.$space-large;
+}
+
+.exerciseControls {
+    margin-bottom: variables.$space-xlarge;
+}
+
+.deleteExerciseButton {
     margin-left: variables.$space-medium;
+}
+
+.setsBlock {
+    margin-bottom: variables.$space-xlarge;
 }

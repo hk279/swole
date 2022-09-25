@@ -1,6 +1,6 @@
 import NavBar from "../navigation/NavBar";
 import TabNav from "../navigation/TabNav";
-import styles from "../../styles/components/layout/Header.module.css";
+import styles from "../../styles/components/layout/Header.module.scss";
 import useViewport from "../../hooks/useViewport";
 
 type Props = {
@@ -9,15 +9,15 @@ type Props = {
 
 function Header({ title }: Props) {
     const width: number = useViewport();
-    const breakpoint: number = 600;
+    const BREAKPOINT: number = 800;
 
     return (
         <>
             <div className={styles.header}>
                 <h1 className={styles.title}>{title}</h1>
-                {width > breakpoint && <NavBar />}
+                {width > BREAKPOINT && <NavBar />}
             </div>
-            {width <= breakpoint && <TabNav />}
+            {width <= BREAKPOINT && <TabNav />}
         </>
     );
 }
