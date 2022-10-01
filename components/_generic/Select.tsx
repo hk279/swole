@@ -11,7 +11,7 @@ interface Props {
 
 const Select = ({ children, value, label, onChange = () => {}, disabled = false }: Props) => {
     return (
-        <>
+        <div className={styles.container}>
             {label && (
                 <label className={styles.label} htmlFor={label}>
                     {label}
@@ -26,7 +26,7 @@ const Select = ({ children, value, label, onChange = () => {}, disabled = false 
             >
                 {children}
             </select>
-        </>
+        </div>
     );
 };
 

@@ -3,11 +3,11 @@ import TabNav from "../navigation/TabNav";
 import styles from "../../styles/components/layout/Header.module.scss";
 import useViewport from "../../hooks/useViewport";
 
-type Props = {
+interface Props {
     title?: string;
-};
+}
 
-function Header({ title }: Props) {
+const Header = ({ title }: Props) => {
     const width: number = useViewport();
     const BREAKPOINT: number = 800;
 
@@ -20,6 +20,6 @@ function Header({ title }: Props) {
             {width <= BREAKPOINT && <TabNav />}
         </>
     );
-}
+};
 
 export default Header;

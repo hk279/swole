@@ -1,15 +1,14 @@
 @use "../../../variables.scss";
 
-.exerciseBlock {
+.container {
+    margin-top: variables.$space-large;
     margin-bottom: variables.$space-large;
 }
 
-.exerciseControls {
+.controls {
     margin-bottom: variables.$space-xlarge;
-}
-
-.deleteExerciseButton {
-    margin-left: variables.$space-medium;
+    display: flex;
+    gap: variables.$space-medium;
 }
 
 .setsBlock {

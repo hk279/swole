@@ -64,9 +64,9 @@ const Workout: NextPage = () => {
                     />
                 ))}
 
-                <div>
+                <div className={styles.controls}>
                     <Button text="Add Exercise" onClick={addExercise} />
-                    <Button className={styles.saveButton} text="Save" primary onClick={saveWorkout} />
+                    <Button text="Save" primary onClick={saveWorkout} />
                 </div>
             </div>
         </Layout>

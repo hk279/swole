@@ -1,5 +1,11 @@
 @use "../../variables.scss";
 
+.container {
+    display: inline-flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
 .input {
     border: 1px solid black;
     border-radius: variables.$space-small;

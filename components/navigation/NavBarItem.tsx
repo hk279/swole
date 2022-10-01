@@ -1,9 +1,15 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import styles from "../../styles/components/navigation/NavBarItem.module.scss";
 
-type Props = { label: string; route: string; disabled?: boolean };
+interface Props {
+    route: string;
+    label: string;
+    icon?: IconDefinition;
+}
 
-function NavBarItem({ label, route, disabled = false }: Props) {
+const NavBarItem = ({ route, label, icon }: Props) => {
     const router = useRouter();
 
     return (
@@ -11,9 +17,10 @@ function NavBarItem({ label, route, disabled = false }: Props) {
             className={`${styles.navBarItem} ${router.pathname === route && styles.active}`}
             onClick={() => router.push(route)}
         >
+            {icon && <FontAwesomeIcon className={styles.navBarItemIcon} icon={icon} />}
             {label}
         </li>
     );
-}
+};
 
 export default NavBarItem;

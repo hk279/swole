@@ -51,6 +51,14 @@
     color: variables.$color-primary;
     border-color: variables.$color-primary;
 }
+.link {
+    border: none;
+    background: none;
+    color: variables.$color-primary;
+}
+.link:hover {
+    text-decoration: underline;
+}
 .danger.primary,
 .danger.secondary:hover {
     color: white;
@@ -79,6 +87,9 @@
     outline-color: variables.$color-primary;
 }
 .primary:focus-visible {
+    outline-color: variables.$color-primary;
+}
+.link:focus-visible {
     outline-color: variables.$color-primary;
 }
 .danger.primary:focus-visible,

@@ -8,6 +8,7 @@ import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import Select from "../components/_generic/Select";
 import styles from "../styles/pages/Log.module.scss";
+import DropdownButton from "../components/_generic/DropdownButton";
 
 const exampleWorkouts: any = [
     {
@@ -99,6 +100,32 @@ const Log: NextPage = () => {
                     <Button size="small" icon={faInfoCircle} />
                     <Button success icon={faCheck} />
                     <Button size="large" danger icon={faTrash} />
+                </div>
+
+                <div className={styles.buttonsDemoRow}>
+                    <DropdownButton text="Random options" size="small" primary>
+                        <DropdownButton.Item size="small">PDF</DropdownButton.Item>
+                        <DropdownButton.Item size="small">CSV</DropdownButton.Item>
+                        <DropdownButton.Item size="small">XLS</DropdownButton.Item>
+                    </DropdownButton>
+                    <hr></hr>
+                    <DropdownButton text="Other options" primary success>
+                        <DropdownButton.Item>Longer text</DropdownButton.Item>
+                        <DropdownButton.Item>CSV</DropdownButton.Item>
+                        <DropdownButton.Item>XLS</DropdownButton.Item>
+                    </DropdownButton>
+                    <hr></hr>
+                    <DropdownButton text="Export options" size="large" primary danger>
+                        <DropdownButton.Item size="large">PDF</DropdownButton.Item>
+                        <DropdownButton.Item size="large">CSV</DropdownButton.Item>
+                        <DropdownButton.Item size="large">XLS</DropdownButton.Item>
+                    </DropdownButton>
+                </div>
+
+                <div className={styles.buttonsDemoRow}>
+                    <Button text="Link button" link />
+                    <Button text="Link button" link />
+                    <Button text="Link button" link />
                 </div>
             </div>
 

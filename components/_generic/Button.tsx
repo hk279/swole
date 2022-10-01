@@ -9,6 +9,7 @@ interface Props {
     className?: string;
     onClick?: (e: React.MouseEvent<HTMLElement>) => any;
     primary?: boolean;
+    link?: boolean;
     disabled?: boolean;
     size?: "small" | "medium" | "large";
     danger?: boolean;
@@ -21,6 +22,7 @@ const Button = ({
     className,
     onClick,
     primary = false,
+    link = false,
     disabled = false,
     size = "medium",
     danger = false,
@@ -33,7 +35,8 @@ const Button = ({
     const classNames: string = cx(
         "button",
         { primary: primary },
-        { secondary: !primary },
+        { secondary: !primary && !link },
+        { link: link },
         { disabled: disabled },
         { small: size === "small" },
         { large: size === "large" },

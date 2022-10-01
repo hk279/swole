@@ -1,9 +1,16 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import styles from "../../styles/components/navigation/TabNavItem.module.scss";
 
-type Props = { label: string; route: string; disabled?: boolean };
+interface Props {
+    route: string;
+    label?: string;
+    disabled?: boolean;
+    icon: IconDefinition;
+}
 
-function TabNavItem({ label, route, disabled = false }: Props) {
+const TabNavItem = ({ route, icon, disabled = false }: Props) => {
     const router = useRouter();
 
     return (
@@ -11,9 +18,9 @@ function TabNavItem({ label, route, disabled = false }: Props) {
             className={`${styles.tabNavItem} ${router.pathname === route && styles.active}`}
             onClick={() => router.push(route)}
         >
-            {label}
+            <FontAwesomeIcon icon={icon} />
         </li>
     );
-}
+};
 
 export default TabNavItem;

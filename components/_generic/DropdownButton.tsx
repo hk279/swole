@@ -16,7 +16,7 @@ interface Props {
     success?: boolean;
 }
 
-function DropdownButton({
+const DropdownButton = ({
     children,
     text,
     primary = false,
@@ -24,7 +24,7 @@ function DropdownButton({
     size = "medium",
     danger = false,
     success = false,
-}: Props) {
+}: Props) => {
     const buttonClassNames: string = cx(
         "button",
         { primary: primary },
@@ -49,7 +49,7 @@ function DropdownButton({
             <div className={menuClassNames}>{children}</div>
         </div>
     );
-}
+};
 
 interface ItemProps {
     children: ReactNode;

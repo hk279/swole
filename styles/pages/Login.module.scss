@@ -1,0 +1,28 @@
+@use "../variables.scss";
+
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: variables.$space-large;
+    max-width: 50%;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: variables.$space-xxlarge;
+}
+
+.divider {
+    width: 100%;
+}

@@ -15,7 +15,8 @@
 .inputsDemo {
     display: flex;
     flex-direction: column;
-    width: 50vw;
+    gap: variables.$space-large;
+    max-width: 50vw;
 }
 
 .selectDemo {

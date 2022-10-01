@@ -66,45 +66,47 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     };
 
     return (
-        <div className={styles.exerciseBlock}>
-            <div className={styles.exerciseControls}>
-                <Select onChange={changeExerciseType} value={exerciseType.id}>
-                    {exerciseTypes.map((exerciseType: ExerciseType) => (
-                        <Select.Option
-                            key={"exercise-" + exerciseData.id + "-type-" + exerciseType.id}
-                            value={exerciseType.id}
-                        >
-                            {exerciseType.name}
-                        </Select.Option>
-                    ))}
-                </Select>
-                <Button
-                    className={styles.deleteExerciseButton}
-                    size="small"
-                    icon={faTrash}
-                    danger
-                    onClick={() => removeExercise(exerciseData.id)}
-                />
+        <>
+            <div className={styles.container}>
+                <div className={styles.controls}>
+                    <Select onChange={changeExerciseType} value={exerciseType.id}>
+                        {exerciseTypes.map((exerciseType: ExerciseType) => (
+                            <Select.Option
+                                key={"exercise-" + exerciseData.id + "-type-" + exerciseType.id}
+                                value={exerciseType.id}
+                            >
+                                {exerciseType.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                    <Button
+                        className={styles.deleteExerciseButton}
+                        size="small"
+                        icon={faTrash}
+                        danger
+                        onClick={() => removeExercise(exerciseData.id)}
+                    />
+                </div>
+                <div className={styles.setsBlock}>
+                    <Table borderless tableStyle="condensed">
+                        {sets.map((set, index) => (
+                            <SetInputBlock
+                                key={"exercise-" + exerciseData.id + "-set-" + index}
+                                index={index}
+                                copySet={copySet}
+                                deleteSet={deleteSet}
+                                weightValue={set.weight}
+                                repsValue={set.reps}
+                                changeWeight={changeSetWeight}
+                                changeReps={changeSetReps}
+                            />
+                        ))}
+                    </Table>
+                </div>
+                <Button size="small" icon={faPlus} text="Add Set" onClick={addSet} />
             </div>
-            <div className={styles.setsBlock}>
-                <Table borderless tableStyle="condensed">
-                    {sets.map((set, index) => (
-                        <SetInputBlock
-                            key={"exercise-" + exerciseData.id + "-set-" + index}
-                            index={index}
-                            copySet={copySet}
-                            deleteSet={deleteSet}
-                            weightValue={set.weight}
-                            repsValue={set.reps}
-                            changeWeight={changeSetWeight}
-                            changeReps={changeSetReps}
-                        />
-                    ))}
-                </Table>
-            </div>
-            <Button size="small" icon={faPlus} text="Add Set" onClick={addSet} />
             <hr></hr>
-        </div>
+        </>
     );
 };
 

@@ -3,7 +3,7 @@ import styles from "../../styles/components/_generic/Input.module.scss";
 
 interface Props {
     label?: string;
-    type?: "text" | "number";
+    type?: "text" | "number" | "email" | "password";
     name?: string;
     value?: string | number | undefined;
     disabled?: boolean;
@@ -48,7 +48,7 @@ const Input = ({
     };
 
     return (
-        <>
+        <div className={styles.container}>
             {label && (
                 <label className={styles.label} htmlFor={label}>
                     {label}
@@ -63,7 +63,7 @@ const Input = ({
                 value={value}
                 onChange={(e) => handleChange(e)}
             ></input>
-        </>
+        </div>
     );
 };
 
