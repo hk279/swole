@@ -4,6 +4,12 @@
     width: 50%;
 }
 
+.dateContainer {
+    display: flex;
+    align-items: center;
+    gap: variables.$space-medium;
+}
+
 .controls {
     display: flex;
     gap: variables.$space-medium;

@@ -1,10 +1,12 @@
+import styles from "../styles/pages/NewWorkout.module.scss";
+import "react-datepicker/dist/react-datepicker.css";
 import type { NextPage } from "next";
+import { useState } from "react";
 import Layout from "../components/layout/Layout";
 import ExerciseInputBlock from "../components/pages/workout/exerciseInputBlock";
 import Button from "../components/_generic/Button";
 import { ExerciseType, ExerciseData } from "../types/exercise";
-import styles from "../styles/pages/Workout.module.scss";
-import { useState } from "react";
+import DatePicker from "react-datepicker";
 
 type WorkoutData = {
     date: Date;
@@ -17,9 +19,10 @@ const exercisesMockData: ExerciseType[] = [
     { id: "3", userId: "1", name: "incline bench", categories: ["chest", "arms"] },
 ];
 
-const Workout: NextPage = () => {
+const NewWorkout: NextPage = () => {
     const [exercisesList, setExercisesList] = useState<ExerciseData[]>([]);
     const [counter, setCounter] = useState<number>(1);
+    const [date, setDate] = useState<Date>(new Date());
 
     const handleExerciseChange = (updatedExercise: ExerciseData) => {
         const exerciseToBeChangedIndex = exercisesList.findIndex((exercise) => exercise.id === updatedExercise.id);
@@ -52,8 +55,17 @@ const Workout: NextPage = () => {
     };
 
     return (
-        <Layout pageTitle="Workout">
+        <Layout pageTitle="New Workout">
             <div className={styles.container}>
+                <div className={styles.dateContainer}>
+                    <p>Date:</p>
+                    <div className={styles.datePicker}>
+                        <DatePicker selected={date} dateFormat="dd.MM.yyyy" onChange={(date: Date) => setDate(date)} />
+                    </div>
+                </div>
+
+                <hr></hr>
+
                 {exercisesList.map((exercise) => (
                     <ExerciseInputBlock
                         key={"exercise-" + exercise.id}
@@ -73,4 +85,4 @@ const Workout: NextPage = () => {
     );
 };
 
-export default Workout;
+export default NewWorkout;
