@@ -12,5 +12,8 @@
 }
 
 .setsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: variables.$space-medium;
     margin-bottom: variables.$space-xlarge;
 }

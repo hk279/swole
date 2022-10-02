@@ -1,28 +1,18 @@
 @use "../variables.scss";
 
 .container {
-    width: 50%;
+    width: fit-content;
 }
 
 .dateContainer {
     display: flex;
     align-items: center;
     gap: variables.$space-medium;
+    margin-bottom: variables.$space-large;
 }
 
 .controls {
     display: flex;
     gap: variables.$space-medium;
-}
-
-@media only screen and (max-width: variables.$breakpoint-1200) {
-    .container {
-        width: 75%
-      }
-}
-
-@media only screen and (max-width: variables.$breakpoint-800) {
-    .container {
-        width: 100%;
-    }
+    margin-top: variables.$space-large;
 }

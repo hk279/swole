@@ -1,11 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../../_generic/Button";
 import Select from "../../_generic/Select";
 import { ExerciseData, ExerciseType, SetData } from "../../../types/exercise";
 import SetInputBlock from "./setInputBlock";
 import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
-import Table from "../../table/Table";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import autoAnimate from "@formkit/auto-animate";
 
 type Props = {
     exerciseTypes: ExerciseType[];
@@ -17,6 +17,13 @@ type Props = {
 const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
     const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
     const [exerciseType, setExerciseType] = useState<ExerciseType>(exerciseTypes[0]);
+
+    const animationParent = useRef(null);
+
+    /* Add / Remove set animation */
+    useEffect(() => {
+        animationParent.current && autoAnimate(animationParent.current);
+    }, [animationParent]);
 
     useEffect(() => {
         onExerciseChange();
@@ -87,25 +94,22 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
                         onClick={() => removeExercise(exerciseData.id)}
                     />
                 </div>
-                <div className={styles.setsBlock}>
-                    <Table borderless tableStyle="condensed">
-                        {sets.map((set, index) => (
-                            <SetInputBlock
-                                key={"exercise-" + exerciseData.id + "-set-" + index}
-                                index={index}
-                                copySet={copySet}
-                                deleteSet={deleteSet}
-                                weightValue={set.weight}
-                                repsValue={set.reps}
-                                changeWeight={changeSetWeight}
-                                changeReps={changeSetReps}
-                            />
-                        ))}
-                    </Table>
+                <div className={styles.setsBlock} ref={animationParent}>
+                    {sets.map((set, index) => (
+                        <SetInputBlock
+                            key={"exercise-" + exerciseData.id + "-set-" + index}
+                            index={index}
+                            copySet={copySet}
+                            deleteSet={deleteSet}
+                            weightValue={set.weight}
+                            repsValue={set.reps}
+                            changeWeight={changeSetWeight}
+                            changeReps={changeSetReps}
+                        />
+                    ))}
                 </div>
                 <Button size="small" icon={faPlus} text="Add Set" onClick={addSet} />
             </div>
-            <hr></hr>
         </>
     );
 };

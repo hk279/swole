@@ -1,12 +1,10 @@
+import styles from "../../../styles/components/pages/workout/SetInputBlock.module.scss";
 import { ChangeEvent } from "react";
 import Button from "../../_generic/Button";
 import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
-import styles from "../../../styles/components/pages/workout/SetInputBlock.module.scss";
-import TableRow from "../../table/TableRow";
-import TableCell from "../../table/TableCell";
 
-type Props = {
+interface Props {
     index: number;
     copySet: (index: number) => void;
     deleteSet: (index: number) => void;
@@ -14,12 +12,12 @@ type Props = {
     changeWeight: (index: number, event: ChangeEvent<HTMLInputElement>) => void;
     repsValue?: number;
     changeReps: (index: number, event: ChangeEvent<HTMLInputElement>) => void;
-};
+}
 
 const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, repsValue, changeReps }: Props) => {
     return (
-        <TableRow>
-            <TableCell>
+        <div className={styles.container}>
+            <div>
                 <Input
                     value={weightValue}
                     name="weight"
@@ -27,8 +25,8 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
                     placeholder="Weight"
                     onChange={(event) => changeWeight(index, event)}
                 />
-            </TableCell>
-            <TableCell>
+            </div>
+            <div>
                 <Input
                     value={repsValue}
                     name="reps"
@@ -36,14 +34,14 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
                     placeholder="Reps"
                     onChange={(event) => changeReps(index, event)}
                 />
-            </TableCell>
-            <TableCell cellType="action">
+            </div>
+            <div>
                 <Button size="small" icon={faTrash} onClick={() => deleteSet(index)} danger />
-            </TableCell>
-            <TableCell cellType="action">
+            </div>
+            <div>
                 <Button size="small" icon={faCopy} onClick={() => copySet(index)} />
-            </TableCell>
-        </TableRow>
+            </div>
+        </div>
     );
 };
 
