@@ -9,7 +9,7 @@ interface Props {
 
 const TableCell = ({ children, colSpan = 1, cellType = "text" }: Props) => {
     return (
-        <td colSpan={colSpan} className={`${styles.cell} ${cellType}`}>
+        <td colSpan={colSpan} className={`${styles.cell} ${styles[cellType]}`}>
             {children}
         </td>
     );

@@ -1,47 +1,72 @@
-import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import type { NextPage } from "next";
+import styles from "../styles/pages/Exercises.module.scss";
+import colors from "../styles/colors.module.scss";
+import { faStar as starEmpty } from "@fortawesome/free-regular-svg-icons";
+import { faInfoCircle, faStar as starFull } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { GetServerSideProps, NextPage } from "next";
 import Layout from "../components/layout/Layout";
 import Table from "../components/table/Table";
 import TableCell from "../components/table/TableCell";
 import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
-import styles from "../styles/pages/Exercises.module.scss";
-import { ExerciseType } from "../types/exercise";
+import Input from "../components/_generic/Input";
+import prisma from "../lib/prisma";
+import { exercise_type } from "@prisma/client";
+import Select from "../components/_generic/Select";
 
-const exercisesMockData: ExerciseType[] = [
-    { id: "1", userId: "1", name: "curls", categories: ["arms"] },
-    { id: "2", userId: "1", name: "bench", categories: ["chest"] },
-    { id: "3", userId: "1", name: "incline bench", categories: ["chest", "arms"] },
-];
+interface Props {
+    exerciseTypes: exercise_type[];
+}
 
-const Excercises: NextPage = () => {
+const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
     return (
-        <Layout pageTitle="Excercises">
-            <div>
-                <Table>
+        <Layout pageTitle="Exercises">
+            <div className={styles.container}>
+                <div className={styles.info}>
+                    <FontAwesomeIcon icon={faInfoCircle} color={colors.colorPrimary} size="lg" />
+                    <span>Use the search to find exercises and mark them as favorites to use on your workouts.</span>
+                </div>
+
+                <div className={styles.search}>
+                    <Input type="text" placeholder="Search">
+                        {exerciseTypes.map((exerciseType) => (
+                            <Select.Option value={exerciseType.name} key={exerciseType.id} />
+                        ))}
+                    </Input>
+                </div>
+
+                <Table tableStyle="condensed">
                     <TableRow header>
                         <TableCell>Name</TableCell>
-                        <TableCell>Categories</TableCell>
-                        <TableCell colSpan={2}>Actions</TableCell>
+                        <TableCell cellType="action">Favorite</TableCell>
                     </TableRow>
-                    {exercisesMockData.map((exercise) => (
-                        <TableRow key={exercise.id}>
-                            <TableCell>{exercise.name}</TableCell>
-                            <TableCell>{exercise.categories.toString()}</TableCell>
+                    {exerciseTypes.map((exerciseType) => (
+                        <TableRow key={exerciseType.id}>
+                            <TableCell>{exerciseType.name}</TableCell>
                             <TableCell cellType="action">
-                                <Button icon={faEdit} size="small" />
-                            </TableCell>
-                            <TableCell cellType="action">
-                                <Button icon={faTrash} danger size="small" />
+                                <Button icon={starEmpty} size="large" link />
                             </TableCell>
                         </TableRow>
                     ))}
+                    {/* ---------FOR DEMO--------- */}
+                    <TableRow>
+                        <TableCell>Favorite exercise</TableCell>
+                        <TableCell cellType="action">
+                            <Button icon={starFull} size="large" link />
+                        </TableCell>
+                    </TableRow>
+                    {/* -------------------------- */}
                 </Table>
-                <p></p>
-                <Button text="New excercise" primary={true} icon={faPlus} />
             </div>
         </Layout>
     );
 };
 
 export default Excercises;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const exerciseTypes = await prisma.exercise_type.findMany();
+    return {
+        props: { exerciseTypes },
+    };
+};

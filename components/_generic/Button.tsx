@@ -52,6 +52,7 @@ const Button = ({
                 <FontAwesomeIcon
                     className={`${!iconOnly ? styles.buttonIconWithText : styles.buttonIconWithoutText}`}
                     icon={icon}
+                    size={size === "large" ? "lg" : "1x"}
                 />
             )}
             {text}

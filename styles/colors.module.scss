@@ -1,0 +1,10 @@
+@use "./variables.scss";
+
+:export {
+    colorPrimary: variables.$color-primary;
+    colorWarning: variables.$color-warning;
+    colorError: variables.$color-error;
+    colorSuccess: variables.$color-success;
+    colorGray: variables.$color-gray;
+    colorLightGray: variables.$color-light-gray;
+}

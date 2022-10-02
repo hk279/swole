@@ -30,18 +30,14 @@ const Select = ({ children, value, label, onChange = () => {}, disabled = false 
     );
 };
 
-interface OptionProps {
-    children: ReactNode;
+export interface OptionProps {
     value: string | number;
+    label?: string;
     disabled?: boolean;
 }
 
-Select.Option = ({ children, value, disabled = false }: OptionProps) => {
-    return (
-        <option className={styles.option} value={value} disabled={disabled}>
-            {children}
-        </option>
-    );
+Select.Option = ({ value, label, disabled = false }: OptionProps) => {
+    return <option className={styles.option} value={value} label={label} disabled={disabled} />;
 };
 
 export default Select;

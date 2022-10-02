@@ -1,22 +1,23 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../../_generic/Button";
 import Select from "../../_generic/Select";
-import { ExerciseData, ExerciseType, SetData } from "../../../types/exercise";
 import SetInputBlock from "./setInputBlock";
 import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
+import { exercise_type } from "@prisma/client";
+import { ExerciseData, SetData } from "../../../types";
 
-type Props = {
-    exerciseTypes: ExerciseType[];
+interface Props {
+    exerciseTypes: exercise_type[];
     exerciseData: ExerciseData;
     handleExerciseChange: (updatedExercise: ExerciseData) => void;
     removeExercise: (id: string) => void;
-};
+}
 
 const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
     const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
-    const [exerciseType, setExerciseType] = useState<ExerciseType>(exerciseTypes[0]);
+    const [exerciseType, setExerciseType] = useState<exercise_type>(exerciseTypes[0]);
 
     const animationParent = useRef(null);
 
@@ -30,7 +31,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     }, [sets, exerciseType]);
 
     const addSet = () => {
-        setSets([...sets, { weight: undefined, reps: undefined }]);
+        setSets([...sets, { weight: 0, reps: 0 }]);
     };
 
     const copySet = (index: number) => {
@@ -44,7 +45,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     };
 
     const changeExerciseType = (event: ChangeEvent<HTMLSelectElement>) => {
-        setExerciseType(exerciseTypes.find((type) => type.id === event.target.value) ?? exerciseTypes[0]);
+        setExerciseType(exerciseTypes.find((type) => type.id === parseInt(event.target.value)) ?? exerciseTypes[0]);
     };
 
     const changeSetWeight = (index: number, event: ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +65,6 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     const onExerciseChange = () => {
         const updatedExerciseData: ExerciseData = {
             id: exerciseData.id,
-            userId: exerciseData.userId,
             exerciseType: exerciseType,
             sets: sets,
         };
@@ -77,13 +77,12 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
             <div className={styles.container}>
                 <div className={styles.controls}>
                     <Select onChange={changeExerciseType} value={exerciseType.id}>
-                        {exerciseTypes.map((exerciseType: ExerciseType) => (
+                        {exerciseTypes.map((exerciseType: exercise_type) => (
                             <Select.Option
                                 key={"exercise-" + exerciseData.id + "-type-" + exerciseType.id}
                                 value={exerciseType.id}
-                            >
-                                {exerciseType.name}
-                            </Select.Option>
+                                label={exerciseType.name}
+                            />
                         ))}
                     </Select>
                     <Button

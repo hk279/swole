@@ -1,28 +1,25 @@
 import styles from "../styles/pages/NewWorkout.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import Layout from "../components/layout/Layout";
 import ExerciseInputBlock from "../components/pages/workout/exerciseInputBlock";
 import Button from "../components/_generic/Button";
-import { ExerciseType, ExerciseData } from "../types/exercise";
 import DatePicker from "react-datepicker";
 import autoAnimate from "@formkit/auto-animate";
+import { exercise_type } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
+import { ExerciseData } from "../types";
+import prisma from "../lib/prisma";
 
-type WorkoutData = {
-    date: Date;
-    exercises: ExerciseData[];
-};
+interface Props {
+    exerciseTypes: exercise_type[];
+}
 
-const exercisesMockData: ExerciseType[] = [
-    { id: "1", userId: "1", name: "curls", categories: ["arms"] },
-    { id: "2", userId: "1", name: "bench", categories: ["chest"] },
-    { id: "3", userId: "1", name: "incline bench", categories: ["chest", "arms"] },
-];
-
-const NewWorkout: NextPage = () => {
-    const [exercisesList, setExercisesList] = useState<ExerciseData[]>([]);
-    const [counter, setCounter] = useState<number>(1);
+const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
+    const [exercisesList, setExercisesList] = useState<ExerciseData[]>([
+        { id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] },
+    ]); // Init with one empty exercise
     const [date, setDate] = useState<Date>(new Date());
 
     const animationParent = useRef(null);
@@ -46,10 +43,9 @@ const NewWorkout: NextPage = () => {
     const addExercise = () => {
         const newExercisesList: ExerciseData[] = [
             ...exercisesList,
-            { id: counter.toString(), userId: "asd", exerciseType: exercisesMockData[0], sets: [] },
+            { id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] },
         ];
 
-        setCounter(counter + 1);
         setExercisesList(newExercisesList);
     };
 
@@ -76,16 +72,15 @@ const NewWorkout: NextPage = () => {
 
                 <div ref={animationParent}>
                     {exercisesList.map((exercise) => (
-                        <>
+                        <div key={"exercise-" + exercise.id}>
                             <ExerciseInputBlock
-                                key={"exercise-" + exercise.id}
-                                exerciseTypes={exercisesMockData}
+                                exerciseTypes={exerciseTypes}
                                 exerciseData={exercise}
                                 handleExerciseChange={handleExerciseChange}
                                 removeExercise={removeExercise}
                             />
                             <hr></hr>
-                        </>
+                        </div>
                     ))}
                 </div>
 
@@ -99,3 +94,10 @@ const NewWorkout: NextPage = () => {
 };
 
 export default NewWorkout;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const exerciseTypes = await prisma.exercise_type.findMany();
+    return {
+        props: { exerciseTypes },
+    };
+};

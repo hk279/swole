@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model exercise {
+  id               Int           @id(map: "exercises_pkey") @default(autoincrement())
+  workout_id       Int
+  exercise_type_id Int
+  exercise_type    exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exercises_exercise_type_id_fkey")
+  workout          workout       @relation(fields: [workout_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exercises_workout_id_fkey")
+  set              set[]
+}
+
+model exercise_type {
+  id       Int        @id(map: "exercise_types_pkey") @default(autoincrement())
+  name     String     @db.VarChar(255)
+  exercise exercise[]
+}
+
+model set {
+  id          Int      @id(map: "sets_pkey") @default(autoincrement())
+  exercise_id Int
+  weight      Float
+  reps        Int
+  exercise    exercise @relation(fields: [exercise_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sets_exercise_id_fkey")
+}
+
+model user {
+  id          Int       @id(map: "users_pkey") @default(autoincrement())
+  email       String    @unique(map: "users_email_key") @db.VarChar(255)
+  password    String    @db.VarChar(50)
+  create_date DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  workout     workout[]
+}
+
+model workout {
+  id           Int        @id(map: "workouts_pkey") @default(autoincrement())
+  user_id      Int
+  workout_date DateTime   @db.Date
+  user         user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "workouts_user_id_fkey")
+  exercise     exercise[]
+}

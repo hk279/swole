@@ -1,5 +1,6 @@
-import { ChangeEvent, ChangeEventHandler } from "react";
+import { ChangeEvent, ChangeEventHandler, ReactElement, useId } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
+import { OptionProps } from "./Select";
 
 interface Props {
     label?: string;
@@ -10,6 +11,7 @@ interface Props {
     placeholder?: string;
     minLength?: number;
     maxLength?: number;
+    children?: ReactElement<OptionProps>[];
     onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -22,8 +24,11 @@ const Input = ({
     placeholder,
     minLength,
     maxLength,
+    children,
     onChange = () => {},
 }: Props) => {
+    const datalistId: string = useId();
+
     const validateLength = (e: ChangeEvent<HTMLInputElement>) => {
         const value: string | null = e.target.value;
 
@@ -54,6 +59,7 @@ const Input = ({
                     {label}
                 </label>
             )}
+
             <input
                 className={`${styles.input} ${disabled && styles.disabled}`}
                 disabled={disabled}
@@ -61,8 +67,11 @@ const Input = ({
                 type={type}
                 name={name}
                 value={value}
+                list={children && datalistId}
                 onChange={(e) => handleChange(e)}
-            ></input>
+            />
+
+            {children && <datalist id={datalistId}>{children}</datalist>}
         </div>
     );
 };

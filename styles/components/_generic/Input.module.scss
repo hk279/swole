@@ -1,20 +1,19 @@
 @use "../../variables.scss";
 
 .container {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
-    width: fit-content;
+    gap: variables.$space-medium;
 }
 
 .input {
-    border: 1px solid black;
+    border: 1px solid variables.$color-gray;
     border-radius: variables.$space-small;
-    padding: variables.$space-small;
+    padding: variables.$space-medium;
 }
 
 .label {
-    margin-right: variables.$space-medium;
-    margin-bottom: variables.$space-medium;
+
 }
 
 .disabled {
