@@ -5,11 +5,11 @@ import SetInputBlock from "./setInputBlock";
 import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
-import { exercise_type } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 import { ExerciseData, SetData } from "../../../types";
 
 interface Props {
-    exerciseTypes: exercise_type[];
+    exerciseTypes: Exercise_type[];
     exerciseData: ExerciseData;
     handleExerciseChange: (updatedExercise: ExerciseData) => void;
     removeExercise: (id: string) => void;
@@ -17,7 +17,7 @@ interface Props {
 
 const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
     const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
-    const [exerciseType, setExerciseType] = useState<exercise_type>(exerciseTypes[0]);
+    const [exerciseType, setExerciseType] = useState<Exercise_type>(exerciseTypes[0]);
 
     const animationParent = useRef(null);
 
@@ -31,7 +31,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     }, [sets, exerciseType]);
 
     const addSet = () => {
-        setSets([...sets, { weight: 0, reps: 0 }]);
+        setSets([...sets, { weight: undefined, reps: undefined }]);
     };
 
     const copySet = (index: number) => {
@@ -77,7 +77,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
             <div className={styles.container}>
                 <div className={styles.controls}>
                     <Select onChange={changeExerciseType} value={exerciseType.id}>
-                        {exerciseTypes.map((exerciseType: exercise_type) => (
+                        {exerciseTypes.map((exerciseType: Exercise_type) => (
                             <Select.Option
                                 key={"exercise-" + exerciseData.id + "-type-" + exerciseType.id}
                                 value={exerciseType.id}

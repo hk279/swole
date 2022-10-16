@@ -7,7 +7,7 @@ const redirects = async () => {
     return [
         {
             source: "/",
-            destination: "/Log",
+            destination: "/login",
             permanent: true,
         },
     ];

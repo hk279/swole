@@ -7,13 +7,13 @@ import ExerciseInputBlock from "../components/pages/workout/exerciseInputBlock";
 import Button from "../components/_generic/Button";
 import DatePicker from "react-datepicker";
 import autoAnimate from "@formkit/auto-animate";
-import { exercise_type } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { ExerciseData } from "../types";
 import prisma from "../lib/prisma";
 
 interface Props {
-    exerciseTypes: exercise_type[];
+    exerciseTypes: Exercise_type[];
 }
 
 const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {

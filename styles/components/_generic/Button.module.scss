@@ -137,3 +137,32 @@
 .dropdownItem > .large {
     border-radius: none;
 }
+
+/* Disabled */
+.disabled.primary, .disabled.secondary, .disabled.success, .disabled.danger {
+    background-color: variables.$color-light-gray;
+    color: variables.$color-gray;
+    border-color: variables.$color-gray;
+}
+
+.disabled.primary:hover, .disabled.secondary:hover, .disabled.success:hover, .disabled:hover {
+    background-color: variables.$color-light-gray;
+    border-color: variables.$color-gray;
+    color: variables.$color-gray;
+    opacity: 100%;
+    cursor: default;
+}
+
+.disabled.link {
+    border: none;
+    background: none;
+    color: variables.$color-gray;
+}
+
+.disabled.link:hover {
+    text-decoration: none;
+    background: none;
+    border-color: none;
+    opacity: 100%;
+    cursor: default;
+}

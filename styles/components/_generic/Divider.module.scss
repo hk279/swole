@@ -1,0 +1,17 @@
+@use "../../variables.scss";
+
+.divider {
+    border: none;
+    background-color: variables.$color-light-gray;
+    color: variables.$color-light-gray;
+    height: 2px;
+    width: 100%;
+}
+
+.thick {
+    height: 3px;
+}
+
+.thin {
+    height: 1px;
+}

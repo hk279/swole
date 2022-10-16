@@ -19,7 +19,7 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
         <div className={styles.container}>
             <div>
                 <Input
-                    value={weightValue}
+                    value={weightValue || ""}
                     name="weight"
                     type="number"
                     placeholder="Weight"
@@ -28,17 +28,17 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
             </div>
             <div>
                 <Input
-                    value={repsValue}
+                    value={repsValue || ""}
                     name="reps"
                     type="number"
                     placeholder="Reps"
                     onChange={(event) => changeReps(index, event)}
                 />
             </div>
-            <div>
+            <div className={styles.iconCell}>
                 <Button size="small" icon={faTrash} onClick={() => deleteSet(index)} danger />
             </div>
-            <div>
+            <div className={styles.iconCell}>
                 <Button size="small" icon={faCopy} onClick={() => copySet(index)} />
             </div>
         </div>

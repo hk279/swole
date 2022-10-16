@@ -9,6 +9,7 @@ import Input from "../components/_generic/Input";
 import Select from "../components/_generic/Select";
 import styles from "../styles/pages/Log.module.scss";
 import DropdownButton from "../components/_generic/DropdownButton";
+import Divider from "../components/_generic/Divider";
 
 const exampleWorkouts: any = [
     {
@@ -69,7 +70,7 @@ const Log: NextPage = () => {
                 </Accordion>
             </div>
 
-            <hr></hr>
+            <Divider />
 
             <div style={{ width: "50vw" }}>
                 <div className={styles.buttonsDemoRow}>
@@ -127,9 +128,15 @@ const Log: NextPage = () => {
                     <Button text="Link button" link />
                     <Button text="Link button" link />
                 </div>
+
+                <div className={styles.buttonsDemoRow}>
+                    <Button text="Link button" link disabled onClick={() => console.log("asd")} />
+                    <Button text="Link button" primary disabled />
+                    <Button text="Link button" success disabled />
+                </div>
             </div>
 
-            <hr></hr>
+            <Divider />
 
             <div className={styles.inputsDemo}>
                 <Input label="Name" />
@@ -144,13 +151,13 @@ const Log: NextPage = () => {
 
             <div className={styles.selectDemo}>
                 <Select label="Example">
-                    <Select.Option value="First">First</Select.Option>
-                    <Select.Option value="Second">Second</Select.Option>
-                    <Select.Option value="Third">Second</Select.Option>
+                    <Select.Option value="1" label="First" />
+                    <Select.Option value="2" label="Second" />
+                    <Select.Option value="3" label="Third" />
                 </Select>
 
                 <Select label="Disabled example" disabled>
-                    <Select.Option value="First">First</Select.Option>
+                    <Select.Option value="1" label="First" />
                 </Select>
             </div>
         </Layout>

@@ -1,4 +1,4 @@
-import { exercise_type } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 
 export interface SetData {
     weight?: number;
@@ -7,6 +7,6 @@ export interface SetData {
 
 export interface ExerciseData {
     id: string; // uuid will be used to handle state changes in the new workout form
-    exerciseType: exercise_type;
+    exerciseType: Exercise_type;
     sets: SetData[];
 }

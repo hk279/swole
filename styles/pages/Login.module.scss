@@ -14,6 +14,9 @@
     flex-direction: column;
     gap: variables.$space-large;
     max-width: 50%;
+    padding: variables.$space-xxlarge;
+    border-radius: variables.$space-medium;
+    border: 2px solid variables.$color-light-gray;
 }
 
 .actions {
@@ -21,8 +24,4 @@
     justify-content: space-between;
     align-items: center;
     gap: variables.$space-xxlarge;
-}
-
-.divider {
-    width: 100%;
 }

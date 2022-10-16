@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
 import Button from "../components/_generic/Button";
+import Divider from "../components/_generic/Divider";
 import Input from "../components/_generic/Input";
 import styles from "../styles/pages/Login.module.scss";
+import { signIn } from "next-auth/react";
 
 const Login: NextPage = () => {
     return (
@@ -9,13 +11,23 @@ const Login: NextPage = () => {
             <div className={styles.form}>
                 <Input placeholder="Email" type="email" />
                 <Input placeholder="Password" type="password" />
+
                 <div className={styles.actions}>
                     <Button text="Log In" primary success />
                     <Button text="Forgot Password?" link />
                 </div>
-                <hr className={styles.divider} />
-                <Button text="Log In with Google" primary />
-                <hr className={styles.divider} />
+
+                <Divider />
+
+                <Button
+                    text="Log in with GitHub"
+                    primary
+                    onClick={() => signIn("github", { callbackUrl: `${window.location.origin}/log` })}
+                />
+                <Button text="Log In with Google" primary disabled />
+
+                <Divider />
+
                 <Button text="Sign up" link />
             </div>
         </div>

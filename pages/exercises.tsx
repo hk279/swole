@@ -11,11 +11,11 @@ import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import prisma from "../lib/prisma";
-import { exercise_type } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 import Select from "../components/_generic/Select";
 
 interface Props {
-    exerciseTypes: exercise_type[];
+    exerciseTypes: Exercise_type[];
 }
 
 const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
