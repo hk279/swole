@@ -3,8 +3,14 @@ $color-primary: #096dd9;
 $color-warning: #d4b106;
 $color-error: #cf1322;
 $color-success: #389e0d;
-$color-gray: #DFDFDF;
+$color-gray: #cacaca;
 $color-light-gray: #EFEFEF;
+$color-background-light: #E8F0FE;
+
+/* Borders */
+$border-thin: 1px solid $color-light-gray;
+$border-default: 2px solid $color-light-gray;
+$border-thick: 3px solid $color-light-gray;
 
 /* Spacing */
 $space-small: 4px;

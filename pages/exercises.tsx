@@ -13,12 +13,17 @@ import Input from "../components/_generic/Input";
 import prisma from "../lib/prisma";
 import { Exercise_type } from "@prisma/client";
 import Select from "../components/_generic/Select";
+import { useState } from "react";
 
 interface Props {
     exerciseTypes: Exercise_type[];
 }
 
 const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const filteredList = exerciseTypes.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
     return (
         <Layout pageTitle="Exercises">
             <div className={styles.container}>
@@ -28,7 +33,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                 </div>
 
                 <div className={styles.search}>
-                    <Input type="text" placeholder="Search">
+                    <Input type="text" placeholder="Search" onChange={(e) => setSearchQuery(e.target.value)}>
                         {exerciseTypes.map((exerciseType) => (
                             <Select.Option value={exerciseType.name} key={exerciseType.id} />
                         ))}
@@ -40,7 +45,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                         <TableCell>Name</TableCell>
                         <TableCell cellType="action">Favorite</TableCell>
                     </TableRow>
-                    {exerciseTypes.map((exerciseType) => (
+                    {filteredList.map((exerciseType) => (
                         <TableRow key={exerciseType.id}>
                             <TableCell>{exerciseType.name}</TableCell>
                             <TableCell cellType="action">
@@ -50,7 +55,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                     ))}
                     {/* ---------FOR DEMO--------- */}
                     <TableRow>
-                        <TableCell>Favorite exercise</TableCell>
+                        <TableCell>Favorite exercise (FOR TESTING - always visible)</TableCell>
                         <TableCell cellType="action">
                             <Button icon={starFull} size="large" link />
                         </TableCell>

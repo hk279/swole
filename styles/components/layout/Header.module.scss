@@ -1,9 +1,10 @@
 @use "../../variables.scss";
 
 .header {
-    margin: 0 variables.$space-xxlarge;
+    padding: 0 variables.$space-xxlarge;
     overflow: hidden;
     white-space: nowrap;
+    border-bottom: variables.$border-default;
 }
 
 .title {

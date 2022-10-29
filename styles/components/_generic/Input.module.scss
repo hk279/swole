@@ -13,7 +13,7 @@
 }
 
 .disabled {
-    cursor: not-allowed;
+    cursor: default;
     border-color: variables.$color-gray;
     background-color: variables.$color-light-gray;
 }

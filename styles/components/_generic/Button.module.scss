@@ -153,6 +153,12 @@
     cursor: default;
 }
 
+.disabled.dropdownItem {
+    background-color: variables.$color-light-gray;
+    color: variables.$color-gray;
+    cursor: default;
+}
+
 .disabled.link {
     border: none;
     background: none;

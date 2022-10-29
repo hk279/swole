@@ -72,35 +72,40 @@ const Log: NextPage = () => {
 
             <Divider />
 
-            <div style={{ width: "50vw" }}>
+            <div className={styles.buttonsDemoContainer}>
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Small button" size="small" primary />
                     <Button text="Normal button" primary />
                     <Button text="Large button" size="large" primary />
+                    <Button text="Large button" size="large" primary disabled />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Small button" size="small" />
                     <Button text="Normal button" />
                     <Button text="Large button" size="large" />
+                    <Button text="Large button" size="large" disabled />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Small button" size="small" primary icon={faInfoCircle} />
                     <Button text="Normal button" success primary icon={faCheck} />
                     <Button text="Large button" size="large" danger primary icon={faTrash} />
+                    <Button text="Large button" size="large" danger primary icon={faTrash} disabled />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Small button" size="small" icon={faInfoCircle} />
                     <Button text="Normal button" success icon={faCheck} />
                     <Button text="Large button" size="large" danger icon={faTrash} />
+                    <Button text="Large button" size="large" danger icon={faTrash} disabled />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
                     <Button size="small" icon={faInfoCircle} />
                     <Button success icon={faCheck} />
                     <Button size="large" danger icon={faTrash} />
+                    <Button size="large" danger icon={faTrash} disabled />
                 </div>
 
                 <div className={styles.buttonsDemoRow}>
@@ -108,15 +113,28 @@ const Log: NextPage = () => {
                         <DropdownButton.Item size="small">PDF</DropdownButton.Item>
                         <DropdownButton.Item size="small">CSV</DropdownButton.Item>
                         <DropdownButton.Item size="small">XLS</DropdownButton.Item>
+                        <DropdownButton.Item size="small" disabled>
+                            XLS
+                        </DropdownButton.Item>
                     </DropdownButton>
-                    <hr></hr>
+
                     <DropdownButton text="Other options" primary success>
                         <DropdownButton.Item>Longer text</DropdownButton.Item>
                         <DropdownButton.Item>CSV</DropdownButton.Item>
                         <DropdownButton.Item>XLS</DropdownButton.Item>
+                        <DropdownButton.Item disabled>XLS</DropdownButton.Item>
                     </DropdownButton>
-                    <hr></hr>
+
                     <DropdownButton text="Export options" size="large" primary danger>
+                        <DropdownButton.Item size="large">PDF</DropdownButton.Item>
+                        <DropdownButton.Item size="large">CSV</DropdownButton.Item>
+                        <DropdownButton.Item size="large">XLS</DropdownButton.Item>
+                        <DropdownButton.Item size="large" disabled>
+                            XLS
+                        </DropdownButton.Item>
+                    </DropdownButton>
+
+                    <DropdownButton text="Export options" size="large" primary danger disabled>
                         <DropdownButton.Item size="large">PDF</DropdownButton.Item>
                         <DropdownButton.Item size="large">CSV</DropdownButton.Item>
                         <DropdownButton.Item size="large">XLS</DropdownButton.Item>
@@ -125,14 +143,8 @@ const Log: NextPage = () => {
 
                 <div className={styles.buttonsDemoRow}>
                     <Button text="Link button" link />
-                    <Button text="Link button" link />
-                    <Button text="Link button" link />
-                </div>
-
-                <div className={styles.buttonsDemoRow}>
-                    <Button text="Link button" link disabled onClick={() => console.log("asd")} />
-                    <Button text="Link button" primary disabled />
-                    <Button text="Link button" success disabled />
+                    <Button text="Link button" link primary />
+                    <Button text="Link button" link success />
                 </div>
             </div>
 
