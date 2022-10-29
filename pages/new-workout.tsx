@@ -11,6 +11,8 @@ import { Exercise_type } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { ExerciseData } from "../types";
 import prisma from "../lib/prisma";
+import Divider from "../components/_generic/Divider";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
     exerciseTypes: Exercise_type[];
@@ -68,7 +70,7 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
                     </div>
                 </div>
 
-                <hr />
+                <Divider />
 
                 <div ref={animationParent}>
                     {exercisesList.map((exercise) => (
@@ -79,13 +81,13 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
                                 handleExerciseChange={handleExerciseChange}
                                 removeExercise={removeExercise}
                             />
-                            <hr></hr>
+                            <Divider />
                         </div>
                     ))}
                 </div>
 
                 <div className={styles.controls}>
-                    <Button text="Add Exercise" onClick={addExercise} />
+                    <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
                     <Button text="Save" primary onClick={saveWorkout} />
                 </div>
             </div>
