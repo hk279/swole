@@ -13,12 +13,21 @@ import { ExerciseData } from "../types";
 import prisma from "../lib/prisma";
 import Divider from "../components/_generic/Divider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 interface Props {
     exerciseTypes: Exercise_type[];
 }
 
 const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            // The user is not authenticated, handle it here.
+        },
+    });
+
     const [exercisesList, setExercisesList] = useState<ExerciseData[]>([
         { id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] },
     ]); // Init with one empty exercise
@@ -56,8 +65,12 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
         setExercisesList(newExercisesList);
     };
 
-    const saveWorkout = () => {
-        console.table(exercisesList);
+    const saveWorkout = async () => {
+        const workout = { user_id: "123", workout_date: date, exercises: exercisesList };
+        console.table(workout);
+
+        const res = await axios.post("/api/createWorkout", workout);
+        console.log(res.data);
     };
 
     return (
