@@ -8,7 +8,7 @@ import Button from "../components/_generic/Button";
 import DatePicker from "react-datepicker";
 import autoAnimate from "@formkit/auto-animate";
 import { Exercise_type } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate } from "uuid";
 import { ExerciseData } from "../types";
 import prisma from "../lib/prisma";
 import Divider from "../components/_generic/Divider";
@@ -66,11 +66,26 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
     };
 
     const saveWorkout = async () => {
-        const workout = { user_id: "123", workout_date: date, exercises: exercisesList };
-        console.table(workout);
+        // Filter out sets with empty values and exercises with no sets.
+        let validatedExercises = exercisesList.map((exercise) => ({
+            ...exercise,
+            sets: exercise.sets.filter((set) => set.weight != null && set.reps != null),
+        }));
+        validatedExercises = validatedExercises.filter((exercise) => exercise.sets.length > 0);
 
-        const res = await axios.post("/api/createWorkout", workout);
-        console.log(res.data);
+        if (validatedExercises.length > 0) {
+            // TODO: Use real user ID
+            const workout = { user_id: 2, workout_date: date, exercises: validatedExercises };
+            console.table(workout);
+    
+            try {
+                const res = await axios.post("/api/createWorkout", workout);
+                console.log(res)
+                // TODO: Add a success toast / message
+            } catch (error) {
+                console.log(error);
+            }
+        }
     };
 
     return (
@@ -101,7 +116,7 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
                 <div className={styles.controls}>
                     <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
-                    <Button text="Save" primary onClick={saveWorkout} />
+                    <Button text="Save" primary disabled={exercisesList.length === 0} onClick={saveWorkout} />
                 </div>
             </div>
         </Layout>

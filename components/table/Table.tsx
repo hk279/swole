@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styles from "../../styles/components/table/Table.module.scss";
 
 interface Props {
-    children: ReactNode[];
+    children: ReactNode | ReactNode[];
     borderless?: boolean;
     tableStyle?: "loose" | "condensed";
 }
