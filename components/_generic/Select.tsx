@@ -4,29 +4,20 @@ import styles from "../../styles/components/_generic/Select.module.scss";
 interface Props {
     children: ReactNode;
     value?: string | number | undefined;
-    label?: string;
     onChange?: ChangeEventHandler<HTMLSelectElement>;
     disabled?: boolean;
 }
 
-const Select = ({ children, value, label, onChange = () => {}, disabled = false }: Props) => {
+const Select = ({ children, value, onChange = () => {}, disabled = false }: Props) => {
     return (
-        <div className={styles.container}>
-            {label && (
-                <label className={styles.label} htmlFor={label}>
-                    {label}
-                </label>
-            )}
-
-            <select
-                value={value}
-                onChange={(e) => onChange(e)}
-                className={`${styles.select} ${disabled && styles.disabled}`}
-                disabled={disabled}
-            >
-                {children}
-            </select>
-        </div>
+        <select
+            value={value}
+            onChange={(e) => onChange(e)}
+            className={`${styles.select} ${disabled && styles.disabled}`}
+            disabled={disabled}
+        >
+            {children}
+        </select>
     );
 };
 

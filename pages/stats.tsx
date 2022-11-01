@@ -7,10 +7,11 @@ import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import Select from "../components/_generic/Select";
-import styles from "../styles/pages/Log.module.scss";
+import styles from "../styles/pages/Stats.module.scss";
 import DropdownButton from "../components/_generic/DropdownButton";
 import Divider from "../components/_generic/Divider";
 import Table from "../components/table/Table";
+import Flex from "../components/_generic/Flex";
 
 const exampleWorkouts: any = [
     {
@@ -72,43 +73,43 @@ const Stats: NextPage = () => {
 
             <Divider />
 
-            <div className={styles.buttonsDemoContainer}>
-                <div className={styles.buttonsDemoRow}>
+            <Flex direction="column" gap={16}>
+                <Flex alignItems="center" gap={16}>
                     <Button text="Small button" size="small" primary />
                     <Button text="Normal button" primary />
                     <Button text="Large button" size="large" primary />
                     <Button text="Large button" size="large" primary disabled />
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <Button text="Small button" size="small" />
                     <Button text="Normal button" />
                     <Button text="Large button" size="large" />
                     <Button text="Large button" size="large" disabled />
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <Button text="Small button" size="small" primary icon={faInfoCircle} />
                     <Button text="Normal button" success primary icon={faCheck} />
                     <Button text="Large button" size="large" danger primary icon={faTrash} />
                     <Button text="Large button" size="large" danger primary icon={faTrash} disabled />
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <Button text="Small button" size="small" icon={faInfoCircle} />
                     <Button text="Normal button" success icon={faCheck} />
                     <Button text="Large button" size="large" danger icon={faTrash} />
                     <Button text="Large button" size="large" danger icon={faTrash} disabled />
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <Button size="small" icon={faInfoCircle} />
                     <Button success icon={faCheck} />
                     <Button size="large" danger icon={faTrash} />
                     <Button size="large" danger icon={faTrash} disabled />
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <DropdownButton text="Random options" size="small" primary>
                         <DropdownButton.Item size="small">PDF</DropdownButton.Item>
                         <DropdownButton.Item size="small">CSV</DropdownButton.Item>
@@ -139,39 +140,42 @@ const Stats: NextPage = () => {
                         <DropdownButton.Item size="large">CSV</DropdownButton.Item>
                         <DropdownButton.Item size="large">XLS</DropdownButton.Item>
                     </DropdownButton>
-                </div>
+                </Flex>
 
-                <div className={styles.buttonsDemoRow}>
+                <Flex alignItems="center" gap={16}>
                     <Button text="Link button" link />
                     <Button text="Link button" link primary />
                     <Button text="Link button" link success />
-                </div>
-            </div>
+                </Flex>
+            </Flex>
 
             <Divider />
 
-            <div className={styles.inputsDemo}>
-                <Input label="Name" />
-                <Input label="Weight" type="number" />
-                <Input label="Disabled" disabled />
-                <Input label="MinLength" minLength={5} placeholder="Minimum length is 5" />
-                <Input label="MaxLength" maxLength={10} placeholder="Maximum length is 10" />
-                <Input label="MinAndMaxLength" minLength={5} maxLength={10} />
-            </div>
+            <Flex inline direction="column" gap={16}>
+                <Flex direction="column">
+                    <span>Name</span>
+                    <Input />
+                </Flex>
+
+                <Input type="number" placeholder="Number" />
+                <Input disabled placeholder="Disabled" />
+                <Input minLength={5} placeholder="Minimum length is 5" />
+                <Input maxLength={10} placeholder="Maximum length is 10" />
+            </Flex>
 
             <Divider />
 
-            <div className={styles.selectDemo}>
-                <Select label="Example">
+            <Flex inline direction="column" gap={16}>
+                <Select>
                     <Select.Option value="1" label="First" />
                     <Select.Option value="2" label="Second" />
                     <Select.Option value="3" label="Third" />
                 </Select>
 
-                <Select label="Disabled example" disabled>
+                <Select disabled>
                     <Select.Option value="1" label="First" />
                 </Select>
-            </div>
+            </Flex>
         </Layout>
     );
 };

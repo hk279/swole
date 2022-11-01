@@ -3,7 +3,6 @@ import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
 interface Props {
-    label?: string;
     type?: "text" | "number" | "email" | "password";
     name?: string;
     value?: string | number | undefined;
@@ -16,7 +15,6 @@ interface Props {
 }
 
 const Input = ({
-    label,
     type = "text",
     name,
     value,
@@ -53,13 +51,7 @@ const Input = ({
     };
 
     return (
-        <div className={styles.container}>
-            {label && (
-                <label className={styles.label} htmlFor={label}>
-                    {label}
-                </label>
-            )}
-
+        <>
             <input
                 className={`${styles.input} ${disabled && styles.disabled}`}
                 disabled={disabled}
@@ -72,7 +64,7 @@ const Input = ({
             />
 
             {children && <datalist id={datalistId}>{children}</datalist>}
-        </div>
+        </>
     );
 };
 

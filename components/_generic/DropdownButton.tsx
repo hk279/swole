@@ -4,6 +4,8 @@ import { ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
+// TODO: Close on click outside
+
 var cx = classnames.bind(styles);
 
 interface Props {

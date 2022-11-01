@@ -4,7 +4,7 @@
     display: inline-flex;
     text-align: center;
     padding: 1em;
-    background-color: variables.$color-gray;
+    background-color: variables.$color-light-blue;
     width: fit-content;
     cursor: pointer;
     transition: variables.$transition-quick;
@@ -14,7 +14,8 @@
 }
 
 .tabNavItem:hover {
-    background-color: variables.$color-light-gray;
+    background-color: variables.$color-primary;
+    color: white;
 }
 
 .tabNavItem.active {
