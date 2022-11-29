@@ -5,12 +5,15 @@
     overflow: hidden;
     white-space: nowrap;
     border-bottom: variables.$border-default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: variables.$space-xxlarge;
 }
 
-.title {
-    display: inline-block;
-}
-
-.nav {
-    display: inline;
+.auth {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: variables.$space-xxlarge;
 }

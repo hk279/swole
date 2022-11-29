@@ -10,8 +10,8 @@ type Props = {
     // etc.
 }
 
-const Flex = ({children, direction = "row", gap = 8, inline = false, alignItems, justifyContent}: Props) => {
-    return <div style={{display: inline ? "inline-flex" : "flex" , flexDirection: direction, gap: gap + "px", alignItems, justifyContent}}>{children}</div>
+const Flex = ({ children, direction = "row", gap = 8, inline = false, alignItems, justifyContent }: Props) => {
+    return <div style={{ display: inline ? "inline-flex" : "flex", flexDirection: direction, gap: gap + "px", alignItems, justifyContent }}>{children}</div>
 };
 
 export default Flex;

@@ -1,13 +1,5 @@
 @use "../../variables.scss";
 
 .navBar {
-    display: inline;
-    width: 50vw;
-    margin: 0;
-}
-.auth {
-    display: inline-flex;
-    align-items: center;
-    gap: variables.$space-xxlarge;
-    margin-left: variables.$space-xxlarge;
+    padding: 0;
 }
