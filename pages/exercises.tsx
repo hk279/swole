@@ -10,7 +10,7 @@ import TableCell from "../components/table/TableCell";
 import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
-import prisma from "../lib/prisma";
+import { prisma } from "../lib/prisma";
 import { Exercise_type } from "@prisma/client";
 import Select from "../components/_generic/Select";
 import { useState } from "react";

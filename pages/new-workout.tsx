@@ -10,7 +10,7 @@ import autoAnimate from "@formkit/auto-animate";
 import { Exercise_type } from "@prisma/client";
 import { v4 as uuidv4, validate } from "uuid";
 import { ExerciseData } from "../types";
-import prisma from "../lib/prisma";
+import { prisma } from "../lib/prisma";
 import Divider from "../components/_generic/Divider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -75,12 +75,12 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
         if (validatedExercises.length > 0) {
             // TODO: Use real user ID
-            const workout = { user_id: 2, workout_date: date, exercises: validatedExercises };
+            const workout = { user_id: 1, workout_date: date, exercises: validatedExercises };
             console.table(workout);
-    
+
             try {
                 const res = await axios.post("/api/createWorkout", workout);
-                console.log(res)
+                console.log(res);
                 // TODO: Add a success toast / message
             } catch (error) {
                 console.log(error);
