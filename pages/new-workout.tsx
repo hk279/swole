@@ -8,29 +8,23 @@ import Button from "../components/_generic/Button";
 import DatePicker from "react-datepicker";
 import autoAnimate from "@formkit/auto-animate";
 import { Exercise_type } from "@prisma/client";
-import { v4 as uuidv4, validate } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { ExerciseData } from "../types";
 import { prisma } from "../lib/prisma";
 import Divider from "../components/_generic/Divider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 
 interface Props {
     exerciseTypes: Exercise_type[];
 }
 
 const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
-    const { data: session } = useSession({
-        required: true,
-        onUnauthenticated() {
-            // The user is not authenticated, handle it here.
-        },
-    });
+    const getInitialExerciseListState = () => {
+        return [{ id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] }];
+    };
 
-    const [exercisesList, setExercisesList] = useState<ExerciseData[]>([
-        { id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] },
-    ]); // Init with one empty exercise
+    const [exercisesList, setExercisesList] = useState<ExerciseData[]>(getInitialExerciseListState()); // Init with one empty exercise
     const [date, setDate] = useState<Date>(new Date());
 
     const animationParent = useRef(null);
@@ -74,17 +68,16 @@ const NewWorkout: NextPage<Props> = ({ exerciseTypes }: Props) => {
         validatedExercises = validatedExercises.filter((exercise) => exercise.sets.length > 0);
 
         if (validatedExercises.length > 0) {
-            // TODO: Use real user ID
-            const workout = { user_id: 1, workout_date: date, exercises: validatedExercises };
-            console.table(workout);
+            const workout = { workout_date: date, exercises: validatedExercises };
 
             try {
                 const res = await axios.post("/api/createWorkout", workout);
+                setExercisesList(getInitialExerciseListState());
                 console.log(res);
-                // TODO: Add a success toast / message
             } catch (error) {
                 console.log(error);
             }
+            // TODO: Add a success/error message
         }
     };
 

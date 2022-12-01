@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 import { prisma } from '../../lib/prisma';
 import { ExerciseData } from '../../types';
 
 interface CreateWorkoutRequest extends NextApiRequest {
     body: {
-        user_id: number;
         workout_date: Date;
         exercises: ExerciseData[];
     };
@@ -14,12 +14,22 @@ export default async function handler(
     req: CreateWorkoutRequest,
     res: NextApiResponse
 ) {
-    const { user_id, workout_date, exercises } = req.body;
+    const session = await getSession({ req });
+    const { workout_date, exercises } = req.body;
 
     try {
         // 30.10.2022 - Nested create not supported, thus having to create workout ad exercises separately.
         // TODO: Put in transaction
-        const workout = await prisma.workout.create({ data: { user_id, workout_date } });
+        const workout = await prisma.workout.create({
+            data: {
+                workout_date,
+                User: {
+                    connect: {
+                        email: session?.user?.email ?? ""
+                    }
+                }
+            }
+        });
 
         exercises.forEach(async (exercise) => {
             await prisma.exercise.create({

@@ -5,6 +5,7 @@ import useViewport from "../../hooks/useViewport";
 import { signOut, useSession } from "next-auth/react";
 import Button from "../_generic/Button";
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 interface Props {
     title?: string;
@@ -13,11 +14,12 @@ interface Props {
 const Header = ({ title }: Props) => {
     const width = useViewport();
     const TAB_NAV_BREAKPOINT = 1200;
+    const router = useRouter();
 
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
-            // The user is not authenticated, handle it here.
+            router.replace("/login");
         },
     });
 
