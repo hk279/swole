@@ -33,7 +33,7 @@ const Button = ({
     const iconOnly = icon != null && text == null;
 
     const classNames: string = cx(
-        "button",
+        styles.button,
         { primary: primary },
         { secondary: !primary && !link },
         { link: link },

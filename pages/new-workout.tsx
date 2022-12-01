@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import type { GetServerSideProps, NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import Layout from "../components/layout/Layout";
-import ExerciseInputBlock from "../components/pages/workout/exerciseInputBlock";
+import ExerciseInputBlock from "../components/pages/workout/ExerciseInputBlock";
 import Button from "../components/_generic/Button";
 import DatePicker from "react-datepicker";
 import autoAnimate from "@formkit/auto-animate";

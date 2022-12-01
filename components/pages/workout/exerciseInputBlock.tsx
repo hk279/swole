@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../../_generic/Button";
 import Select from "../../_generic/Select";
-import SetInputBlock from "./setInputBlock";
+import SetInputBlock from "./SetInputBlock";
 import styles from "../../../styles/components/pages/workout/ExerciseInputBlock.module.scss";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
-    const [sets, setSets] = useState<SetData[]>([{ weight: undefined, reps: undefined }]);
+    const [sets, setSets] = useState<SetData[]>([{ weight: 0, reps: 0 }]);
     const [exerciseType, setExerciseType] = useState<Exercise_type>(exerciseTypes[0]);
 
     const animationParent = useRef(null);
@@ -31,7 +31,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     }, [sets, exerciseType]);
 
     const addSet = () => {
-        setSets([...sets, { weight: undefined, reps: undefined }]);
+        setSets([...sets, { weight: 0, reps: 0 }]);
     };
 
     const copySet = (index: number) => {

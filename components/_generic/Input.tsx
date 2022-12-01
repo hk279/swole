@@ -1,18 +1,13 @@
-import { ChangeEvent, ChangeEventHandler, ReactElement, useId } from "react";
+import classnames from "classnames";
+import { ChangeEvent, ReactElement, useId } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
-interface Props {
-    type?: "text" | "number" | "email" | "password";
-    name?: string;
-    value?: string | number | undefined;
-    disabled?: boolean;
-    placeholder?: string;
+type Props = JSX.IntrinsicElements["input"] & {
     minLength?: number;
     maxLength?: number;
     children?: ReactElement<OptionProps>[];
-    onChange?: ChangeEventHandler<HTMLInputElement>;
-}
+};
 
 const Input = ({
     type = "text",
@@ -22,10 +17,19 @@ const Input = ({
     placeholder,
     minLength,
     maxLength,
+    size,
     children,
-    onChange = () => {},
+    className,
+    onChange = () => { },
 }: Props) => {
     const datalistId: string = useId();
+    const cx = classnames.bind(styles);
+
+    const classNames: string = cx(
+        styles.input,
+        { disabled: disabled },
+        className
+    );
 
     const validateLength = (e: ChangeEvent<HTMLInputElement>) => {
         const value: string | null = e.target.value;
@@ -53,9 +57,10 @@ const Input = ({
     return (
         <>
             <input
-                className={`${styles.input} ${disabled && styles.disabled}`}
+                className={classNames}
                 disabled={disabled}
                 placeholder={placeholder}
+                size={size}
                 type={type}
                 name={name}
                 value={value}

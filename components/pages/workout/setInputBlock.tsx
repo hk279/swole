@@ -19,18 +19,20 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
     return (
         <Flex alignItems="center">
             <Input
-                value={weightValue || ""}
+                value={weightValue}
                 name="weight"
                 type="number"
                 placeholder="Weight"
                 onChange={(event) => changeWeight(index, event)}
+                className={styles.setInput}
             />
             <Input
-                value={repsValue || ""}
+                value={repsValue}
                 name="reps"
                 type="number"
                 placeholder="Reps"
                 onChange={(event) => changeReps(index, event)}
+                className={styles.setInput}
             />
             <Button size="small" icon={faTrash} onClick={() => deleteSet(index)} danger />
             <Button size="small" icon={faCopy} onClick={() => copySet(index)} />
