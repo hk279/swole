@@ -6,15 +6,20 @@
     padding: variables.$space-medium;
 }
 
-.disabled {
-    cursor: default;
-    border-color: variables.$color-gray;
-    background-color: variables.$color-light-gray;
+.input:invalid {
+    border-color: variables.$color-error;
+    background-color: rgba(variables.$color-error, 0.1);
 }
 
 .invalid {
     border-color: variables.$color-error;
     background-color: rgba(variables.$color-error, 0.1);
+}
+
+.disabled {
+    cursor: default;
+    border-color: variables.$color-gray;
+    background-color: variables.$color-light-gray;
 }
 
 .invalid:focus-visible {

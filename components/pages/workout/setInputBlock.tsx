@@ -19,17 +19,19 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
     return (
         <Flex alignItems="center">
             <Input
-                value={weightValue}
+                value={weightValue ?? ""}
                 name="weight"
                 type="number"
+                min={0}
                 placeholder="Weight"
                 onChange={(event) => changeWeight(index, event)}
                 className={styles.setInput}
             />
             <Input
-                value={repsValue}
+                value={repsValue ?? ""}
                 name="reps"
                 type="number"
+                min={0}
                 placeholder="Reps"
                 onChange={(event) => changeReps(index, event)}
                 className={styles.setInput}

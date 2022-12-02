@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
-    const [sets, setSets] = useState<SetData[]>([{ weight: 0, reps: 0 }]);
+    const [sets, setSets] = useState<SetData[]>([{}]);
     const [exerciseType, setExerciseType] = useState<Exercise_type>(exerciseTypes[0]);
 
     const animationParent = useRef(null);
@@ -31,7 +31,7 @@ const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange,
     }, [sets, exerciseType]);
 
     const addSet = () => {
-        setSets([...sets, { weight: 0, reps: 0 }]);
+        setSets([...sets, {}]);
     };
 
     const copySet = (index: number) => {

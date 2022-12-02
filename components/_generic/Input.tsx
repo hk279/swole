@@ -1,11 +1,10 @@
 import classnames from "classnames";
-import { ChangeEvent, ReactElement, useId } from "react";
+import { ReactElement, useId } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
 type Props = JSX.IntrinsicElements["input"] & {
-    minLength?: number;
-    maxLength?: number;
+    isValid?: boolean;
     children?: ReactElement<OptionProps>[];
 };
 
@@ -15,44 +14,25 @@ const Input = ({
     value,
     disabled = false,
     placeholder,
+    min,
     minLength,
     maxLength,
+    step,
     size,
-    children,
     className,
     onChange = () => { },
+    isValid = true,
+    children,
 }: Props) => {
-    const datalistId: string = useId();
+    const datalistId = useId();
     const cx = classnames.bind(styles);
 
     const classNames: string = cx(
         styles.input,
         { disabled: disabled },
+        { invalid: !isValid },
         className
     );
-
-    const validateLength = (e: ChangeEvent<HTMLInputElement>) => {
-        const value: string | null = e.target.value;
-
-        e.target.classList.remove(styles.invalid);
-
-        if (minLength != null && value != null) {
-            if (value.length < minLength) {
-                e.target.classList.add(styles.invalid);
-            }
-        }
-
-        if (maxLength != null && value != null) {
-            if (value.length > maxLength) {
-                e.target.classList.add(styles.invalid);
-            }
-        }
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        validateLength(e);
-        onChange(e);
-    };
 
     return (
         <>
@@ -62,10 +42,14 @@ const Input = ({
                 placeholder={placeholder}
                 size={size}
                 type={type}
+                step={step}
                 name={name}
                 value={value}
+                min={min}
+                minLength={minLength}
+                maxLength={maxLength}
                 list={children && datalistId}
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => onChange(e)}
             />
 
             {children && <datalist id={datalistId}>{children}</datalist>}
