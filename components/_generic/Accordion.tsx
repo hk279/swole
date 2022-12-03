@@ -4,22 +4,22 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import styles from "../../styles/components/_generic/Accordion.module.scss";
 
-interface Props {
+type AccordionProps = {
     children: ReactNode;
-}
+};
 
-const Accordion = ({ children }: Props) => {
+const Accordion = ({ children }: AccordionProps) => {
     return <div className={styles.accordion}>{children}</div>;
 };
 
-interface PanelProps {
+type PanelProps = {
     children: ReactNode;
     primaryHeader: string;
     secondaryHeader?: string;
-}
+};
 
-Accordion.Panel = ({ children, primaryHeader, secondaryHeader}: PanelProps) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+Accordion.Panel = ({ children, primaryHeader, secondaryHeader }: PanelProps) => {
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleRowClick = (): void => {
         setIsOpen(!isOpen);
@@ -40,7 +40,7 @@ Accordion.Panel = ({ children, primaryHeader, secondaryHeader}: PanelProps) => {
     };
 
     return (
-        <div>
+        <div className={styles.panel}>
             <div
                 className={styles.panelHeader}
                 onClick={() => handleRowClick()}

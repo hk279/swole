@@ -1,10 +1,73 @@
-import type { NextPage } from "next";
+import { Exercise, Exercise_type, Set, Workout } from "@prisma/client";
+import type { GetServerSideProps, NextPage } from "next";
+import { Fragment } from "react";
 import Layout from "../components/layout/Layout";
+import Accordion from "../components/_generic/Accordion";
+import Divider from "../components/_generic/Divider";
+import Flex from "../components/_generic/Flex";
+import { prisma } from "../lib/prisma";
 
-const Log: NextPage = () => {
+// Combined nested models into one model
+type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
+
+type Props = {
+    workouts: WorkoutData[];
+};
+
+const Log: NextPage<Props> = ({ workouts }) => {
+    console.log(workouts);
+
     return (
-        <Layout pageTitle="Log"></Layout>
+        <Layout pageTitle="Log">
+            <div style={{ width: "80%" }}>
+                <Accordion>
+                    {workouts.map(workout =>
+                        <Accordion.Panel primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
+                            {workout.Exercise.map((exercise, index, array) =>
+                                <Fragment>
+                                    <Flex justifyContent="space-between">
+                                        <span style={{ flex: "1" }}>{exercise.Exercise_type.name}</span>
+                                        <div style={{ flex: "3" }}>
+                                            <Flex direction="column">
+                                                {exercise.Set.map((set) =>
+                                                    <Flex gap={8} key={set.id}>
+                                                        {set.weight} kg <b>x</b> {set.reps} reps
+                                                    </Flex>
+                                                )}
+                                            </Flex>
+                                        </div>
+                                    </Flex>
+
+                                    {index !== array.length - 1 && <Divider variant="thin" />}
+                                </Fragment>
+                            )}
+                        </Accordion.Panel>
+                    )}
+                </Accordion>
+            </div >
+        </Layout >
     );
 };
 
 export default Log;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    let workouts = await prisma.workout.findMany({
+        include: {
+            Exercise: {
+                include: {
+                    Set: true,
+                    Exercise_type: true
+                }
+            }
+        }
+    });
+
+    workouts.sort((a, b) => a.workout_date > b.workout_date ? -1 : 1); // Order descending by date
+
+    return {
+        props: {
+            workouts: JSON.parse(JSON.stringify(workouts))
+        }
+    };
+};

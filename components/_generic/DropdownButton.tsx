@@ -40,7 +40,10 @@ const DropdownButton = ({
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const menuClassNames: string = cx(styles.dropdownMenu, { hideMenu: !isOpen });
+    const menuClassNames: string = cx(
+        styles.dropdownMenu,
+        { hideMenu: !isOpen }
+    );
 
     return (
         <div className={styles.dropdown}>

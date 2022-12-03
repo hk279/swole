@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { ReactElement, useId } from "react";
+import { ReactElement, useId, useState } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
@@ -9,6 +9,7 @@ type Props = JSX.IntrinsicElements["input"] & {
 };
 
 const Input = ({
+    required,
     type = "text",
     name,
     value,
@@ -21,6 +22,7 @@ const Input = ({
     size,
     className,
     onChange = () => { },
+    onClick = () => { },
     isValid = true,
     children,
 }: Props) => {
@@ -34,9 +36,12 @@ const Input = ({
         className
     );
 
+    //const [controlledValue, setControlledValue] = useState(value);
+
     return (
         <>
             <input
+                required={required}
                 className={classNames}
                 disabled={disabled}
                 placeholder={placeholder}
@@ -50,6 +55,7 @@ const Input = ({
                 maxLength={maxLength}
                 list={children && datalistId}
                 onChange={(e) => onChange(e)}
+                onClick={e => onClick(e)}
             />
 
             {children && <datalist id={datalistId}>{children}</datalist>}

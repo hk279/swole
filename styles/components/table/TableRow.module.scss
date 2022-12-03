@@ -1,5 +1,6 @@
 @use "../../variables.scss";
 
+// TODO: Move hover to table component and make it optional with a flag
 .tableRow:hover {
     background-color: variables.$color-light-blue;
 }

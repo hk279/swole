@@ -39,40 +39,7 @@ const exampleWorkouts: any = [
 
 const Stats: NextPage = () => {
     return (
-        <Layout pageTitle="Log">
-            <div style={{ width: "50vw" }}>
-                <Accordion>
-                    {exampleWorkouts.map((workout: any) => {
-                        return (
-                            <Accordion.Panel
-                                primaryHeader={workout.date}
-                                secondaryHeader={workout.excercises.length + " excercises"}
-                                key={workout.id}
-                            >
-                                <Table>
-                                    {workout.excercises.map((excercise: any, index: number) => {
-                                        return (
-                                            <TableRow key={workout.id + "-" + index}>
-                                                <TableCell>{excercise.name}</TableCell>
-                                                <TableCell>{excercise.sets} sets</TableCell>
-                                                <TableCell>{excercise.weight}kg</TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </Table>
-                            </Accordion.Panel>
-                        );
-                    })}
-                    <Accordion.Panel primaryHeader={"Test"} secondaryHeader={"Example"}>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum repellat fugiat qui quo
-                        repudiandae assumenda odio totam nostrum deleniti praesentium! Facere ullam harum neque, sed
-                        dolor explicabo accusamus! Obcaecati, delectus?
-                    </Accordion.Panel>
-                </Accordion>
-            </div>
-
-            <Divider />
-
+        <Layout pageTitle="Stats">
             <Flex direction="column" gap={16}>
                 <Flex alignItems="center" gap={16}>
                     <Button text="Small button" size="small" primary />

@@ -3,19 +3,24 @@
 .accordion {
     width: auto;
 }
+
+.panel:not(:last-of-type) {
+    border-bottom: variables.$border-default;
+}
+
 .panelHeader {
     padding: variables.$space-medium;
-    background-color: variables.$color-light-blue;
     transition: variables.$transition-quick;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .panelHeader:hover {
-    background-color: variables.$color-primary;
-    color: white;
+    background-color: variables.$color-light-blue;
 }
+
 .primaryHeaderText {
     font-weight: bold;
 }

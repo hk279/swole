@@ -10,8 +10,8 @@ type Props = {
 
 const NewWorkout: NextPage<Props> = (props) => {
     return (
-        <NewWorkoutProvider>
-            <NewWorkoutForm {...props} />
+        <NewWorkoutProvider {...props}>
+            <NewWorkoutForm />
         </NewWorkoutProvider>
     );
 };

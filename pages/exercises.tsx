@@ -71,7 +71,5 @@ export default Excercises;
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const exerciseTypes = await prisma.exercise_type.findMany();
-    return {
-        props: { exerciseTypes },
-    };
+    return { props: { exerciseTypes } };
 };

@@ -7,21 +7,21 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
 import { Exercise_type } from "@prisma/client";
 import { ExerciseData, SetData } from "../../../types";
+import { useNewWorkout } from "../../../context/NewWorkoutContext";
 
 interface Props {
-    exerciseTypes: Exercise_type[];
     exerciseData: ExerciseData;
-    handleExerciseChange: (updatedExercise: ExerciseData) => void;
-    removeExercise: (id: string) => void;
 }
 
-const ExerciseInputBlock = ({ exerciseTypes, exerciseData, handleExerciseChange, removeExercise }: Props) => {
+const ExerciseInputBlock = ({ exerciseData }: Props) => {
+    const { exerciseTypes, handleExerciseChange, removeExercise } = useNewWorkout();
+
     const [sets, setSets] = useState<SetData[]>([{}]);
     const [exerciseType, setExerciseType] = useState<Exercise_type>(exerciseTypes[0]);
 
     const animationParent = useRef(null);
 
-    /* Add / Remove set animation */
+    // Add / Remove set animation
     useEffect(() => {
         animationParent.current && autoAnimate(animationParent.current);
     }, [animationParent]);

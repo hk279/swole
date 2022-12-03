@@ -23,6 +23,7 @@ const SetInputBlock = ({ index, copySet, deleteSet, weightValue, changeWeight, r
                 name="weight"
                 type="number"
                 min={0}
+                step={0.05}
                 placeholder="Weight"
                 onChange={(event) => changeWeight(index, event)}
                 className={styles.setInput}

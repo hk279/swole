@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styles from "../../styles/components/table/TableCell.module.scss";
 
 interface Props {
-    children: ReactNode;
+    children?: ReactNode;
     colSpan?: number;
     cellType?: "text" | "number" | "action";
 }

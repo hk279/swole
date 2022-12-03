@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styles from "../../styles/components/table/TableRow.module.scss";
 
 interface Props {
-    children: ReactNode;
+    children?: ReactNode;
     header?: boolean;
 }
 
