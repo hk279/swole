@@ -25,7 +25,7 @@ type Props = {
 
 export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     const getInitialExerciseListState = () => {
-        return [{ id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] }];
+        return [{ id: uuidv4(), exerciseType: exerciseTypes[0], sets: [{}] }];
     };
 
     const [workoutDate, setWorkoutDate] = useState(new Date());

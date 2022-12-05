@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { ReactElement, useId, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useId, useState } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
@@ -36,7 +36,17 @@ const Input = ({
         className
     );
 
-    //const [controlledValue, setControlledValue] = useState(value);
+    const [controlledValue, setControlledValue] = useState(value);
+
+    useEffect(() => {
+        console.log(controlledValue);
+    }, [controlledValue]);
+
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setControlledValue(e.target.value);
+        onChange(e);
+    };
 
     return (
         <>
@@ -49,12 +59,12 @@ const Input = ({
                 type={type}
                 step={step}
                 name={name}
-                value={value}
+                value={controlledValue}
                 min={min}
                 minLength={minLength}
                 maxLength={maxLength}
                 list={children && datalistId}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => handleChange(e)}
                 onClick={e => onClick(e)}
             />
 

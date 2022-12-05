@@ -15,16 +15,14 @@ type Props = {
 };
 
 const Log: NextPage<Props> = ({ workouts }) => {
-    console.log(workouts);
-
     return (
         <Layout pageTitle="Log">
             <div style={{ width: "80%" }}>
                 <Accordion>
                     {workouts.map(workout =>
-                        <Accordion.Panel primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
+                        <Accordion.Panel key={workout.id} primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
                             {workout.Exercise.map((exercise, index, array) =>
-                                <Fragment>
+                                <Fragment key={workout.id + "-" + index}>
                                     <Flex justifyContent="space-between">
                                         <span style={{ flex: "1" }}>{exercise.Exercise_type.name}</span>
                                         <div style={{ flex: "3" }}>
@@ -38,6 +36,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                         </div>
                                     </Flex>
 
+                                    {/* // No divider after last element */}
                                     {index !== array.length - 1 && <Divider variant="thin" />}
                                 </Fragment>
                             )}

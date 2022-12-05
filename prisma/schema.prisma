@@ -12,8 +12,8 @@ model Exercise {
   id               Int           @id(map: "exercises_pkey") @default(autoincrement())
   workout_id       Int
   exercise_type_id Int
-  Exercise_type    Exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exercises_exercise_type_id_fkey")
-  Workout          Workout       @relation(fields: [workout_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exercises_workout_id_fkey")
+  Exercise_type    Exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "exercises_exercise_type_id_fkey")
+  Workout          Workout       @relation(fields: [workout_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "exercises_workout_id_fkey")
   Set              Set[]
 }
 
@@ -28,7 +28,7 @@ model Set {
   exercise_id Int
   weight      Float
   reps        Int
-  Exercise    Exercise @relation(fields: [exercise_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sets_exercise_id_fkey")
+  Exercise    Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sets_exercise_id_fkey")
 }
 
 model User {
@@ -46,7 +46,7 @@ model Workout {
   id           Int        @id(map: "workouts_pkey") @default(autoincrement())
   user_id      Int
   workout_date DateTime   @db.Date
-  User         User       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "workouts_user_id_fkey")
+  User         User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "workouts_user_id_fkey")
   Exercise     Exercise[]
 }
 

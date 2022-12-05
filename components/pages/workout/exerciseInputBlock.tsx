@@ -51,7 +51,7 @@ const ExerciseInputBlock = ({ exerciseData }: Props) => {
     const changeSetWeight = (index: number, event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         const setInputs = [...sets];
-        setInputs[index].weight = parseInt(value);
+        setInputs[index].weight = parseFloat(value);
         setSets(setInputs);
     };
 
