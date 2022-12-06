@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["interactiveTransactions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -12,8 +11,8 @@ model Exercise {
   id               Int           @id(map: "exercises_pkey") @default(autoincrement())
   workout_id       Int
   exercise_type_id Int
-  Exercise_type    Exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "exercises_exercise_type_id_fkey")
-  Workout          Workout       @relation(fields: [workout_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "exercises_workout_id_fkey")
+  Exercise_type    Exercise_type @relation(fields: [exercise_type_id], references: [id], onUpdate: Cascade, map: "exercises_exercise_type_id_fkey")
+  Workout          Workout       @relation(fields: [workout_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "exercises_workout_id_fkey")
   Set              Set[]
 }
 
@@ -21,6 +20,15 @@ model Exercise_type {
   id       Int        @id(map: "exercise_types_pkey") @default(autoincrement())
   name     String     @db.VarChar(255)
   Exercise Exercise[]
+  User     Favorite[]
+}
+
+model Favorite {
+  id               Int           @id(map: "favorites_pkey") @default(autoincrement())
+  user_id          Int
+  User             User          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  exercise_type_id Int
+  ExerciseType     Exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Set {
@@ -28,16 +36,17 @@ model Set {
   exercise_id Int
   weight      Float
   reps        Int
-  Exercise    Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sets_exercise_id_fkey")
+  Exercise    Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "sets_exercise_id_fkey")
 }
 
 model User {
-  id            Int       @id(map: "users_pkey") @default(autoincrement())
+  id            Int        @id(map: "users_pkey") @default(autoincrement())
   name          String?
-  email         String    @unique(map: "users_email_key") @db.VarChar(255)
+  email         String     @unique(map: "users_email_key") @db.VarChar(255)
   emailVerified DateTime?
   image         String?
   accounts      Account[]
+  Exercise_type Favorite[]
   sessions      Session[]
   Workout       Workout[]
 }
@@ -46,8 +55,8 @@ model Workout {
   id           Int        @id(map: "workouts_pkey") @default(autoincrement())
   user_id      Int
   workout_date DateTime   @db.Date
-  User         User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "workouts_user_id_fkey")
   Exercise     Exercise[]
+  User         User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "workouts_user_id_fkey")
 }
 
 model Account {

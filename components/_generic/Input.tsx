@@ -38,11 +38,6 @@ const Input = ({
 
     const [controlledValue, setControlledValue] = useState(value);
 
-    useEffect(() => {
-        console.log(controlledValue);
-    }, [controlledValue]);
-
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setControlledValue(e.target.value);
         onChange(e);

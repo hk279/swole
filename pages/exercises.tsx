@@ -11,18 +11,48 @@ import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import { prisma } from "../lib/prisma";
-import { Exercise_type } from "@prisma/client";
 import Select from "../components/_generic/Select";
 import { useState } from "react";
+import { getSession } from "next-auth/react";
+import axios from "axios";
+import router from "next/router";
+
+type ExerciseType = {
+    id: number;
+    name: string;
+    isFavorite: boolean;
+};
 
 interface Props {
-    exerciseTypes: Exercise_type[];
+    exerciseTypes: ExerciseType[];
 }
 
 const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const filteredList = exerciseTypes.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const refreshData = () => {
+        router.replace(router.asPath);
+    };
+
+    const addFavorite = async (exerciseTypeId: number) => {
+        try {
+            await axios.post("/api/addFavorite", { exerciseTypeId });
+            refreshData();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const removeFavorite = async (exerciseTypeId: number) => {
+        try {
+            await axios.post("/api/removeFavorite", { exerciseTypeId });
+            refreshData();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Layout pageTitle="Exercises">
@@ -33,14 +63,14 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                 </div>
 
                 <div className={styles.search}>
-                    <Input type="text" placeholder="Search" onChange={(e) => setSearchQuery(e.target.value)}>
+                    <Input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}>
                         {exerciseTypes.map((exerciseType) => (
                             <Select.Option value={exerciseType.name} key={exerciseType.id} />
                         ))}
                     </Input>
                 </div>
 
-                <Table tableStyle="condensed">
+                <Table>
                     <TableRow header>
                         <TableCell>Name</TableCell>
                         <TableCell cellType="action">Favorite</TableCell>
@@ -49,18 +79,14 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                         <TableRow key={exerciseType.id}>
                             <TableCell>{exerciseType.name}</TableCell>
                             <TableCell cellType="action">
-                                <Button icon={starEmpty} size="large" link />
+                                <Button
+                                    icon={exerciseType.isFavorite ? starFull : starEmpty}
+                                    onClick={() => { exerciseType.isFavorite ? removeFavorite(exerciseType.id) : addFavorite(exerciseType.id); }}
+                                    size="large"
+                                    link />
                             </TableCell>
                         </TableRow>
                     ))}
-                    {/* ---------FOR DEMO--------- */}
-                    <TableRow>
-                        <TableCell>Favorite exercise (FOR TESTING - always visible)</TableCell>
-                        <TableCell cellType="action">
-                            <Button icon={starFull} size="large" link />
-                        </TableCell>
-                    </TableRow>
-                    {/* -------------------------- */}
                 </Table>
             </div>
         </Layout>
@@ -69,7 +95,34 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
 export default Excercises;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    const exerciseTypes = await prisma.exercise_type.findMany();
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getSession({ req });
+
+    if (!session) {
+        res.statusCode = 403;
+        return { props: { exerciseTypes: [] } };
+    }
+
+    const exerciseTypeData = await prisma.exercise_type.findMany();
+    const favoriteExerciseTypes = await prisma.exercise_type.findMany({
+        where: {
+            User: {
+                some: {
+                    User: {
+                        email: session.user?.email ?? ""
+                    }
+                }
+            }
+        }
+    });
+
+    const exerciseTypes = exerciseTypeData.map(exerciseType => {
+        return {
+            id: exerciseType.id,
+            name: exerciseType.name,
+            isFavorite: favoriteExerciseTypes.find(favorite => favorite.id == exerciseType.id) != null
+        };
+    });
+
     return { props: { exerciseTypes } };
 };

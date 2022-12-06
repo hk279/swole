@@ -92,7 +92,6 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
             try {
                 const res = await axios.post("/api/createWorkout", workout);
                 setExercises(getInitialExerciseListState());
-                console.log(res);
             } catch (error) {
                 console.log(error);
             }
