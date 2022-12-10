@@ -1,19 +1,24 @@
 import { Exercise_type } from "@prisma/client";
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
+import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { ExerciseData } from "../types";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
 interface NewWorkoutContextInterface {
+    isValid: boolean;
     exerciseTypes: Exercise_type[];
     workoutDate: Date;
-    setWorkoutDate: Dispatch<SetStateAction<Date>>;
+    changeWorkoutDate: (event: ChangeEvent<HTMLInputElement>) => void;
     exercises: ExerciseData[];
     addExercise: () => void;
-    removeExercise: (id: string) => void;
-    handleExerciseChange: (updatedExercise: ExerciseData) => void;
+    removeExercise: (index: number) => void;
+    changeExerciseType: (event: ChangeEvent<HTMLSelectElement>, exerciseIndex: number) => void;
+    handleExerciseChange: (updatedExercise: ExerciseData, index: number) => void;
+    addSet: (exerciseIndex: number) => void;
+    copySet: (exerciseIndex: number, setIndex: number) => void;
+    removeSet: (exerciseIndex: number, setIndex: number) => void;
+    handleSetWeightChange: (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => void;
+    handleSetRepsChange: (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => void;
     saveWorkout: () => void;
-    isValid: boolean;
 }
 
 export const NewWorkoutContext = createContext<NewWorkoutContextInterface | null>(null);
@@ -24,12 +29,10 @@ type Props = {
 };
 
 export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
-    const getInitialExerciseListState = () => {
-        return [{ id: uuidv4(), exerciseType: exerciseTypes[0], sets: [{}] }];
-    };
+    const getEmptyExercise = () => ({ exerciseType: exerciseTypes[0], sets: [{}] });
 
     const [workoutDate, setWorkoutDate] = useState(new Date());
-    const [exercises, setExercises] = useState<ExerciseData[]>(getInitialExerciseListState());
+    const [exercises, setExercises] = useState<ExerciseData[]>([getEmptyExercise()]);
     const [isValid, setIsValid] = useState<boolean>(false);
 
     useEffect(() => {
@@ -51,28 +54,36 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
         return !hasInvalidInputs;
     };
 
-    const addExercise = () => {
-        const newExercisesList: ExerciseData[] = [
-            ...exercises,
-            { id: uuidv4(), exerciseType: exerciseTypes[0], sets: [] },
-        ];
+    const changeWorkoutDate = (event: ChangeEvent<HTMLInputElement>) => {
+        const valueAsDate = event.target.valueAsDate;
 
-        setExercises(newExercisesList);
-    };
-
-    const removeExercise = (id: string) => {
-        const newExercisesList: ExerciseData[] = exercises.filter((exercise) => exercise.id !== id);
-        setExercises(newExercisesList);
-    };
-
-    const handleExerciseChange = (updatedExercise: ExerciseData) => {
-        const exerciseToBeChangedIndex = exercises.findIndex((exercise) => exercise.id === updatedExercise.id);
-        const newExercisesList = [...exercises];
-
-        if (exerciseToBeChangedIndex !== -1) {
-            newExercisesList[exerciseToBeChangedIndex] = updatedExercise;
+        if (valueAsDate) {
+            setWorkoutDate(valueAsDate);
         }
+    };
 
+    const addExercise = () => {
+        setExercises([
+            ...exercises,
+            getEmptyExercise(),
+        ]);
+    };
+
+    const removeExercise = (exerciseIndex: number) => {
+        const updatedExercisesList = exercises.filter((_, index) => exerciseIndex !== index);
+        setExercises(updatedExercisesList);
+    };
+
+    const changeExerciseType = (event: ChangeEvent<HTMLSelectElement>, exerciseIndex: number) => {
+        const { value } = event.target;
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.exerciseType = exerciseTypes.find((type) => type.id === parseInt(value)) ?? exerciseTypes[0];
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
+    const handleExerciseChange = (updatedExercise: ExerciseData, exerciseIndex: number) => {
+        const newExercisesList = [...exercises];
+        newExercisesList[exerciseIndex] = updatedExercise;
         setExercises(newExercisesList);
     };
 
@@ -90,8 +101,8 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
             const workout = { workout_date: workoutDate, exercises: validatedExercises };
 
             try {
-                const res = await axios.post("/api/createWorkout", workout);
-                setExercises(getInitialExerciseListState());
+                await axios.post("/api/createWorkout", workout);
+                setExercises([getEmptyExercise()]);
             } catch (error) {
                 console.log(error);
             }
@@ -99,18 +110,57 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
         }
     };
 
+    const addSet = (exerciseIndex: number) => {
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.sets = [...updatedExercise.sets, {}];
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
+    const copySet = (exerciseIndex: number, setIndex: number) => {
+        const setToCopy = exercises[exerciseIndex].sets[setIndex];
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.sets = [...updatedExercise.sets, setToCopy];
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
+    const removeSet = (exerciseIndex: number, setIndex: number) => {
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.sets = updatedExercise.sets.filter((_, index) => setIndex !== index);
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
+    const handleSetWeightChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
+        const { value } = event.target;
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.sets[setIndex].weight = parseFloat(value);
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
+    const handleSetRepsChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
+        const { value } = event.target;
+        const updatedExercise = exercises[exerciseIndex];
+        updatedExercise.sets[setIndex].reps = parseInt(value);
+        handleExerciseChange(updatedExercise, exerciseIndex);
+    };
+
     return (
         <NewWorkoutContext.Provider
             value={{
+                isValid,
                 exerciseTypes,
                 workoutDate,
-                setWorkoutDate,
+                changeWorkoutDate,
                 exercises,
                 addExercise,
                 removeExercise,
+                changeExerciseType,
                 handleExerciseChange,
-                saveWorkout,
-                isValid
+                addSet,
+                copySet,
+                removeSet,
+                handleSetWeightChange,
+                handleSetRepsChange,
+                saveWorkout
             }}>
             {children}
         </NewWorkoutContext.Provider>
