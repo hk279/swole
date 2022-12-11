@@ -1,12 +1,9 @@
-import type { NextPage } from "next";
-import Layout from "../components/layout/Layout";
+import { NextPage } from "next";
 
-const Testing: NextPage = () => {
-    return (
-        <Layout pageTitle="Testing">
-            <p>testing</p>
-        </Layout>
-    );
-};
+const Testing: NextPage = () =>
+    <>
+
+    </>;
+
 
 export default Testing;
