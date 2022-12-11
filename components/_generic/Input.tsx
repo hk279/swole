@@ -35,10 +35,7 @@ const Input = ({
         className
     );
 
-    const [controlledValue, setControlledValue] = useState(value);
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setControlledValue(e.target.value);
         onChange(e);
     };
 
@@ -46,7 +43,7 @@ const Input = ({
         <>
             <input
                 className={classNames}
-                value={controlledValue}
+                value={value?.toString() ?? ""}
                 required={required}
                 disabled={disabled}
                 placeholder={placeholder}

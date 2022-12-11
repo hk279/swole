@@ -7,19 +7,18 @@ import { useNewWorkout } from "../../../context/NewWorkoutContext";
 import { SetData } from "../../../types";
 
 type Props = {
-    data: SetData;
+    set: SetData;
     exerciseIndex: number;
     setIndex: number;
 };
 
-const SetBlock = ({ data, exerciseIndex, setIndex }: Props) => {
+const SetBlock = ({ set, exerciseIndex, setIndex }: Props) => {
     const { copySet, removeSet, handleSetWeightChange, handleSetRepsChange } = useNewWorkout();
 
     return (
         <Flex alignItems="center" key={`${exerciseIndex}-${setIndex}`}>
-            exercise {exerciseIndex} --- set: {setIndex}
             <Input
-                value={data.weight ?? ""}
+                value={set.weight ?? ""}
                 type="number"
                 min={0}
                 step={0.05}
@@ -28,7 +27,7 @@ const SetBlock = ({ data, exerciseIndex, setIndex }: Props) => {
                 className={styles.setInput}
             />
             <Input
-                value={data.reps ?? ""}
+                value={set.reps ?? ""}
                 type="number"
                 min={0}
                 placeholder="Reps"

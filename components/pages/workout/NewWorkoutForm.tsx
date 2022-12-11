@@ -21,17 +21,11 @@ const NewWorkoutForm = () => {
     } = useNewWorkout();
 
     const exercisesAnimationParent = useRef<HTMLDivElement>(null);
-    const setsAnimationParent = useRef<HTMLDivElement>(null);
 
     /* Add / Remove exercise animation */
     useEffect(() => {
         exercisesAnimationParent.current && autoAnimate(exercisesAnimationParent.current);
     }, [exercisesAnimationParent]);
-
-    /* Add / Remove set animation */
-    useEffect(() => {
-        setsAnimationParent.current && autoAnimate(setsAnimationParent.current);
-    }, [setsAnimationParent]);
 
     return (
         <Layout pageTitle="New Workout">
@@ -43,9 +37,9 @@ const NewWorkoutForm = () => {
                 <Divider />
 
                 <div ref={exercisesAnimationParent}>
-                    {exercises.map((_, exerciseIndex) => (
+                    {exercises.map((exercise, exerciseIndex) => (
                         <Fragment key={exerciseIndex}>
-                            <ExerciseBlock exerciseIndex={exerciseIndex} />
+                            <ExerciseBlock exercise={exercise} exerciseIndex={exerciseIndex} />
                             <Divider />
                         </Fragment>
                     ))}

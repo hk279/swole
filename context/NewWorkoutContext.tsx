@@ -33,7 +33,7 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
 
     const [workoutDate, setWorkoutDate] = useState(new Date());
     const [exercises, setExercises] = useState<ExerciseData[]>([getEmptyExercise()]);
-    const [isValid, setIsValid] = useState<boolean>(false);
+    const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
         if (validateExercises()) {
@@ -132,14 +132,14 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     const handleSetWeightChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
         const { value } = event.target;
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets[setIndex].weight = parseFloat(value);
+        updatedExercise.sets[setIndex].weight = value !== "" ? parseFloat(value) : undefined; // TODO: clean up the parsing logic
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     const handleSetRepsChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
         const { value } = event.target;
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets[setIndex].reps = parseInt(value);
+        updatedExercise.sets[setIndex].reps = value !== "" ? parseInt(value) : undefined; // TODO: clean up the parsing logic
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
