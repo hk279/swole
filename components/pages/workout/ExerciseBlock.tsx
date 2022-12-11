@@ -7,6 +7,7 @@ import autoAnimate from "@formkit/auto-animate";
 import { useNewWorkout } from "../../../context/NewWorkoutContext";
 import Flex from "../../_generic/Flex";
 import { ExerciseData } from "../../../types";
+import spaces from "../../../styles/spaces.module.scss";
 
 type Props = {
     exercise: ExerciseData;
@@ -24,8 +25,8 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
     }, [setsAnimationParent]);
 
     return (
-        <Flex direction="column" gap={12} alignItems="flex-start">
-            <Flex gap={12}>
+        <Flex direction="column" gap={spaces.large} alignItems="flex-start">
+            <Flex gap={spaces.large}>
                 <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.exerciseType.id}>
                     {exerciseTypes.map((exerciseType) => (
                         <Select.Option
@@ -43,7 +44,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
                 />
             </Flex>
 
-            <Flex ref={setsAnimationParent} direction="column" gap={12}>
+            <Flex ref={setsAnimationParent} direction="column" gap={spaces.large}>
                 {exercise.sets.map((set, setIndex) => (
                     <SetBlock set={set} exerciseIndex={exerciseIndex} setIndex={setIndex} key={`${exerciseIndex}-${setIndex}`} />
                 ))}

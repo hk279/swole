@@ -13,8 +13,10 @@ interface Props {
 
 const Header = ({ title }: Props) => {
     const width = useViewport();
-    const TAB_NAV_BREAKPOINT = 1200;
     const router = useRouter();
+
+    const TAB_NAV_BREAKPOINT = 1200;
+    const HIDE_EMAIL_BREAKPOINT = 800;
 
     const { data: session } = useSession({
         required: true,
@@ -32,7 +34,7 @@ const Header = ({ title }: Props) => {
 
                 {session?.user?.email && (
                     <div className={styles.auth}>
-                        {session.user.email}
+                        {width > HIDE_EMAIL_BREAKPOINT && session.user.email}
                         <Button
                             icon={faSignOut}
                             danger

@@ -6,6 +6,7 @@ import Accordion from "../components/_generic/Accordion";
 import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
 import { prisma } from "../lib/prisma";
+import spaces from "../styles/spaces.module.scss";
 
 // Combined nested models into one model
 type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
@@ -28,7 +29,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                         <div style={{ flex: "3" }}>
                                             <Flex direction="column">
                                                 {exercise.Set.map((set) =>
-                                                    <Flex gap={8} key={set.id}>
+                                                    <Flex gap={spaces.medium} key={set.id}>
                                                         {set.weight} kg <b>x</b> {set.reps} reps
                                                     </Flex>
                                                 )}

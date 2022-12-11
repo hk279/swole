@@ -1,0 +1,9 @@
+@use "./variables.scss";
+
+:export {
+    small: variables.$space-small;
+    medium: variables.$space-medium;
+    large: variables.$space-large;
+    xlarge: variables.$space-xlarge;
+    xxlarge: variables.$space-xxlarge;
+}
