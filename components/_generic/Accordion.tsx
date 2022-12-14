@@ -8,17 +8,17 @@ type AccordionProps = {
     children: ReactNode;
 };
 
-const Accordion = ({ children }: AccordionProps) => {
+export const Accordion = ({ children }: AccordionProps) => {
     return <div className={styles.accordion}>{children}</div>;
 };
 
-type PanelProps = {
+type AccordionPanelProps = {
     children: ReactNode;
     primaryHeader: string;
     secondaryHeader?: string;
 };
 
-Accordion.Panel = ({ children, primaryHeader, secondaryHeader }: PanelProps) => {
+export const AccordionPanel = ({ children, primaryHeader, secondaryHeader }: AccordionPanelProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleRowClick = (): void => {
@@ -55,5 +55,3 @@ Accordion.Panel = ({ children, primaryHeader, secondaryHeader }: PanelProps) => 
         </div>
     );
 };
-
-export default Accordion;

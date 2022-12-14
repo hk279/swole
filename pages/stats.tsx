@@ -1,82 +1,54 @@
 import type { NextPage } from "next";
 import { faTrash, faCheck, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout/Layout";
-import TableCell from "../components/table/TableCell";
-import TableRow from "../components/table/TableRow";
-import Accordion from "../components/_generic/Accordion";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import Select from "../components/_generic/Select";
-import styles from "../styles/pages/Stats.module.scss";
 import DropdownButton from "../components/_generic/DropdownButton";
 import Divider from "../components/_generic/Divider";
-import Table from "../components/table/Table";
 import Flex from "../components/_generic/Flex";
-
-const exampleWorkouts: any = [
-    {
-        id: "1",
-        date: "1.2.2022",
-        excercises: [
-            { name: "Curls", sets: 3, weight: 20 },
-            { name: "Squats", sets: 4, weight: 60 },
-            { name: "Bench press", sets: 3, weight: 50 },
-            { name: "Deadlift", sets: 2, weight: 70 },
-            { name: "Shoulder press", sets: 3, weight: 20 },
-        ],
-    },
-    {
-        id: "2",
-        date: "2.3.2022",
-        excercises: [
-            { name: "Shoulder press", sets: 3, weight: 20 },
-            { name: "Deadlift", sets: 4, weight: 60 },
-            { name: "Bench press", sets: 2, weight: 60 },
-        ],
-    },
-];
-
+import spaces from "../styles/spaces.module.scss";
 
 const Stats: NextPage = () => {
     return (
         <Layout pageTitle="Stats">
-            <Flex direction="column" gap={16}>
-                <Flex alignItems="center" gap={16}>
+            <Flex direction="column" gap={spaces.large}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button text="Small button" size="small" primary />
                     <Button text="Normal button" primary />
                     <Button text="Large button" size="large" primary />
                     <Button text="Large button" size="large" primary disabled />
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button text="Small button" size="small" />
                     <Button text="Normal button" />
                     <Button text="Large button" size="large" />
                     <Button text="Large button" size="large" disabled />
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button text="Small button" size="small" primary icon={faInfoCircle} />
                     <Button text="Normal button" success primary icon={faCheck} />
                     <Button text="Large button" size="large" danger primary icon={faTrash} />
                     <Button text="Large button" size="large" danger primary icon={faTrash} disabled />
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button text="Small button" size="small" icon={faInfoCircle} />
                     <Button text="Normal button" success icon={faCheck} />
                     <Button text="Large button" size="large" danger icon={faTrash} />
                     <Button text="Large button" size="large" danger icon={faTrash} disabled />
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button size="small" icon={faInfoCircle} />
                     <Button success icon={faCheck} />
                     <Button size="large" danger icon={faTrash} />
                     <Button size="large" danger icon={faTrash} disabled />
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <DropdownButton text="Random options" size="small" primary>
                         <DropdownButton.Item size="small">PDF</DropdownButton.Item>
                         <DropdownButton.Item size="small">CSV</DropdownButton.Item>
@@ -109,7 +81,7 @@ const Stats: NextPage = () => {
                     </DropdownButton>
                 </Flex>
 
-                <Flex alignItems="center" gap={16}>
+                <Flex alignItems="center" gap={spaces.large}>
                     <Button text="Link button" link />
                     <Button text="Link button" link primary />
                     <Button text="Link button" link success />
@@ -118,7 +90,7 @@ const Stats: NextPage = () => {
 
             <Divider />
 
-            <Flex inline direction="column" gap={16}>
+            <Flex inline direction="column" gap={spaces.large}>
                 <Flex direction="column">
                     <span>Name</span>
                     <Input />
@@ -132,7 +104,7 @@ const Stats: NextPage = () => {
 
             <Divider />
 
-            <Flex inline direction="column" gap={16}>
+            <Flex inline direction="column" gap={spaces.large}>
                 <Select>
                     <Select.Option value="1" label="First" />
                     <Select.Option value="2" label="Second" />

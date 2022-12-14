@@ -2,7 +2,7 @@ import { Exercise, Exercise_type, Set, Workout } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import { Fragment } from "react";
 import Layout from "../components/layout/Layout";
-import Accordion from "../components/_generic/Accordion";
+import { Accordion, AccordionPanel } from "../components/_generic/Accordion";
 import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
 import { prisma } from "../lib/prisma";
@@ -21,7 +21,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
             <div style={{ width: "80%" }}>
                 <Accordion>
                     {workouts.map(workout =>
-                        <Accordion.Panel key={workout.id} primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
+                        <AccordionPanel key={workout.id} primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
                             {workout.Exercise.map((exercise, index, array) =>
                                 <Fragment key={workout.id + "-" + index}>
                                     <Flex justifyContent="space-between">
@@ -41,7 +41,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                     {index !== array.length - 1 && <Divider variant="thin" />}
                                 </Fragment>
                             )}
-                        </Accordion.Panel>
+                        </AccordionPanel>
                     )}
                 </Accordion>
             </div >
