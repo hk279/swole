@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import Button from "../../_generic/Button";
-import Select from "../../_generic/Select";
+import { Select, SelectOption } from "../../_generic/Select";
 import SetBlock from "./SetBlock";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
@@ -29,7 +29,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
             <Flex gap={spaces.large}>
                 <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.exerciseType.id}>
                     {exerciseTypes.map((exerciseType) => (
-                        <Select.Option
+                        <SelectOption
                             key={`option-${exerciseIndex}-${exerciseType.id}`}
                             value={exerciseType.id}
                             label={exerciseType.name}

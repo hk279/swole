@@ -8,7 +8,7 @@ interface Props {
     disabled?: boolean;
 }
 
-const Select = ({ children, value, onChange = () => {}, disabled = false }: Props) => {
+export const Select = ({ children, value, onChange = () => { }, disabled = false }: Props) => {
     return (
         <select
             value={value}
@@ -27,8 +27,6 @@ export interface OptionProps {
     disabled?: boolean;
 }
 
-Select.Option = ({ value, label, disabled = false }: OptionProps) => {
+export const SelectOption = ({ value, label, disabled = false }: OptionProps) => {
     return <option className={styles.option} value={value} label={label} disabled={disabled} />;
 };
-
-export default Select;

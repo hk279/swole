@@ -11,7 +11,7 @@ import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
 import { prisma } from "../lib/prisma";
-import Select from "../components/_generic/Select";
+import { Select, SelectOption } from "../components/_generic/Select";
 import { useState } from "react";
 import { getSession } from "next-auth/react";
 import axios from "axios";
@@ -65,7 +65,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
                 <div className={styles.search}>
                     <Input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}>
                         {exerciseTypes.map((exerciseType) => (
-                            <Select.Option value={exerciseType.name} key={exerciseType.id} />
+                            <SelectOption value={exerciseType.name} key={exerciseType.id} />
                         ))}
                     </Input>
                 </div>

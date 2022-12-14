@@ -15,4 +15,6 @@ const Flex = forwardRef(({ children, direction = "row", gap = "8px", inline = fa
     <div style={{ display: inline ? "inline-flex" : "flex", flexDirection: direction, gap, alignItems, justifyContent }} ref={ref}>{children}</div>
 );
 
+Flex.displayName = "Flex";
+
 export default Flex;

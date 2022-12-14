@@ -18,7 +18,7 @@ interface Props {
     success?: boolean;
 }
 
-const DropdownButton = ({
+export const DropdownButton = ({
     children,
     text,
     primary = false,
@@ -62,7 +62,7 @@ interface ItemProps {
     size?: "small" | "medium" | "large";
 }
 
-DropdownButton.Item = ({ children, disabled = false, size = "medium" }: ItemProps) => {
+export const DropdownButtonItem = ({ children, disabled = false, size = "medium" }: ItemProps) => {
     const classNames: string = cx(
         "dropdownItem",
         { disabled: disabled },
@@ -72,5 +72,3 @@ DropdownButton.Item = ({ children, disabled = false, size = "medium" }: ItemProp
 
     return <div className={classNames}>{children}</div>;
 };
-
-export default DropdownButton;

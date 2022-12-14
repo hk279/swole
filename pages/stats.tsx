@@ -3,8 +3,8 @@ import { faTrash, faCheck, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import Layout from "../components/layout/Layout";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
-import Select from "../components/_generic/Select";
-import DropdownButton from "../components/_generic/DropdownButton";
+import { Select, SelectOption } from "../components/_generic/Select";
+import { DropdownButton, DropdownButtonItem } from "../components/_generic/DropdownButton";
 import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
 import spaces from "../styles/spaces.module.scss";
@@ -50,34 +50,34 @@ const Stats: NextPage = () => {
 
                 <Flex alignItems="center" gap={spaces.large}>
                     <DropdownButton text="Random options" size="small" primary>
-                        <DropdownButton.Item size="small">PDF</DropdownButton.Item>
-                        <DropdownButton.Item size="small">CSV</DropdownButton.Item>
-                        <DropdownButton.Item size="small">XLS</DropdownButton.Item>
-                        <DropdownButton.Item size="small" disabled>
+                        <DropdownButtonItem size="small">PDF</DropdownButtonItem>
+                        <DropdownButtonItem size="small">CSV</DropdownButtonItem>
+                        <DropdownButtonItem size="small">XLS</DropdownButtonItem>
+                        <DropdownButtonItem size="small" disabled>
                             XLS
-                        </DropdownButton.Item>
+                        </DropdownButtonItem>
                     </DropdownButton>
 
                     <DropdownButton text="Other options" primary success>
-                        <DropdownButton.Item>Longer text</DropdownButton.Item>
-                        <DropdownButton.Item>CSV</DropdownButton.Item>
-                        <DropdownButton.Item>XLS</DropdownButton.Item>
-                        <DropdownButton.Item disabled>XLS</DropdownButton.Item>
+                        <DropdownButtonItem>Longer text</DropdownButtonItem>
+                        <DropdownButtonItem>CSV</DropdownButtonItem>
+                        <DropdownButtonItem>XLS</DropdownButtonItem>
+                        <DropdownButtonItem disabled>XLS</DropdownButtonItem>
                     </DropdownButton>
 
                     <DropdownButton text="Export options" size="large" primary danger>
-                        <DropdownButton.Item size="large">PDF</DropdownButton.Item>
-                        <DropdownButton.Item size="large">CSV</DropdownButton.Item>
-                        <DropdownButton.Item size="large">XLS</DropdownButton.Item>
-                        <DropdownButton.Item size="large" disabled>
+                        <DropdownButtonItem size="large">PDF</DropdownButtonItem>
+                        <DropdownButtonItem size="large">CSV</DropdownButtonItem>
+                        <DropdownButtonItem size="large">XLS</DropdownButtonItem>
+                        <DropdownButtonItem size="large" disabled>
                             XLS
-                        </DropdownButton.Item>
+                        </DropdownButtonItem>
                     </DropdownButton>
 
                     <DropdownButton text="Export options" size="large" primary danger disabled>
-                        <DropdownButton.Item size="large">PDF</DropdownButton.Item>
-                        <DropdownButton.Item size="large">CSV</DropdownButton.Item>
-                        <DropdownButton.Item size="large">XLS</DropdownButton.Item>
+                        <DropdownButtonItem size="large">PDF</DropdownButtonItem>
+                        <DropdownButtonItem size="large">CSV</DropdownButtonItem>
+                        <DropdownButtonItem size="large">XLS</DropdownButtonItem>
                     </DropdownButton>
                 </Flex>
 
@@ -106,13 +106,13 @@ const Stats: NextPage = () => {
 
             <Flex inline direction="column" gap={spaces.large}>
                 <Select>
-                    <Select.Option value="1" label="First" />
-                    <Select.Option value="2" label="Second" />
-                    <Select.Option value="3" label="Third" />
+                    <SelectOption value="1" label="First" />
+                    <SelectOption value="2" label="Second" />
+                    <SelectOption value="3" label="Third" />
                 </Select>
 
                 <Select disabled>
-                    <Select.Option value="1" label="First" />
+                    <SelectOption value="1" label="First" />
                 </Select>
             </Flex>
         </Layout>
