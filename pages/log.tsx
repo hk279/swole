@@ -8,6 +8,7 @@ import Flex from "../components/_generic/Flex";
 import { prisma } from "../lib/prisma";
 import spaces from "../styles/spaces.module.scss";
 import styles from "../styles/pages/Log.module.scss";
+import { getSession } from "next-auth/react";
 
 // Combined nested models into one model
 type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
@@ -52,8 +53,20 @@ const Log: NextPage<Props> = ({ workouts }) => {
 
 export default Log;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getSession({ req });
+
+    if (!session) {
+        res.statusCode = 403;
+        return { props: { exerciseTypes: [] } };
+    }
+
     let workouts = await prisma.workout.findMany({
+        where: {
+            User: {
+                email: session.user?.email ?? ""
+            }
+        },
         include: {
             Exercise: {
                 include: {

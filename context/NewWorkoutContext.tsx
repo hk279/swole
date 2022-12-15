@@ -44,6 +44,8 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     }, [exercises]);
 
     const validateExercises = () => {
+        if (exercises.length === 0) return false;
+
         const hasInvalidInputs = exercises.some(exercise => {
             return !!exercise.sets.find(set =>
                 set.reps == null || set.reps <= 0 ||
@@ -88,6 +90,8 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     };
 
     const saveWorkout = async () => {
+        // TODO: use React Query
+
         // Filter out sets with empty values and exercises with no sets.
         let validatedExercises = exercises.map((exercise) => ({
             ...exercise,
