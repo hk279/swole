@@ -32,16 +32,18 @@ const Header = ({ title }: Props) => {
 
                 {width > TAB_NAV_BREAKPOINT && <NavBar />}
 
-                {session?.user?.email && (
-                    <div className={styles.auth}>
-                        {width > HIDE_EMAIL_BREAKPOINT && session.user.email}
-                        <Button
-                            icon={faSignOut}
-                            danger
-                            onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
-                        />
-                    </div>
-                )}
+                <div className={styles.auth}>
+                    {session?.user?.email && (
+                        <>
+                            {width > HIDE_EMAIL_BREAKPOINT && session.user.email}
+                            <Button
+                                icon={faSignOut}
+                                danger
+                                onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
+                            />
+                        </>
+                    )}
+                </div>
             </div>
 
             {width <= TAB_NAV_BREAKPOINT && <TabNav />}

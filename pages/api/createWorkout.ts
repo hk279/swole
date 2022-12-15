@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../lib/prisma';
@@ -18,27 +19,36 @@ export default async function handler(
     const { workout_date, exercises } = req.body;
 
     try {
-        // 30.10.2022 - Nested create not supported, thus having to create workout ad exercises separately.
-        // TODO: Put in transaction
-        const workout = await prisma.workout.create({
-            data: {
-                workout_date,
-                User: {
-                    connect: {
-                        email: session?.user?.email ?? ""
+        // 30.10.2022 - Nested create not supported, thus having to create workout and exercises separately.
+        await prisma.$transaction(async (prisma) => {
+            const workout = await prisma.workout.create({
+                data: {
+                    workout_date,
+                    User: {
+                        connect: {
+                            email: session?.user?.email ?? ""
+                        }
                     }
                 }
-            }
-        });
-
-        exercises.forEach(async (exercise) => {
-            await prisma.exercise.create({
-                data: {
-                    workout_id: workout.id,
-                    exercise_type_id: exercise.exerciseType.id,
-                    Set: { createMany: { data: exercise.sets.map(set => ({ weight: set.weight ?? 0, reps: set.reps ?? 0 })) } }
-                }
             });
+
+            for (const exercise of exercises) {
+                await prisma.exercise.create({
+                    data: {
+                        Workout: {
+                            connect: {
+                                id: workout.id
+                            }
+                        },
+                        Exercise_type: {
+                            connect: {
+                                id: exercise.exerciseType.id
+                            }
+                        },
+                        Set: { createMany: { data: exercise.sets.map(set => ({ weight: set.weight ?? 0, reps: set.reps ?? 0 })) } }
+                    }
+                });
+            };
         });
 
         res.status(200).send(null);
