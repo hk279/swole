@@ -7,6 +7,7 @@ import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
 import { prisma } from "../lib/prisma";
 import spaces from "../styles/spaces.module.scss";
+import styles from "../styles/pages/Log.module.scss";
 
 // Combined nested models into one model
 type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
@@ -18,7 +19,7 @@ type Props = {
 const Log: NextPage<Props> = ({ workouts }) => {
     return (
         <Layout pageTitle="Log">
-            <div style={{ width: "80%" }}>
+            <div className={styles.container}>
                 <Accordion>
                     {workouts.map(workout =>
                         <AccordionPanel key={workout.id} primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
@@ -26,7 +27,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                 <Fragment key={workout.id + "-" + index}>
                                     <Flex justifyContent="space-between">
                                         <span style={{ flex: "1" }}>{exercise.Exercise_type.name}</span>
-                                        <div style={{ flex: "3" }}>
+                                        <div style={{ flex: "1" }}>
                                             <Flex direction="column">
                                                 {exercise.Set.map((set) =>
                                                     <Flex gap={spaces.medium} key={set.id}>

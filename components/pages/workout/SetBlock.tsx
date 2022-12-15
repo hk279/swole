@@ -1,4 +1,4 @@
-import styles from "../../../styles/components/pages/workout/SetInputBlock.module.scss";
+import styles from "../../../styles/components/pages/workout/SetBlock.module.scss";
 import Button from "../../_generic/Button";
 import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
