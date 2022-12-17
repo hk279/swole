@@ -1,8 +1,8 @@
 import { Exercise_type } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import NewWorkoutForm from "../components/pages/workout/NewWorkoutForm";
-import { NewWorkoutProvider } from "../context/NewWorkoutContext";
-import { prisma } from "../lib/prisma";
+import NewWorkoutForm from "../../components/pages/workout/NewWorkoutForm";
+import { NewWorkoutProvider } from "../../context/NewWorkoutContext";
+import { prisma } from "../../lib/prisma";
 
 type Props = {
     exerciseTypes: Exercise_type[];

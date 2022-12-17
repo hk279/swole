@@ -8,7 +8,7 @@ const NavBar = () => {
             <TabNavItem icon={faList} route="/log" />
             <TabNavItem icon={faDumbbell} route="/exercises" />
             <TabNavItem icon={faChartSimple} route="/stats" />
-            <TabNavItem icon={faPlus} route="/new-workout" />
+            <TabNavItem icon={faPlus} route="/workouts/new-workout" />
         </ul>
     );
 };
