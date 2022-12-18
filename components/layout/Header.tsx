@@ -28,7 +28,7 @@ const Header = ({ title }: Props) => {
     return (
         <>
             <div className={styles.header}>
-                <h1 className={styles.title}>{title}</h1>
+                {title && <h1 className={styles.title}>{title}</h1>}
 
                 {width > TAB_NAV_BREAKPOINT && <NavBar />}
 

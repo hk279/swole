@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import styles from "../../styles/components/_generic/Accordion.module.scss";
+import spaces from "../../styles/spaces.module.scss";
+import Flex from "./Flex";
 
 type AccordionProps = {
     children: ReactNode;
@@ -16,9 +18,10 @@ type AccordionPanelProps = {
     children: ReactNode;
     primaryHeader: string;
     secondaryHeader?: string;
+    actions?: ReactNode;
 };
 
-export const AccordionPanel = ({ children, primaryHeader, secondaryHeader }: AccordionPanelProps) => {
+export const AccordionPanel = ({ children, primaryHeader, secondaryHeader, actions }: AccordionPanelProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleRowClick = (): void => {
@@ -41,16 +44,25 @@ export const AccordionPanel = ({ children, primaryHeader, secondaryHeader }: Acc
 
     return (
         <div className={styles.panel}>
-            <div
-                className={styles.panelHeader}
-                onClick={() => handleRowClick()}
-                onKeyDown={(e) => handleEnter(e)}
-                tabIndex={0}
-            >
-                <span className={styles.primaryHeaderText}>{primaryHeader}</span>
-                {secondaryHeader && <span>{secondaryHeader}</span>}
-                {getIcon()}
-            </div>
+            <Flex alignItems="center">
+                <Flex
+                    style={{ flex: "1" }}
+                    inline
+                    alignItems="center"
+                    justifyContent="space-between"
+                    className={styles.panelHeader}
+                    onClick={() => handleRowClick()}
+                    onKeyDown={(e) => handleEnter(e)}
+                    tabIndex={0}
+                >
+                    <span className={styles.primaryHeaderText}>{primaryHeader}</span>
+                    {secondaryHeader && <span>{secondaryHeader}</span>}
+                    {getIcon()}
+                </Flex>
+                <Flex style={{ textAlign: "right" }}>
+                    {actions}
+                </Flex>
+            </Flex>
             {isOpen && <div className={styles.content}>{children}</div>}
         </div>
     );

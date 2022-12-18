@@ -12,9 +12,6 @@
     padding: variables.$space-medium;
     transition: variables.$transition-quick;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .panelHeader:hover {

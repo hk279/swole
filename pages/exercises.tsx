@@ -95,13 +95,10 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
 export default Excercises;
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
 
-    if (!session) {
-        res.statusCode = 403;
-        return { props: { exerciseTypes: [] } };
-    }
+    if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 
     const exerciseTypeData = await prisma.exercise_type.findMany();
     const favoriteExerciseTypes = await prisma.exercise_type.findMany({
@@ -109,7 +106,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             User: {
                 some: {
                     User: {
-                        email: session.user?.email ?? ""
+                        email: session.user.email
                     }
                 }
             }

@@ -9,6 +9,9 @@ import { prisma } from "../lib/prisma";
 import spaces from "../styles/spaces.module.scss";
 import styles from "../styles/pages/Log.module.scss";
 import { getSession } from "next-auth/react";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Button from "../components/_generic/Button";
+import { useRouter } from "next/router";
 
 // Combined nested models into one model
 type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
@@ -18,12 +21,23 @@ type Props = {
 };
 
 const Log: NextPage<Props> = ({ workouts }) => {
+    const router = useRouter();
+
     return (
         <Layout pageTitle="Log">
             <div className={styles.container}>
                 <Accordion>
                     {workouts.map(workout =>
-                        <AccordionPanel key={workout.id} primaryHeader={new Date(workout.workout_date).toLocaleDateString()} secondaryHeader={workout.Exercise.length + " exercises"}>
+                        <AccordionPanel
+                            key={workout.id}
+                            primaryHeader={new Date(workout.workout_date).toLocaleDateString()}
+                            secondaryHeader={workout.Exercise.length + " exercises"}
+                            actions={
+                                <>
+                                    <Button icon={faEdit} size="small" onClick={() => router.push(`/workouts/${workout.id}`)} />
+                                    <Button icon={faTrash} danger size="small" onClick={() => console.log("delete")} />
+                                </>}
+                        >
                             {workout.Exercise.map((exercise, index, array) =>
                                 <Fragment key={workout.id + "-" + index}>
                                     <Flex justifyContent="space-between">
@@ -53,18 +67,15 @@ const Log: NextPage<Props> = ({ workouts }) => {
 
 export default Log;
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
 
-    if (!session) {
-        res.statusCode = 403;
-        return { props: { exerciseTypes: [] } };
-    }
+    if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 
     let workouts = await prisma.workout.findMany({
         where: {
             User: {
-                email: session.user?.email ?? ""
+                email: session.user.email
             }
         },
         include: {

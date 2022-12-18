@@ -1,7 +1,7 @@
 @use "../../variables.scss";
 
 .header {
-    padding: 0 variables.$space-xxlarge;
+    padding: variables.$space-xlarge;
     overflow: hidden;
     white-space: nowrap;
     border-bottom: variables.$border-default;
@@ -9,6 +9,10 @@
     justify-content: space-between;
     align-items: center;
     gap: variables.$space-xxlarge;
+}
+
+.title {
+    margin: 0;
 }
 
 .auth {
