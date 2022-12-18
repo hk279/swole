@@ -1,7 +1,7 @@
 import { Exercise_type } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import NewWorkoutForm from "../../components/pages/workout/NewWorkoutForm";
-import { NewWorkoutProvider } from "../../context/NewWorkoutContext";
+import WorkoutForm from "../../components/pages/workout/WorkoutForm";
+import { WorkoutProvider } from "../../context/WorkoutContext";
 import { prisma } from "../../lib/prisma";
 
 type Props = {
@@ -10,9 +10,9 @@ type Props = {
 
 const NewWorkout: NextPage<Props> = (props) => {
     return (
-        <NewWorkoutProvider {...props}>
-            <NewWorkoutForm />
-        </NewWorkoutProvider>
+        <WorkoutProvider {...props}>
+            <WorkoutForm />
+        </WorkoutProvider>
     );
 };
 

@@ -1,12 +1,14 @@
 import { Exercise_type } from "@prisma/client";
 import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { ExerciseData } from "../types";
+import { ExerciseData, WorkoutResponse } from "../types";
 import axios from "axios";
+import { format, parseISO } from "date-fns";
 
 interface NewWorkoutContextInterface {
     isValid: boolean;
+    isSaving: boolean;
     exerciseTypes: Exercise_type[];
-    workoutDate: Date;
+    workoutDate: string;
     changeWorkoutDate: (event: ChangeEvent<HTMLInputElement>) => void;
     exercises: ExerciseData[];
     addExercise: () => void;
@@ -21,19 +23,21 @@ interface NewWorkoutContextInterface {
     saveWorkout: () => void;
 }
 
-export const NewWorkoutContext = createContext<NewWorkoutContextInterface | null>(null);
+export const WorkoutContext = createContext<NewWorkoutContextInterface | null>(null);
 
 type Props = {
     exerciseTypes: Exercise_type[];
+    workout?: WorkoutResponse;
     children: ReactNode;
 };
 
-export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
-    const getEmptyExercise = () => ({ exerciseType: exerciseTypes[0], sets: [{}] });
+export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => {
+    const getEmptyExercise = () => ({ Exercise_type: exerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] });
 
-    const [workoutDate, setWorkoutDate] = useState(new Date());
-    const [exercises, setExercises] = useState<ExerciseData[]>([getEmptyExercise()]);
+    const [workoutDate, setWorkoutDate] = useState(format(new Date(), "yyyy-MM-dd"));
+    const [exercises, setExercises] = useState(workout != null ? workout.Exercise : [getEmptyExercise()]);
     const [isValid, setIsValid] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         if (validateExercises()) {
@@ -47,7 +51,7 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
         if (exercises.length === 0) return false;
 
         const hasInvalidInputs = exercises.some(exercise => {
-            return !!exercise.sets.find(set =>
+            return !!exercise.Set.find(set =>
                 set.reps == null || set.reps <= 0 ||
                 set.weight == null || set.weight <= 0
             );
@@ -57,10 +61,10 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     };
 
     const changeWorkoutDate = (event: ChangeEvent<HTMLInputElement>) => {
-        const valueAsDate = event.target.valueAsDate;
+        //const valueAsDate = event.target.valueAsDate;
 
-        if (valueAsDate) {
-            setWorkoutDate(valueAsDate);
+        if (event.target.value) {
+            setWorkoutDate(event.target.value);
         }
     };
 
@@ -79,7 +83,7 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
     const changeExerciseType = (event: ChangeEvent<HTMLSelectElement>, exerciseIndex: number) => {
         const { value } = event.target;
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.exerciseType = exerciseTypes.find((type) => type.id === parseInt(value)) ?? exerciseTypes[0];
+        updatedExercise.Exercise_type = exerciseTypes.find((type) => type.id === parseInt(value)) ?? exerciseTypes[0];
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
@@ -95,20 +99,29 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
         // Filter out sets with empty values and exercises with no sets.
         let validatedExercises = exercises.map((exercise) => ({
             ...exercise,
-            sets: exercise.sets.filter((set) =>
+            sets: exercise.Set.filter((set) =>
                 set.weight && set.weight > 0 &&
                 set.reps && set.reps > 0),
         }));
         validatedExercises = validatedExercises.filter((exercise) => exercise.sets.length > 0);
 
         if (validatedExercises.length > 0) {
-            const workout = { workout_date: workoutDate, exercises: validatedExercises };
-
             try {
-                await axios.post("/api/createWorkout", workout);
-                setExercises([getEmptyExercise()]);
+                setIsSaving(true);
+
+                const requestBody = { workout_date: parseISO(workoutDate), exercises: validatedExercises };
+
+                if (workout?.id != null) {
+                    // TODO: Update-endpoint
+                    //await axios.put(`/api/updateWorkout/${workout.id}`, requestBody);
+                } else {
+                    await axios.post("/api/createWorkout", requestBody);
+                    setExercises([getEmptyExercise()]);
+                }
             } catch (error) {
                 console.log(error);
+            } finally {
+                setIsSaving(false);
             }
             // TODO: Add a success/error message
         }
@@ -116,41 +129,42 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
 
     const addSet = (exerciseIndex: number) => {
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets = [...updatedExercise.sets, {}];
+        updatedExercise.Set = [...updatedExercise.Set, {}];
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     const copySet = (exerciseIndex: number, setIndex: number) => {
-        const setToCopy = exercises[exerciseIndex].sets[setIndex];
+        const setToCopy = exercises[exerciseIndex].Set[setIndex];
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets = [...updatedExercise.sets, setToCopy];
+        updatedExercise.Set = [...updatedExercise.Set, setToCopy];
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     const removeSet = (exerciseIndex: number, setIndex: number) => {
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets = updatedExercise.sets.filter((_, index) => setIndex !== index);
+        updatedExercise.Set = updatedExercise.Set.filter((_, index) => setIndex !== index);
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     const handleSetWeightChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
         const { value } = event.target;
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets[setIndex].weight = value !== "" ? parseFloat(value) : undefined; // TODO: clean up the parsing logic
+        updatedExercise.Set[setIndex].weight = value !== "" ? parseFloat(value) : undefined; // TODO: clean up the parsing logic
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     const handleSetRepsChange = (event: ChangeEvent<HTMLInputElement>, exerciseIndex: number, setIndex: number) => {
         const { value } = event.target;
         const updatedExercise = exercises[exerciseIndex];
-        updatedExercise.sets[setIndex].reps = value !== "" ? parseInt(value) : undefined; // TODO: clean up the parsing logic
+        updatedExercise.Set[setIndex].reps = value !== "" ? parseInt(value) : undefined; // TODO: clean up the parsing logic
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
     return (
-        <NewWorkoutContext.Provider
+        <WorkoutContext.Provider
             value={{
                 isValid,
+                isSaving,
                 exerciseTypes,
                 workoutDate,
                 changeWorkoutDate,
@@ -167,12 +181,12 @@ export const NewWorkoutProvider = ({ exerciseTypes, children }: Props) => {
                 saveWorkout
             }}>
             {children}
-        </NewWorkoutContext.Provider>
+        </WorkoutContext.Provider>
     );
 };
 
 export const useNewWorkout = () => {
-    const context = useContext(NewWorkoutContext);
+    const context = useContext(WorkoutContext);
 
     if (context == null) throw new Error("Using context outside of its Provider");
 

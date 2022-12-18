@@ -1,24 +1,23 @@
-import { Exercise_type, Workout } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 import { format } from "date-fns";
 import { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
-import { json } from "stream/consumers";
-import NewWorkoutForm from "../../components/pages/workout/NewWorkoutForm";
-import { NewWorkoutProvider } from "../../context/NewWorkoutContext";
+import WorkoutForm from "../../components/pages/workout/WorkoutForm";
+import { WorkoutProvider } from "../../context/WorkoutContext";
 import { prisma } from "../../lib/prisma";
+import { WorkoutResponse } from "../../types";
 
 type Props = {
     exerciseTypes: Exercise_type[];
-    workout: Workout;
+    workout: WorkoutResponse;
 };
 
 const NewWorkout: NextPage<Props> = (props) => {
-    console.log(props.workout);
-
     return (
-        <NewWorkoutProvider {...props}>
-            {JSON.stringify(props.workout)}
-        </NewWorkoutProvider>
+        <WorkoutProvider {...props}>
+            {/* {JSON.stringify(props.workout)} */}
+            <WorkoutForm />
+        </WorkoutProvider>
     );
 };
 
@@ -37,11 +36,28 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
             User: {
                 email: session.user.email
             }
+        },
+        select: {
+            id: true,
+            workout_date: true,
+            Exercise: {
+                select: {
+                    Set: {
+                        select: {
+                            weight: true,
+                            reps: true
+                        }
+                    },
+                    Exercise_type: true
+                }
+            }
         }
     });
 
     // Not found
     if (workout == null) return { redirect: { destination: '/404', permanent: false } };
+
+    console.log(workout);
 
     const exerciseTypes = await prisma.exercise_type.findMany();
 

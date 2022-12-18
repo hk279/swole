@@ -1,4 +1,3 @@
-import { Exercise, Exercise_type, Set, Workout } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import { Fragment } from "react";
 import Layout from "../components/layout/Layout";
@@ -12,12 +11,10 @@ import { getSession } from "next-auth/react";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
-
-// Combined nested models into one model
-type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
+import { WorkoutResponse } from "../types";
 
 type Props = {
-    workouts: WorkoutData[];
+    workouts: WorkoutResponse[];
 };
 
 const Log: NextPage<Props> = ({ workouts }) => {
@@ -38,14 +35,14 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                     <Button icon={faTrash} danger size="small" onClick={() => console.log("delete")} />
                                 </>}
                         >
-                            {workout.Exercise.map((exercise, index, array) =>
-                                <Fragment key={workout.id + "-" + index}>
+                            {workout.Exercise.map((exercise, exerciseIndex, array) =>
+                                <Fragment key={`${workout.id}-${exerciseIndex}`}>
                                     <Flex justifyContent="space-between">
                                         <span style={{ flex: "1" }}>{exercise.Exercise_type.name}</span>
                                         <div style={{ flex: "1" }}>
                                             <Flex direction="column">
-                                                {exercise.Set.map((set) =>
-                                                    <Flex gap={spaces.medium} key={set.id}>
+                                                {exercise.Set.map((set, setIndex) =>
+                                                    <Flex gap={spaces.medium} key={`${workout.id}-${exerciseIndex}-${setIndex}`}>
                                                         {set.weight} kg <b>x</b> {set.reps} reps
                                                     </Flex>
                                                 )}
@@ -54,7 +51,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                                     </Flex>
 
                                     {/* // No divider after last element */}
-                                    {index !== array.length - 1 && <Divider variant="thin" />}
+                                    {exerciseIndex !== array.length - 1 && <Divider variant="thin" />}
                                 </Fragment>
                             )}
                         </AccordionPanel>

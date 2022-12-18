@@ -3,7 +3,7 @@ import Button from "../../_generic/Button";
 import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Flex from "../../_generic/Flex";
-import { useNewWorkout } from "../../../context/NewWorkoutContext";
+import { useNewWorkout } from "../../../context/WorkoutContext";
 import { SetData } from "../../../types";
 
 type Props = {

@@ -42,10 +42,10 @@ export default async function handler(
                         },
                         Exercise_type: {
                             connect: {
-                                id: exercise.exerciseType.id
+                                id: exercise.Exercise_type.id
                             }
                         },
-                        Set: { createMany: { data: exercise.sets.map(set => ({ weight: set.weight ?? 0, reps: set.reps ?? 0 })) } }
+                        Set: { createMany: { data: exercise.Set.map(set => ({ weight: set.weight ?? 0, reps: set.reps ?? 0 })) } }
                     }
                 });
             };

@@ -4,7 +4,7 @@ import { Select, SelectOption } from "../../_generic/Select";
 import SetBlock from "./SetBlock";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
-import { useNewWorkout } from "../../../context/NewWorkoutContext";
+import { useNewWorkout } from "../../../context/WorkoutContext";
 import Flex from "../../_generic/Flex";
 import { ExerciseData } from "../../../types";
 import spaces from "../../../styles/spaces.module.scss";
@@ -27,7 +27,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
     return (
         <Flex direction="column" gap={spaces.large} alignItems="flex-start">
             <Flex gap={spaces.large}>
-                <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.exerciseType.id}>
+                <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.Exercise_type.id}>
                     {exerciseTypes.map((exerciseType) => (
                         <SelectOption
                             key={`option-${exerciseIndex}-${exerciseType.id}`}
@@ -45,7 +45,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
             </Flex>
 
             <Flex ref={setsAnimationParent} direction="column" gap={spaces.large}>
-                {exercise.sets.map((set, setIndex) => (
+                {exercise.Set.map((set, setIndex) => (
                     <SetBlock set={set} exerciseIndex={exerciseIndex} setIndex={setIndex} key={`${exerciseIndex}-${setIndex}`} />
                 ))}
             </Flex>

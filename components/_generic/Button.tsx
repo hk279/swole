@@ -2,6 +2,7 @@ import styles from "../../styles/components/_generic/Button.module.scss";
 import classnames from "classnames/bind";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
     text?: string;
@@ -14,6 +15,7 @@ interface Props {
     size?: "small" | "medium" | "large";
     danger?: boolean;
     success?: boolean;
+    isLoading?: boolean;
 }
 
 const Button = ({
@@ -27,6 +29,7 @@ const Button = ({
     size = "medium",
     danger = false,
     success = false,
+    isLoading = false
 }: Props) => {
     const cx = classnames.bind(styles);
 
@@ -51,7 +54,8 @@ const Button = ({
             {icon && (
                 <FontAwesomeIcon
                     className={`${!iconOnly ? styles.buttonIconWithText : styles.buttonIconWithoutText}`}
-                    icon={icon}
+                    icon={isLoading ? faSpinner : icon}
+                    spin={isLoading}
                     size={size === "large" ? "lg" : "1x"}
                 />
             )}

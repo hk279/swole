@@ -1,11 +1,20 @@
-import { Exercise_type } from "@prisma/client";
+import { Exercise, Set, Exercise_type, Workout } from "@prisma/client";
 
-export interface SetData {
+export type SetData = {
     weight?: number;
     reps?: number;
-}
+};
 
-export interface ExerciseData {
-    exerciseType: Exercise_type;
-    sets: SetData[];
-}
+export type ExerciseData = {
+    Exercise_type: Exercise_type;
+    Set: SetData[];
+};
+
+// export type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
+
+export type WorkoutResponse = {
+    workout_date: string;
+    id: number;
+    user_id: number;
+    Exercise: ExerciseData[];
+};

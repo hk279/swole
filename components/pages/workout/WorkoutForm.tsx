@@ -1,16 +1,16 @@
 import styles from "../../../styles/components/pages/workout/NewWorkoutForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { Fragment, useEffect, useRef } from "react";
-import Layout from "../../../components/layout/Layout";
-import Button from "../../../components/_generic/Button";
+import Layout from "../../layout/Layout";
+import Button from "../../_generic/Button";
 import autoAnimate from "@formkit/auto-animate";
-import Divider from "../../../components/_generic/Divider";
+import Divider from "../../_generic/Divider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useNewWorkout } from "../../../context/NewWorkoutContext";
+import { useNewWorkout } from "../../../context/WorkoutContext";
 import Input from "../../_generic/Input";
 import ExerciseBlock from "./ExerciseBlock";
 
-const NewWorkoutForm = () => {
+const WorkoutForm = () => {
     const {
         workoutDate,
         changeWorkoutDate,
@@ -18,6 +18,7 @@ const NewWorkoutForm = () => {
         addExercise,
         saveWorkout,
         isValid,
+        isSaving
     } = useNewWorkout();
 
     const exercisesAnimationParent = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ const NewWorkoutForm = () => {
         <Layout pageTitle="New Workout">
             <div className={styles.container}>
                 <div className={styles.dateContainer}>
-                    Date: <Input required type="date" value={workoutDate.toISOString().split("T")[0]} onChange={changeWorkoutDate} />
+                    Date: <Input required type="date" value={workoutDate} onChange={changeWorkoutDate} />
                 </div>
 
                 <Divider />
@@ -47,11 +48,11 @@ const NewWorkoutForm = () => {
 
                 <div className={styles.workoutControls}>
                     <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
-                    <Button text="Save" primary disabled={!isValid} onClick={saveWorkout} />
+                    <Button icon={faPlus} text="Save" primary disabled={!isValid} onClick={saveWorkout} isLoading={isSaving} />
                 </div>
             </div>
         </Layout>
     );
 };
 
-export default NewWorkoutForm;
+export default WorkoutForm;
