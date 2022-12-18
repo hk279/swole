@@ -3,6 +3,7 @@ import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useState 
 import { ExerciseData, WorkoutResponse } from "../types";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
+import { useRouter } from "next/router";
 
 interface NewWorkoutContextInterface {
     isValid: boolean;
@@ -32,9 +33,12 @@ type Props = {
 };
 
 export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => {
+    const router = useRouter();
+
     const getEmptyExercise = () => ({ Exercise_type: exerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] });
 
-    const [workoutDate, setWorkoutDate] = useState(format(new Date(), "yyyy-MM-dd"));
+    // TODO: Fix date off-by-one issue
+    const [workoutDate, setWorkoutDate] = useState(workout != null ? workout.workout_date : format(new Date(), "yyyy-MM-dd"));
     const [exercises, setExercises] = useState(workout != null ? workout.Exercise : [getEmptyExercise()]);
     const [isValid, setIsValid] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -61,11 +65,7 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
     };
 
     const changeWorkoutDate = (event: ChangeEvent<HTMLInputElement>) => {
-        //const valueAsDate = event.target.valueAsDate;
-
-        if (event.target.value) {
-            setWorkoutDate(event.target.value);
-        }
+        if (event.target.value) setWorkoutDate(event.target.value);
     };
 
     const addExercise = () => {
@@ -109,14 +109,16 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
             try {
                 setIsSaving(true);
 
-                const requestBody = { workout_date: parseISO(workoutDate), exercises: validatedExercises };
+                // TODO: Make a normalization utility function if used more
+                const timezoneNormalizedDate = parseISO(new Date(workoutDate).toISOString());
+                const requestBody = { workout_date: timezoneNormalizedDate, exercises: validatedExercises };
 
                 if (workout?.id != null) {
-                    // TODO: Update-endpoint
-                    //await axios.put(`/api/updateWorkout/${workout.id}`, requestBody);
+                    await axios.put(`/api/updateWorkout/${workout.id}`, requestBody);
+                    router.push("/log");
                 } else {
                     await axios.post("/api/createWorkout", requestBody);
-                    setExercises([getEmptyExercise()]);
+                    router.push("/log");
                 }
             } catch (error) {
                 console.log(error);

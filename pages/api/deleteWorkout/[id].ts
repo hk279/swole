@@ -1,33 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 
-interface RemoveFavoriteExerciseRequest extends NextApiRequest {
-    body: {
-        exerciseTypeId: number;
+interface DeleteWorkoutRequest extends NextApiRequest {
+    query: {
+        id: string;
     };
 }
 
 export default async function handler(
-    req: RemoveFavoriteExerciseRequest,
+    req: DeleteWorkoutRequest,
     res: NextApiResponse
 ) {
-    const { exerciseTypeId } = req.body;
+    const { id } = req.query;
     const session = await getSession({ req });
     const sessionEmail = session?.user?.email;
 
     // TODO: Put in a middleware
     if (sessionEmail == null) return { redirect: { destination: '/login', permanent: false } };
 
+    const numericId = parseInt(id);
+
+    if (isNaN(numericId)) return { redirect: { destination: '/404', permanent: false } };
+
     try {
-        // Using delete many to get access to relational where-parameters
-        await prisma.favorite.deleteMany({
+        await prisma.workout.delete({
             where: {
+                id: numericId,
                 User: {
                     email: sessionEmail
-                },
-                ExerciseType: {
-                    id: exerciseTypeId
                 }
             }
         });

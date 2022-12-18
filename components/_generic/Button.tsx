@@ -49,13 +49,21 @@ const Button = ({
         className
     );
 
+    const getSpinner = () => {
+        return <FontAwesomeIcon
+            className={`${!iconOnly ? styles.buttonIconWithText : styles.buttonIconWithoutText}`}
+            icon={faSpinner}
+            spin
+            size={size === "large" ? "lg" : "1x"} />;
+    };
+
     return (
         <button disabled={disabled} className={classNames} onClick={onClick}>
-            {icon && (
+            {isLoading && getSpinner()}
+            {(icon && !isLoading) && (
                 <FontAwesomeIcon
                     className={`${!iconOnly ? styles.buttonIconWithText : styles.buttonIconWithoutText}`}
-                    icon={isLoading ? faSpinner : icon}
-                    spin={isLoading}
+                    icon={icon}
                     size={size === "large" ? "lg" : "1x"}
                 />
             )}

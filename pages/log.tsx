@@ -12,6 +12,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
 import { WorkoutResponse } from "../types";
+import axios from "axios";
 
 type Props = {
     workouts: WorkoutResponse[];
@@ -19,6 +20,16 @@ type Props = {
 
 const Log: NextPage<Props> = ({ workouts }) => {
     const router = useRouter();
+
+    const deleteWorkout = async (id: number) => {
+        try {
+            await axios.delete(`/api/deleteWorkout/${id}`);
+            router.replace(router.asPath); // Refresh page
+        } catch (error) {
+            console.log(error);
+        }
+        // TODO: Add a success/error message
+    };
 
     return (
         <Layout pageTitle="Log">
@@ -32,7 +43,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
                             actions={
                                 <>
                                     <Button icon={faEdit} size="small" onClick={() => router.push(`/workouts/${workout.id}`)} />
-                                    <Button icon={faTrash} danger size="small" onClick={() => console.log("delete")} />
+                                    <Button icon={faTrash} danger size="small" onClick={() => deleteWorkout(workout.id)} />
                                 </>}
                         >
                             {workout.Exercise.map((exercise, exerciseIndex, array) =>

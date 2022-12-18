@@ -15,7 +15,6 @@ type Props = {
 const NewWorkout: NextPage<Props> = (props) => {
     return (
         <WorkoutProvider {...props}>
-            {/* {JSON.stringify(props.workout)} */}
             <WorkoutForm />
         </WorkoutProvider>
     );
@@ -56,8 +55,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
     // Not found
     if (workout == null) return { redirect: { destination: '/404', permanent: false } };
-
-    console.log(workout);
 
     const exerciseTypes = await prisma.exercise_type.findMany();
 

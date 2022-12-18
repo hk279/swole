@@ -48,7 +48,7 @@ const WorkoutForm = () => {
 
                 <div className={styles.workoutControls}>
                     <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
-                    <Button icon={faPlus} text="Save" primary disabled={!isValid} onClick={saveWorkout} isLoading={isSaving} />
+                    <Button text="Save" primary disabled={!isValid} onClick={saveWorkout} isLoading={isSaving} />
                 </div>
             </div>
         </Layout>

@@ -4,8 +4,17 @@ import Divider from "../components/_generic/Divider";
 import Input from "../components/_generic/Input";
 import styles from "../styles/pages/Login.module.scss";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 const Login: NextPage = () => {
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+    const handleSignIn = async () => {
+        setIsAuthenticating(true);
+        await signIn("github", { callbackUrl: `${window.location.origin}/log` });
+        setIsAuthenticating(false);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.form}>
@@ -22,9 +31,9 @@ const Login: NextPage = () => {
                 <Button
                     text="Log in with GitHub"
                     primary
-                    onClick={() => signIn("github", { callbackUrl: `${window.location.origin}/log` })}
+                    onClick={handleSignIn}
                 />
-                <Button text="Log In with Google" primary disabled />
+                <Button text="Log In with Google" primary disabled isLoading={isAuthenticating} />
 
                 <Divider />
 

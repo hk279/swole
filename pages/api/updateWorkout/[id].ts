@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { prisma } from '../../lib/prisma';
-import { ExerciseData } from '../../types';
+import { prisma } from '../../../lib/prisma';
+import { ExerciseData } from '../../../types';
 
-interface CreateWorkoutRequest extends NextApiRequest {
+interface UpdateWorkoutRequest extends NextApiRequest {
+    query: {
+        id: string;
+    },
     body: {
         workout_date: Date;
         exercises: ExerciseData[];
@@ -11,30 +14,46 @@ interface CreateWorkoutRequest extends NextApiRequest {
 }
 
 export default async function handler(
-    req: CreateWorkoutRequest,
+    req: UpdateWorkoutRequest,
     res: NextApiResponse
 ) {
     const { workout_date, exercises } = req.body;
+    const { id } = req.query;
     const session = await getSession({ req });
     const sessionEmail = session?.user?.email;
 
     // TODO: Put in a middleware
     if (sessionEmail == null) return { redirect: { destination: '/login', permanent: false } };
 
+    const numericId = parseInt(id);
+
+    if (isNaN(numericId)) return { redirect: { destination: '/404', permanent: false } };
+
     try {
-        // 30.10.2022 - Nested create not supported, thus having to create workout and exercises separately.
         await prisma.$transaction(async (prisma) => {
-            const workout = await prisma.workout.create({
-                data: {
-                    workout_date,
+            // Update workout date
+            const workout = await prisma.workout.update({
+                where: {
+                    id: numericId,
                     User: {
-                        connect: {
-                            email: sessionEmail
-                        }
+                        email: sessionEmail
+                    }
+                },
+                data: {
+                    workout_date
+                }
+            });
+
+            // Delete all exercises from the workout
+            await prisma.exercise.deleteMany({
+                where: {
+                    Workout: {
+                        id: numericId
                     }
                 }
             });
 
+            // Add new list of exercises
             for (const exercise of exercises) {
                 await prisma.exercise.create({
                     data: {
