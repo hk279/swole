@@ -1,21 +1,21 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+// import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../../lib/prisma';
 import { ExerciseData } from '../../../types';
 
-interface UpdateWorkoutRequest extends NextApiRequest {
-    query: {
-        id: string;
-    },
-    body: {
-        workout_date: Date;
-        exercises: ExerciseData[];
-    };
-}
+// interface UpdateWorkoutRequest extends NextApiRequest {
+//     query: {
+//         id: string;
+//     },
+//     body: {
+//         workout_date: Date;
+//         exercises: ExerciseData[];
+//     };
+// }
 
 export default async function handler(
-    req: UpdateWorkoutRequest,
-    res: NextApiResponse
+    req,
+    res
 ) {
     const { workout_date, exercises } = req.body;
     const { id } = req.query;

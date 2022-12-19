@@ -1,17 +1,16 @@
-import { Prisma } from '.prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
+// import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../../lib/prisma';
 
-interface DeleteWorkoutRequest extends NextApiRequest {
-    query: {
-        id: string;
-    };
-}
+// interface DeleteWorkoutRequest extends NextApiRequest {
+//     query: {
+//         id: string;
+//     };
+// }
 
 export default async function handler(
-    req: DeleteWorkoutRequest,
-    res: NextApiResponse
+    req,
+    res
 ) {
     const { id } = req.query;
     const session = await getSession({ req });
@@ -24,17 +23,14 @@ export default async function handler(
 
     if (isNaN(numericId)) return { redirect: { destination: '/404', permanent: false } };
 
-    // Workaround because Vercel deployment was not working
-    const input: Prisma.WorkoutWhereUniqueInput = {
-        id: numericId,
-        User: {
-            email: sessionEmail
-        }
-    };
-
     try {
         await prisma.workout.delete({
-            where: input
+            where: {
+                id: numericId,
+                User: {
+                    email: sessionEmail
+                }
+            }
         });
 
         res.status(200).send(null);
