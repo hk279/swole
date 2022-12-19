@@ -1,21 +1,21 @@
-// import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../../lib/prisma';
 import { ExerciseData } from '../../../types';
 
-// interface UpdateWorkoutRequest extends NextApiRequest {
-//     query: {
-//         id: string;
-//     },
-//     body: {
-//         workout_date: Date;
-//         exercises: ExerciseData[];
-//     };
-// }
+interface UpdateWorkoutRequest extends NextApiRequest {
+    query: {
+        id: string;
+    },
+    body: {
+        workout_date: Date;
+        exercises: ExerciseData[];
+    };
+}
 
 export default async function handler(
-    req,
-    res
+    req: UpdateWorkoutRequest,
+    res: NextApiResponse
 ) {
     const { workout_date, exercises } = req.body;
     const { id } = req.query;
@@ -32,7 +32,8 @@ export default async function handler(
     try {
         await prisma.$transaction(async (prisma) => {
             // Update workout date
-            const workout = await prisma.workout.update({
+            // 19.12.2022 - Using updateMany since the experimental feature "extendedWhereUnique" doesnt seem to work
+            await prisma.workout.updateMany({
                 where: {
                     id: numericId,
                     User: {
@@ -59,7 +60,7 @@ export default async function handler(
                     data: {
                         Workout: {
                             connect: {
-                                id: workout.id
+                                id: numericId
                             }
                         },
                         Exercise_type: {

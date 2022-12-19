@@ -23,8 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/api/updateWorkout/[id].js",
-    "pages/api/deleteWorkout/[id].js"
+    "pages/api/updateWorkout/[id].ts",
+    "pages/api/deleteWorkout/[id].ts"
   ],
   "exclude": [
     "node_modules"

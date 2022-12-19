@@ -1,16 +1,16 @@
-// import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../../lib/prisma';
 
-// interface DeleteWorkoutRequest extends NextApiRequest {
-//     query: {
-//         id: string;
-//     };
-// }
+interface DeleteWorkoutRequest extends NextApiRequest {
+    query: {
+        id: string;
+    };
+}
 
 export default async function handler(
-    req,
-    res
+    req: DeleteWorkoutRequest,
+    res: NextApiResponse
 ) {
     const { id } = req.query;
     const session = await getSession({ req });
@@ -24,7 +24,8 @@ export default async function handler(
     if (isNaN(numericId)) return { redirect: { destination: '/404', permanent: false } };
 
     try {
-        await prisma.workout.delete({
+        // 19.12.2022 - Using deleteMany since the experimental feature "extendedWhereUnique" doesnt seem to work
+        await prisma.workout.deleteMany({
             where: {
                 id: numericId,
                 User: {
