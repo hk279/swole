@@ -29,11 +29,12 @@ const Login: NextPage = () => {
                 <Divider />
 
                 <Button
+                    isLoading={isAuthenticating}
                     text="Log in with GitHub"
                     primary
                     onClick={handleSignIn}
                 />
-                <Button text="Log In with Google" primary disabled isLoading={isAuthenticating} />
+                <Button text="Log In with Google" primary disabled />
 
                 <Divider />
 
