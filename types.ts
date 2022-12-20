@@ -1,4 +1,4 @@
-import { Exercise, Set, Exercise_type, Workout } from "@prisma/client";
+import { Exercise_type } from "@prisma/client";
 
 export type SetData = {
     weight?: number;
@@ -10,7 +10,11 @@ export type ExerciseData = {
     Set: SetData[];
 };
 
-// export type WorkoutData = Workout & { Exercise: Exercise & { Set: Set[], Exercise_type: Exercise_type; }[]; };
+export type WorkoutData = {
+    workoutDate: Date;
+    exercises: ExerciseData[];
+};
+
 
 export type WorkoutResponse = {
     workout_date: string;

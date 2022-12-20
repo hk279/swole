@@ -3,7 +3,7 @@ import Button from "../../_generic/Button";
 import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Flex from "../../_generic/Flex";
-import { useNewWorkout } from "../../../context/WorkoutContext";
+import { useWorkoutContext } from "../../../context/WorkoutContext";
 import { SetData } from "../../../types";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const SetBlock = ({ set, exerciseIndex, setIndex }: Props) => {
-    const { copySet, removeSet, handleSetWeightChange, handleSetRepsChange } = useNewWorkout();
+    const { copySet, removeSet, handleSetWeightChange, handleSetRepsChange } = useWorkoutContext();
 
     return (
         <Flex alignItems="center" key={`${exerciseIndex}-${setIndex}`}>

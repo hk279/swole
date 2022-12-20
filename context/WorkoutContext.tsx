@@ -99,11 +99,11 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
         // Filter out sets with empty values and exercises with no sets.
         let validatedExercises = exercises.map((exercise) => ({
             ...exercise,
-            sets: exercise.Set.filter((set) =>
+            Set: exercise.Set.filter((set) =>
                 set.weight && set.weight > 0 &&
                 set.reps && set.reps > 0),
         }));
-        validatedExercises = validatedExercises.filter((exercise) => exercise.sets.length > 0);
+        validatedExercises = validatedExercises.filter((exercise) => exercise.Set.length > 0);
 
         if (validatedExercises.length > 0) {
             try {
@@ -114,10 +114,10 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
                 const requestBody = { workout_date: timezoneNormalizedDate, exercises: validatedExercises };
 
                 if (workout?.id != null) {
-                    await axios.put(`/api/updateWorkout/${workout.id}`, requestBody);
+                    await axios.put(`/api/workout/update/${workout.id}`, requestBody);
                     router.push("/log");
                 } else {
-                    await axios.post("/api/createWorkout", requestBody);
+                    await axios.post("/api/workout/create", requestBody);
                     router.push("/log");
                 }
             } catch (error) {
@@ -187,7 +187,7 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
     );
 };
 
-export const useNewWorkout = () => {
+export const useWorkoutContext = () => {
     const context = useContext(WorkoutContext);
 
     if (context == null) throw new Error("Using context outside of its Provider");

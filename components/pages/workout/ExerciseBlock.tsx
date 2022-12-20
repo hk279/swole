@@ -4,7 +4,7 @@ import { Select, SelectOption } from "../../_generic/Select";
 import SetBlock from "./SetBlock";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
-import { useNewWorkout } from "../../../context/WorkoutContext";
+import { useWorkoutContext } from "../../../context/WorkoutContext";
 import Flex from "../../_generic/Flex";
 import { ExerciseData } from "../../../types";
 import spaces from "../../../styles/spaces.module.scss";
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
-    const { exerciseTypes, changeExerciseType, removeExercise, addSet } = useNewWorkout();
+    const { exerciseTypes, changeExerciseType, removeExercise, addSet } = useWorkoutContext();
 
     const setsAnimationParent = useRef(null);
 

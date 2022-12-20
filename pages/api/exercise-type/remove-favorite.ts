@@ -2,34 +2,32 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { prisma } from '../../../lib/prisma';
 
-interface DeleteWorkoutRequest extends NextApiRequest {
-    query: {
-        id: string;
+interface RemoveFavoriteExerciseRequest extends NextApiRequest {
+    body: {
+        exerciseTypeId: number;
     };
 }
 
 export default async function handler(
-    req: DeleteWorkoutRequest,
+    req: RemoveFavoriteExerciseRequest,
     res: NextApiResponse
 ) {
-    const { id } = req.query;
+    const { exerciseTypeId } = req.body;
     const session = await getSession({ req });
     const sessionEmail = session?.user?.email;
 
     // TODO: Put in a middleware
     if (sessionEmail == null) return { redirect: { destination: '/login', permanent: false } };
 
-    const numericId = parseInt(id);
-
-    if (isNaN(numericId)) return { redirect: { destination: '/404', permanent: false } };
-
     try {
-        // 19.12.2022 - Using deleteMany since the experimental feature "extendedWhereUnique" doesnt seem to work
-        await prisma.workout.deleteMany({
+        // Using delete many to get access to relational where-parameters
+        await prisma.favorite.deleteMany({
             where: {
-                id: numericId,
                 User: {
                     email: sessionEmail
+                },
+                ExerciseType: {
+                    id: exerciseTypeId
                 }
             }
         });

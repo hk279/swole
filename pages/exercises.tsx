@@ -38,7 +38,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
     const addFavorite = async (exerciseTypeId: number) => {
         try {
-            await axios.post("/api/addFavorite", { exerciseTypeId });
+            await axios.post("/api/exercise-type/add-favorite", { exerciseTypeId });
             refreshData();
         } catch (error) {
             console.log(error);
@@ -47,7 +47,7 @@ const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
 
     const removeFavorite = async (exerciseTypeId: number) => {
         try {
-            await axios.post("/api/removeFavorite", { exerciseTypeId });
+            await axios.post("/api/exercise-type/remove-favorite", { exerciseTypeId });
             refreshData();
         } catch (error) {
             console.log(error);

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { prisma } from '../../lib/prisma';
-import { ExerciseData } from '../../types';
+import { prisma } from '../../../lib/prisma';
+import { ExerciseData } from '../../../types';
 
 interface CreateWorkoutRequest extends NextApiRequest {
     body: {

@@ -6,7 +6,7 @@ import Button from "../../_generic/Button";
 import autoAnimate from "@formkit/auto-animate";
 import Divider from "../../_generic/Divider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useNewWorkout } from "../../../context/WorkoutContext";
+import { useWorkoutContext } from "../../../context/WorkoutContext";
 import Input from "../../_generic/Input";
 import ExerciseBlock from "./ExerciseBlock";
 
@@ -19,7 +19,7 @@ const WorkoutForm = () => {
         saveWorkout,
         isValid,
         isSaving
-    } = useNewWorkout();
+    } = useWorkoutContext();
 
     const exercisesAnimationParent = useRef<HTMLDivElement>(null);
 
