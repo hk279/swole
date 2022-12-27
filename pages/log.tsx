@@ -23,7 +23,7 @@ const Log: NextPage<Props> = ({ workouts }) => {
 
     const deleteWorkout = async (id: number) => {
         try {
-            await axios.delete(`/api/deleteWorkout/${id}`);
+            await axios.delete(`/api/workout/delete/${id}`);
             router.replace(router.asPath); // Refresh page
         } catch (error) {
             console.log(error);
