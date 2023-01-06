@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import styles from "../../styles/components/_generic/Accordion.module.scss";
-import spaces from "../../styles/spaces.module.scss";
 import Flex from "./Flex";
 
 type AccordionProps = {
@@ -56,7 +55,7 @@ export const AccordionPanel = ({ children, primaryHeader, secondaryHeader, actio
                     tabIndex={0}
                 >
                     <span className={styles.primaryHeaderText}>{primaryHeader}</span>
-                    {secondaryHeader && <span>{secondaryHeader}</span>}
+                    {secondaryHeader && <span className={styles.secondaryHeaderText}>{secondaryHeader}</span>}
                     {getIcon()}
                 </Flex>
                 <Flex style={{ textAlign: "right" }}>
