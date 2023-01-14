@@ -9,7 +9,7 @@ import { useState } from "react";
 const Login: NextPage = () => {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-    const handleSignIn = async () => {
+    const handleGithubSignIn = async () => {
         setIsAuthenticating(true);
         await signIn("github", { callbackUrl: `${window.location.origin}/log` });
         setIsAuthenticating(false);
@@ -32,7 +32,7 @@ const Login: NextPage = () => {
                     isLoading={isAuthenticating}
                     text="Log in with GitHub"
                     primary
-                    onClick={handleSignIn}
+                    onClick={handleGithubSignIn}
                 />
                 <Button text="Log In with Google" primary disabled />
 

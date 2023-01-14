@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { WorkoutResponse } from "../types";
 import axios from "axios";
 import { getAllWorkouts } from "../prisma/queries/workouts";
+import { unstable_getServerSession } from "next-auth";
+import { options } from "./api/auth/[...nextauth]";
 
 type Props = {
     workouts: WorkoutResponse[];
@@ -78,8 +80,8 @@ const Log: NextPage<Props> = ({ workouts }) => {
 
 export default Log;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const session = await getSession({ req });
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await unstable_getServerSession(req, res, options);
 
     if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 

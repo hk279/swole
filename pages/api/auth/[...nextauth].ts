@@ -7,13 +7,21 @@ import { prisma } from '../../../lib/prisma';
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
 export default authHandler;
 
-const options: NextAuthOptions = {
+export const options: NextAuthOptions = {
     providers: [
         GitHubProvider({
             clientId: process.env.GITHUB_ID || "",
             clientSecret: process.env.GITHUB_SECRET || "",
         }),
     ],
+    callbacks: {
+        session({ session, user }) {
+            if (session.user) {
+                session.user.id = user.id;
+            }
+            return session;
+        },
+    },
     adapter: PrismaAdapter(prisma),
-    secret: process.env.SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
 };

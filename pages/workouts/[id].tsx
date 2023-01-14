@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { GetServerSideProps, NextPage } from "next";
+import { unstable_getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import Layout from "../../components/layout/Layout";
 import WorkoutForm from "../../components/pages/workout/WorkoutForm";
@@ -7,6 +8,7 @@ import { WorkoutProvider } from "../../context/WorkoutContext";
 import { getAllExerciseTypes, getFavoriteExerciseTypes } from "../../prisma/queries/exerciseTypes";
 import { getSingleWorkout } from "../../prisma/queries/workouts";
 import { ExerciseType, WorkoutResponse } from "../../types";
+import { options } from "../api/auth/[...nextauth]";
 
 type Props = {
     exerciseTypes: ExerciseType[];
@@ -25,8 +27,8 @@ const NewWorkout: NextPage<Props> = (props) => {
 
 export default NewWorkout;
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
-    const session = await getSession({ req });
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+    const session = await unstable_getServerSession(req, res, options);
 
     if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 
