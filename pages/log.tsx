@@ -13,6 +13,7 @@ import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
 import { WorkoutResponse } from "../types";
 import axios from "axios";
+import { getAllWorkouts } from "../prisma/queries/workouts";
 
 type Props = {
     workouts: WorkoutResponse[];
@@ -82,22 +83,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 
-    let workouts = await prisma.workout.findMany({
-        where: {
-            User: {
-                email: session.user.email
-            }
-        },
-        include: {
-            Exercise: {
-                include: {
-                    Set: true,
-                    Exercise_type: true
-                }
-            }
-        }
-    });
-
+    let workouts = await getAllWorkouts(session.user.email);
     workouts.sort((a, b) => a.workout_date > b.workout_date ? -1 : 1); // Order descending by date
 
     return {

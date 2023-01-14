@@ -1,21 +1,24 @@
-import { Exercise_type } from "@prisma/client";
 import { format } from "date-fns";
 import { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
+import Layout from "../../components/layout/Layout";
 import WorkoutForm from "../../components/pages/workout/WorkoutForm";
 import { WorkoutProvider } from "../../context/WorkoutContext";
-import { prisma } from "../../lib/prisma";
-import { WorkoutResponse } from "../../types";
+import { getAllExerciseTypes, getFavoriteExerciseTypes } from "../../prisma/queries/exerciseTypes";
+import { getSingleWorkout } from "../../prisma/queries/workouts";
+import { ExerciseType, WorkoutResponse } from "../../types";
 
 type Props = {
-    exerciseTypes: Exercise_type[];
+    exerciseTypes: ExerciseType[];
     workout: WorkoutResponse;
 };
 
 const NewWorkout: NextPage<Props> = (props) => {
     return (
         <WorkoutProvider {...props}>
-            <WorkoutForm />
+            <Layout pageTitle="Edit Workout">
+                <WorkoutForm />
+            </Layout>
         </WorkoutProvider>
     );
 };
@@ -29,34 +32,20 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
     if (typeof (params?.id) !== 'string') return { redirect: { destination: '/404', permanent: false } };
 
-    const workout = await prisma.workout.findFirst({
-        where: {
-            id: parseInt(params.id),
-            User: {
-                email: session.user.email
-            }
-        },
-        select: {
-            id: true,
-            workout_date: true,
-            Exercise: {
-                select: {
-                    Set: {
-                        select: {
-                            weight: true,
-                            reps: true
-                        }
-                    },
-                    Exercise_type: true
-                }
-            }
-        }
-    });
+    const workout = await getSingleWorkout(session.user.email, parseInt(params.id));
 
-    // Not found
     if (workout == null) return { redirect: { destination: '/404', permanent: false } };
 
-    const exerciseTypes = await prisma.exercise_type.findMany();
+    const allExerciseTypes = await getAllExerciseTypes();
+    const favoriteExerciseTypes = await getFavoriteExerciseTypes(session.user.email);
+
+    const exerciseTypes = allExerciseTypes.map(exerciseType => {
+        return {
+            id: exerciseType.id,
+            name: exerciseType.name,
+            isFavorite: favoriteExerciseTypes.find(favorite => favorite.id == exerciseType.id) != null
+        };
+    });
 
     return {
         props: {

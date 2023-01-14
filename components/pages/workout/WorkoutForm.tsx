@@ -1,7 +1,6 @@
 import styles from "../../../styles/components/pages/workout/NewWorkoutForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { Fragment, useEffect, useRef } from "react";
-import Layout from "../../layout/Layout";
 import Button from "../../_generic/Button";
 import autoAnimate from "@formkit/auto-animate";
 import Divider from "../../_generic/Divider";
@@ -29,29 +28,27 @@ const WorkoutForm = () => {
     }, [exercisesAnimationParent]);
 
     return (
-        <Layout pageTitle="New Workout">
-            <div className={styles.container}>
-                <div className={styles.dateContainer}>
-                    Date: <Input required type="date" value={workoutDate} onChange={changeWorkoutDate} />
-                </div>
-
-                <Divider />
-
-                <div ref={exercisesAnimationParent}>
-                    {exercises.map((exercise, exerciseIndex) => (
-                        <Fragment key={exerciseIndex}>
-                            <ExerciseBlock exercise={exercise} exerciseIndex={exerciseIndex} />
-                            <Divider />
-                        </Fragment>
-                    ))}
-                </div>
-
-                <div className={styles.workoutControls}>
-                    <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
-                    <Button text="Save" primary disabled={!isValid} onClick={saveWorkout} isLoading={isSaving} />
-                </div>
+        <div className={styles.container}>
+            <div className={styles.dateContainer}>
+                Date: <Input required type="date" value={workoutDate} onChange={changeWorkoutDate} />
             </div>
-        </Layout>
+
+            <Divider />
+
+            <div ref={exercisesAnimationParent}>
+                {exercises.map((exercise, exerciseIndex) => (
+                    <Fragment key={exerciseIndex}>
+                        <ExerciseBlock exercise={exercise} exerciseIndex={exerciseIndex} />
+                        <Divider />
+                    </Fragment>
+                ))}
+            </div>
+
+            <div className={styles.workoutControls}>
+                <Button icon={faPlus} text="Add Exercise" onClick={addExercise} />
+                <Button text="Save" primary disabled={!isValid} onClick={saveWorkout} isLoading={isSaving} />
+            </div>
+        </div>
     );
 };
 

@@ -10,22 +10,17 @@ import TableCell from "../components/table/TableCell";
 import TableRow from "../components/table/TableRow";
 import Button from "../components/_generic/Button";
 import Input from "../components/_generic/Input";
-import { prisma } from "../lib/prisma";
-import { Select, SelectOption } from "../components/_generic/Select";
+import { SelectOption } from "../components/_generic/Select";
 import { useState } from "react";
 import { getSession } from "next-auth/react";
 import axios from "axios";
 import router from "next/router";
+import { getAllExerciseTypes, getFavoriteExerciseTypes } from "../prisma/queries/exerciseTypes";
+import { ExerciseType } from "../types";
 
-type ExerciseType = {
-    id: number;
-    name: string;
-    isFavorite: boolean;
-};
-
-interface Props {
+type Props = {
     exerciseTypes: ExerciseType[];
-}
+};
 
 const Excercises: NextPage<Props> = ({ exerciseTypes }: Props) => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -100,20 +95,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
 
-    const exerciseTypeData = await prisma.exercise_type.findMany();
-    const favoriteExerciseTypes = await prisma.exercise_type.findMany({
-        where: {
-            User: {
-                some: {
-                    User: {
-                        email: session.user.email
-                    }
-                }
-            }
-        }
-    });
+    const allExerciseTypes = await getAllExerciseTypes();
+    const favoriteExerciseTypes = await getFavoriteExerciseTypes(session.user.email);
 
-    const exerciseTypes = exerciseTypeData.map(exerciseType => {
+    const exerciseTypes = allExerciseTypes.map(exerciseType => {
         return {
             id: exerciseType.id,
             name: exerciseType.name,

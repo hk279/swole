@@ -1,6 +1,6 @@
 import { Exercise_type } from "@prisma/client";
-import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { ExerciseData, WorkoutResponse } from "../types";
+import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { ExerciseData, ExerciseType, WorkoutResponse } from "../types";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 interface NewWorkoutContextInterface {
     isValid: boolean;
     isSaving: boolean;
-    exerciseTypes: Exercise_type[];
+    exerciseTypes: ExerciseType[];
     workoutDate: string;
     changeWorkoutDate: (event: ChangeEvent<HTMLInputElement>) => void;
     exercises: ExerciseData[];
@@ -27,7 +27,7 @@ interface NewWorkoutContextInterface {
 export const WorkoutContext = createContext<NewWorkoutContextInterface | null>(null);
 
 type Props = {
-    exerciseTypes: Exercise_type[];
+    exerciseTypes: ExerciseType[];
     workout?: WorkoutResponse;
     children: ReactNode;
 };
@@ -35,7 +35,9 @@ type Props = {
 export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => {
     const router = useRouter();
 
-    const getEmptyExercise = () => ({ Exercise_type: exerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] });
+    const favoriteExerciseTypes = useMemo(() => exerciseTypes.filter(exerciseType => exerciseType.isFavorite), [exerciseTypes]);
+
+    const getEmptyExercise = () => ({ Exercise_type: favoriteExerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] });
 
     // TODO: Fix date off-by-one issue
     const [workoutDate, setWorkoutDate] = useState(workout != null ? workout.workout_date : format(new Date(), "yyyy-MM-dd"));
@@ -57,7 +59,7 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
         const hasInvalidInputs = exercises.some(exercise => {
             return !!exercise.Set.find(set =>
                 set.reps == null || set.reps <= 0 ||
-                set.weight == null || set.weight <= 0
+                set.weight == null || set.weight < 0 // Allow 0 weight for now to represent bodyweight exercise set
             );
         });
 

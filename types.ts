@@ -1,5 +1,7 @@
 import { Exercise_type } from "@prisma/client";
 
+export type ExerciseType = Exercise_type & { isFavorite: boolean; };
+
 export type SetData = {
     weight?: number;
     reps?: number;
@@ -14,7 +16,6 @@ export type WorkoutData = {
     workoutDate: Date;
     exercises: ExerciseData[];
 };
-
 
 export type WorkoutResponse = {
     workout_date: string;

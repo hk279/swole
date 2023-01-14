@@ -28,13 +28,15 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
         <Flex direction="column" gap={spaces.large} alignItems="flex-start">
             <Flex gap={spaces.large}>
                 <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.Exercise_type.id}>
-                    {exerciseTypes.map((exerciseType) => (
-                        <SelectOption
-                            key={`option-${exerciseIndex}-${exerciseType.id}`}
-                            value={exerciseType.id}
-                            label={exerciseType.name}
-                        />
-                    ))}
+                    {exerciseTypes
+                        .filter(exerciseType => exerciseType.id === exercise.Exercise_type.id || exerciseType.isFavorite)
+                        .map((exerciseType) => (
+                            <SelectOption
+                                key={`option-${exerciseIndex}-${exerciseType.id}`}
+                                value={exerciseType.id}
+                                label={exerciseType.name}
+                            />
+                        ))}
                 </Select>
                 <Button
                     size="small"
