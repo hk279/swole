@@ -1,10 +1,11 @@
 @use "../../variables.scss";
 
 .select {
-    border: 1px solid black;
+    border: variables.$border-default;
     border-radius: variables.$space-small;
-    padding: variables.$space-small;
+    padding: variables.$space-medium;
     cursor: pointer;
+    min-width: 180px;
 }
 
 .label {
@@ -16,4 +17,8 @@
     cursor: default;
     border-color: variables.$color-gray;
     background-color: variables.$color-light-gray;
+}
+
+.select:hover {
+    box-shadow: 0 4px 8px variables.$color-gray;
 }

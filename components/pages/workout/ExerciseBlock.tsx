@@ -6,55 +6,72 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
 import { useWorkoutContext } from "../../../context/WorkoutContext";
 import Flex from "../../_generic/Flex";
-import { ExerciseData } from "../../../types";
 import spaces from "../../../styles/spaces.module.scss";
+import { Exercise } from "../../../queries/workout";
 
 type Props = {
-    exercise: ExerciseData;
-    exerciseIndex: number;
+  exercise: Exercise;
+  exerciseIndex: number;
 };
 
 const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
-    const { exerciseTypes, changeExerciseType, removeExercise, addSet } = useWorkoutContext();
+  const { exerciseTypes, changeExerciseType, removeExercise, addSet } =
+    useWorkoutContext();
 
-    const setsAnimationParent = useRef(null);
+  const setsAnimationParent = useRef(null);
 
-    // Add / Remove set animation
-    useEffect(() => {
-        setsAnimationParent.current && autoAnimate(setsAnimationParent.current);
-    }, [setsAnimationParent]);
+  // Add / Remove set animation
+  useEffect(() => {
+    setsAnimationParent.current && autoAnimate(setsAnimationParent.current);
+  }, [setsAnimationParent]);
 
-    return (
-        <Flex direction="column" gap={spaces.large} alignItems="flex-start">
-            <Flex gap={spaces.large}>
-                <Select onChange={(e) => changeExerciseType(e, exerciseIndex)} value={exercise.Exercise_type.id}>
-                    {exerciseTypes
-                        .filter(exerciseType => exerciseType.id === exercise.Exercise_type.id || exerciseType.isFavorite)
-                        .map((exerciseType) => (
-                            <SelectOption
-                                key={`option-${exerciseIndex}-${exerciseType.id}`}
-                                value={exerciseType.id}
-                                label={exerciseType.name}
-                            />
-                        ))}
-                </Select>
-                <Button
-                    size="small"
-                    icon={faTrash}
-                    danger
-                    onClick={() => removeExercise(exerciseIndex)}
-                />
-            </Flex>
+  return (
+    <Flex direction="column" gap={spaces.large} alignItems="flex-start">
+      <Flex gap={spaces.large} alignItems="center">
+        <Select
+          onChange={(e) => changeExerciseType(e, exerciseIndex)}
+          value={exercise?.Exercise_type?.id}
+        >
+          {exerciseTypes
+            .filter(
+              (exerciseType) =>
+                exerciseType.id === exercise?.Exercise_type?.id ||
+                exerciseType.isFavorite
+            )
+            .map((exerciseType) => (
+              <SelectOption
+                key={`option-${exerciseIndex}-${exerciseType.id}`}
+                value={exerciseType.id}
+                label={exerciseType.name}
+              />
+            ))}
+        </Select>
+        <Button
+          icon={faTrash}
+          danger
+          onClick={() => removeExercise(exerciseIndex)}
+        />
+      </Flex>
 
-            <Flex ref={setsAnimationParent} direction="column" gap={spaces.large}>
-                {exercise.Set.map((set, setIndex) => (
-                    <SetBlock set={set} exerciseIndex={exerciseIndex} setIndex={setIndex} key={`${exerciseIndex}-${setIndex}`} />
-                ))}
-            </Flex>
+      <Flex ref={setsAnimationParent} direction="column" gap={spaces.large}>
+        {exercise.Set.map((set, setIndex) => (
+          <SetBlock
+            set={set}
+            exerciseIndex={exerciseIndex}
+            setIndex={setIndex}
+            key={`${exerciseIndex}-${setIndex}`}
+          />
+        ))}
+      </Flex>
 
-            <Button size="small" icon={faPlus} text="Add Set" onClick={() => addSet(exerciseIndex)} />
-        </Flex>
-    );
+      <Button
+        size="small"
+        icon={faPlus}
+        text="Add Set"
+        onClick={() => addSet(exerciseIndex)}
+      />
+    </Flex>
+  );
 };
 
 export default ExerciseBlock;

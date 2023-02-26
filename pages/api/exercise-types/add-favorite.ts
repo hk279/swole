@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
-import { prisma } from '../../../lib/prisma';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
+import { addFavoriteExerciseType } from "../../../prisma/queries/exerciseTypes";
 
 interface AddFavoriteExerciseRequest extends NextApiRequest {
   body: {
@@ -13,30 +13,19 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const session = await getSession({ req });
+  const email = session?.user?.email;
+
+  if (email == null) return res.status(401).redirect("/login");
+
   const { exerciseTypeId } = req.body;
 
-  try {
-    await prisma.favorite.create({
-      data: {
-        User: {
-          connect: {
-            email: session?.user?.email ?? ""
-          }
-        },
-        ExerciseType: {
-          connect: {
-            id: exerciseTypeId
-          }
-        },
-      },
-    });
+  console.log(exerciseTypeId);
 
-    res.status(200).send(null);
-  } catch (error) {
-    // TODO: Proper error handling in a middleware
-    console.log(error);
-    res.status(500).json(
-      { message: error }
-    );
+  switch (req.method) {
+    case "POST":
+      await addFavoriteExerciseType(email, exerciseTypeId);
+      return res.status(200).end();
+    default:
+      return res.status(405).end();
   }
 }

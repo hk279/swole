@@ -1,0 +1,7 @@
+@use "../../../variables.scss";
+
+.workoutControls {
+    display: flex;
+    gap: variables.$space-medium;
+    margin-top: variables.$space-large;
+}

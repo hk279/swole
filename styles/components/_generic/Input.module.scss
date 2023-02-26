@@ -1,7 +1,7 @@
 @use "../../variables.scss";
 
 .input {
-    border: 1px solid variables.$color-gray;
+    border: variables.$border-default;
     border-radius: variables.$space-small;
     padding: variables.$space-medium;
 }
@@ -24,4 +24,8 @@
 
 .invalid:focus-visible {
     outline-color: variables.$color-error;
+}
+
+.input:hover:not(.disabled) {
+    box-shadow: 0 4px 8px variables.$color-gray;
 }

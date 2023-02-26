@@ -27,9 +27,9 @@ const Log: NextPage = () => {
     );
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this workout?")) {
-      await deleteWorkout.mutateAsync(id);
+      deleteWorkout.mutate(id);
     }
   };
 
@@ -64,7 +64,7 @@ const Log: NextPage = () => {
                 <Fragment key={`${workout.id}-${exerciseIndex}`}>
                   <Flex justifyContent="space-between">
                     <span style={{ flex: "1" }}>
-                      {exercise.Exercise_type.name}
+                      {exercise?.Exercise_type?.name}
                     </span>
                     <div style={{ flex: "1" }}>
                       <Flex direction="column">

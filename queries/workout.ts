@@ -9,7 +9,7 @@ export type Set = {
 };
 
 export type Exercise = {
-  Exercise_type: Exercise_type;
+  Exercise_type?: Exercise_type;
   Set: Set[];
 };
 
@@ -28,13 +28,15 @@ export type Workout = {
 export const useWorkouts = () =>
   useQuery<Workout[]>({
     queryKey: ["workouts"],
-    queryFn: () => axios.get<Workout[]>("/api/workouts").then((res) => res.data),
+    queryFn: () =>
+      axios.get<Workout[]>("/api/workouts").then((res) => res.data),
   });
 
 export const useWorkout = (id: number) =>
   useQuery<Workout>({
     queryKey: ["workout", { id }],
-    queryFn: () => axios.get<Workout>("/api/workouts/" + id).then((res) => res.data),
+    queryFn: () =>
+      axios.get<Workout>("/api/workouts/" + id).then((res) => res.data),
   });
 
 // TODO: Invalidate queries
@@ -44,7 +46,8 @@ export const useWorkoutActions = () => {
   const queryClient = useQueryClient();
 
   const createWorkout = useMutation({
-    mutationFn: async (data: WorkoutRequest) => await axios.post("/api/workouts/", data),
+    mutationFn: async (data: WorkoutRequest) =>
+      await axios.post("/api/workouts/", data),
     onError: (error) => console.log(error),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
