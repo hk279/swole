@@ -6,12 +6,13 @@ import WorkoutForm from "../../components/pages/workout/WorkoutForm";
 import { WorkoutProvider } from "../../context/WorkoutContext";
 import { getAllExerciseTypes, getFavoriteExerciseTypes } from "../../prisma/queries/exerciseTypes";
 import { getSingleWorkout } from "../../prisma/queries/workouts";
-import { ExerciseType, WorkoutResponse } from "../../types";
+import { Workout } from "../../queries/workout";
+import { ExerciseType } from "../../types";
 import { options } from "../api/auth/[...nextauth]";
 
 type Props = {
     exerciseTypes: ExerciseType[];
-    workout: WorkoutResponse;
+    workout: Workout;
 };
 
 const NewWorkout: NextPage<Props> = (props) => {

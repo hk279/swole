@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { getAllWorkouts } from "../../../prisma/queries/workouts";
+import { createWorkout, getAllWorkouts } from "../../../prisma/queries/workouts";
 
 export default async function handler(
     req: NextApiRequest,
@@ -15,11 +15,8 @@ export default async function handler(
         case "GET":
             return res.status(200).json(await getAllWorkouts(email));
         case "POST":
-            // TODO: Create workout
-            break;
-        case "PUT":
-            // TODO: Edit workout
-            break;
+            await createWorkout(email, req.body);
+            return res.status(201).end();
         default:
             return res.status(405).end();
     }

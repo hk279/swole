@@ -1,9 +1,10 @@
 import { Exercise_type } from "@prisma/client";
 import { ChangeEvent, createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { ExerciseData, ExerciseType, WorkoutResponse } from "../types";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 import { useRouter } from "next/router";
+import { Exercise, useWorkoutActions, Workout } from "../queries/workout";
+import { ExerciseType } from "../types";
 
 interface NewWorkoutContextInterface {
     isValid: boolean;
@@ -11,11 +12,11 @@ interface NewWorkoutContextInterface {
     exerciseTypes: ExerciseType[];
     workoutDate: string;
     changeWorkoutDate: (event: ChangeEvent<HTMLInputElement>) => void;
-    exercises: ExerciseData[];
+    exercises: Exercise[];
     addExercise: () => void;
     removeExercise: (index: number) => void;
     changeExerciseType: (event: ChangeEvent<HTMLSelectElement>, exerciseIndex: number) => void;
-    handleExerciseChange: (updatedExercise: ExerciseData, index: number) => void;
+    handleExerciseChange: (updatedExercise: Exercise, index: number) => void;
     addSet: (exerciseIndex: number) => void;
     copySet: (exerciseIndex: number, setIndex: number) => void;
     removeSet: (exerciseIndex: number, setIndex: number) => void;
@@ -28,12 +29,13 @@ export const WorkoutContext = createContext<NewWorkoutContextInterface | null>(n
 
 type Props = {
     exerciseTypes: ExerciseType[];
-    workout?: WorkoutResponse;
+    workout?: Workout;
     children: ReactNode;
 };
 
 export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => {
     const router = useRouter();
+    const { createWorkout, updateWorkout } = useWorkoutActions();
 
     const favoriteExerciseTypes = useMemo(() => exerciseTypes.filter(exerciseType => exerciseType.isFavorite), [exerciseTypes]);
 
@@ -43,7 +45,6 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
     const [workoutDate, setWorkoutDate] = useState(workout != null ? workout.workout_date : format(new Date(), "yyyy-MM-dd"));
     const [exercises, setExercises] = useState(workout != null ? workout.Exercise : [emptyExercise]);
     const [isValid, setIsValid] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         if (validateExercises()) {
@@ -89,15 +90,13 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
         handleExerciseChange(updatedExercise, exerciseIndex);
     };
 
-    const handleExerciseChange = (updatedExercise: ExerciseData, exerciseIndex: number) => {
+    const handleExerciseChange = (updatedExercise: Exercise, exerciseIndex: number) => {
         const newExercisesList = [...exercises];
         newExercisesList[exerciseIndex] = updatedExercise;
         setExercises(newExercisesList);
     };
 
     const saveWorkout = async () => {
-        // TODO: use React Query
-
         // Filter out sets with empty values and exercises with no sets.
         let validatedExercises = exercises.map((exercise) => ({
             ...exercise,
@@ -108,26 +107,15 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
         validatedExercises = validatedExercises.filter((exercise) => exercise.Set.length > 0);
 
         if (validatedExercises.length > 0) {
-            try {
-                setIsSaving(true);
+            // TODO: Make a normalization utility function if used more
+            const timezoneNormalizedDate = parseISO(new Date(workoutDate).toISOString());
+            const requestBody = { workoutDate: timezoneNormalizedDate, exercises: validatedExercises };
 
-                // TODO: Make a normalization utility function if used more
-                const timezoneNormalizedDate = parseISO(new Date(workoutDate).toISOString());
-                const requestBody = { workout_date: timezoneNormalizedDate, exercises: validatedExercises };
-
-                if (workout?.id != null) {
-                    await axios.put(`/api/workout/update/${workout.id}`, requestBody);
-                    router.push("/log");
-                } else {
-                    await axios.post("/api/workout/create", requestBody);
-                    router.push("/log");
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setIsSaving(false);
+            if (workout?.id != null) {
+                await updateWorkout.mutateAsync({id: workout.id, data: requestBody});
+            } else {
+                await createWorkout.mutateAsync(requestBody);
             }
-            // TODO: Add a success/error message
         }
     };
 
@@ -168,7 +156,7 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
         <WorkoutContext.Provider
             value={{
                 isValid,
-                isSaving,
+                isSaving: createWorkout.isLoading || updateWorkout.isLoading,
                 exerciseTypes,
                 workoutDate,
                 changeWorkoutDate,
