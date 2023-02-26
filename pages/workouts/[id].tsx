@@ -9,8 +9,8 @@ import {
   getFavoriteExerciseTypes,
 } from "../../prisma/queries/exerciseTypes";
 import { getSingleWorkout } from "../../prisma/queries/workouts";
+import { ExerciseType } from "../../queries/exerciseType";
 import { Workout } from "../../queries/workout";
-import { ExerciseType } from "../../types";
 import { options } from "../api/auth/[...nextauth]";
 
 type Props = {

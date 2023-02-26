@@ -73,7 +73,7 @@ export const createWorkout = async (
           },
           Exercise_type: {
             connect: {
-              id: exercise.Exercise_type.id,
+              id: exercise?.Exercise_type?.id,
             },
           },
           Set: {
@@ -142,7 +142,7 @@ export const updateWorkout = async (
           },
           Exercise_type: {
             connect: {
-              id: exercise.Exercise_type.id,
+              id: exercise?.Exercise_type?.id,
             },
           },
           Set: {

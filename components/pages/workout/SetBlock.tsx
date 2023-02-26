@@ -4,40 +4,50 @@ import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Flex from "../../_generic/Flex";
 import { useWorkoutContext } from "../../../context/WorkoutContext";
-import { SetData } from "../../../types";
+import { Set } from "../../../queries/workout";
 
 type Props = {
-    set: SetData;
-    exerciseIndex: number;
-    setIndex: number;
+  set: Set;
+  exerciseIndex: number;
+  setIndex: number;
 };
 
 const SetBlock = ({ set, exerciseIndex, setIndex }: Props) => {
-    const { copySet, removeSet, handleSetWeightChange, handleSetRepsChange } = useWorkoutContext();
+  const { copySet, removeSet, handleSetWeightChange, handleSetRepsChange } =
+    useWorkoutContext();
 
-    return (
-        <Flex alignItems="center" key={`${exerciseIndex}-${setIndex}`}>
-            <Input
-                value={set.weight ?? ""}
-                type="number"
-                min={0}
-                step={0.05}
-                placeholder="Weight"
-                onChange={(e) => handleSetWeightChange(e, exerciseIndex, setIndex)}
-                className={styles.setInput}
-            />
-            <Input
-                value={set.reps ?? ""}
-                type="number"
-                min={0}
-                placeholder="Reps"
-                onChange={(e) => handleSetRepsChange(e, exerciseIndex, setIndex)}
-                className={styles.setInput}
-            />
-            <Button size="small" icon={faTrash} onClick={() => removeSet(exerciseIndex, setIndex)} danger />
-            <Button size="small" icon={faCopy} onClick={() => copySet(exerciseIndex, setIndex)} />
-        </Flex>
-    );
+  return (
+    <Flex alignItems="center" key={`${exerciseIndex}-${setIndex}`}>
+      <Input
+        value={set.weight ?? ""}
+        type="number"
+        min={0}
+        step={0.05}
+        placeholder="Weight"
+        onChange={(e) => handleSetWeightChange(e, exerciseIndex, setIndex)}
+        className={styles.setInput}
+      />
+      <Input
+        value={set.reps ?? ""}
+        type="number"
+        min={0}
+        placeholder="Reps"
+        onChange={(e) => handleSetRepsChange(e, exerciseIndex, setIndex)}
+        className={styles.setInput}
+      />
+      <Button
+        size="small"
+        icon={faTrash}
+        onClick={() => removeSet(exerciseIndex, setIndex)}
+        danger
+      />
+      <Button
+        size="small"
+        icon={faCopy}
+        onClick={() => copySet(exerciseIndex, setIndex)}
+      />
+    </Flex>
+  );
 };
 
 export default SetBlock;
