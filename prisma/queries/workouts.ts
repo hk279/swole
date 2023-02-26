@@ -40,6 +40,9 @@ export const getAllWorkouts = (email: string) => {
                     Exercise_type: true
                 }
             }
-        }
+        },
+        orderBy: [
+            { workout_date: "desc" }
+        ]
     });
 };

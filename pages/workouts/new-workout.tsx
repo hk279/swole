@@ -1,6 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import Layout from "../../components/layout/Layout";
 import WorkoutForm from "../../components/pages/workout/WorkoutForm";
 import { WorkoutProvider } from "../../context/WorkoutContext";

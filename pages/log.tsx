@@ -1,28 +1,21 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { Fragment } from "react";
 import Layout from "../components/layout/Layout";
 import { Accordion, AccordionPanel } from "../components/_generic/Accordion";
 import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
-import { prisma } from "../lib/prisma";
 import spaces from "../styles/spaces.module.scss";
 import styles from "../styles/pages/Log.module.scss";
-import { getSession } from "next-auth/react";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
-import { WorkoutResponse } from "../types";
 import axios from "axios";
-import { getAllWorkouts } from "../prisma/queries/workouts";
-import { unstable_getServerSession } from "next-auth";
-import { options } from "./api/auth/[...nextauth]";
+import { useWorkouts } from "../queries/workout";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-type Props = {
-    workouts: WorkoutResponse[];
-};
-
-const Log: NextPage<Props> = ({ workouts }) => {
+const Log: NextPage = () => {
     const router = useRouter();
+    const { data: workouts } = useWorkouts();
 
     const deleteWorkout = async (id: number) => {
         try {
@@ -35,6 +28,16 @@ const Log: NextPage<Props> = ({ workouts }) => {
         }
         // TODO: Add a success/error message
     };
+
+    if (workouts == null) {
+        return (
+            <Layout pageTitle="Log">
+                <Flex justifyContent="center" alignItems="center">
+                    <FontAwesomeIcon icon={faSpinner} spin size="5x" />
+                </Flex>
+            </Layout>
+        );
+    }
 
     return (
         <Layout pageTitle="Log">
@@ -79,18 +82,3 @@ const Log: NextPage<Props> = ({ workouts }) => {
 };
 
 export default Log;
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await unstable_getServerSession(req, res, options);
-
-    if (session?.user?.email == null) return { redirect: { destination: '/login', permanent: false } };
-
-    let workouts = await getAllWorkouts(session.user.email);
-    workouts.sort((a, b) => a.workout_date > b.workout_date ? -1 : 1); // Order descending by date
-
-    return {
-        props: {
-            workouts: JSON.parse(JSON.stringify(workouts))
-        }
-    };
-};

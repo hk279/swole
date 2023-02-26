@@ -37,11 +37,11 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
 
     const favoriteExerciseTypes = useMemo(() => exerciseTypes.filter(exerciseType => exerciseType.isFavorite), [exerciseTypes]);
 
-    const getEmptyExercise = () => ({ Exercise_type: favoriteExerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] });
+    const emptyExercise = { Exercise_type: favoriteExerciseTypes[0], Set: [{ weight: undefined, reps: undefined }] };
 
     // TODO: Fix date off-by-one issue
     const [workoutDate, setWorkoutDate] = useState(workout != null ? workout.workout_date : format(new Date(), "yyyy-MM-dd"));
-    const [exercises, setExercises] = useState(workout != null ? workout.Exercise : [getEmptyExercise()]);
+    const [exercises, setExercises] = useState(workout != null ? workout.Exercise : [emptyExercise]);
     const [isValid, setIsValid] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -73,7 +73,7 @@ export const WorkoutProvider = ({ exerciseTypes, workout, children }: Props) => 
     const addExercise = () => {
         setExercises([
             ...exercises,
-            getEmptyExercise(),
+            emptyExercise,
         ]);
     };
 
