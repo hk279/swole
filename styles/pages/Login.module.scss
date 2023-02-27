@@ -1,35 +1,21 @@
 @use "../variables.scss";
 
-.container {
-    display: flex;
+.page {
     width: 100vw;
     height: 100vh;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
     background-color: variables.$color-light-blue;
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: variables.$space-large;
-    max-width: 50%;
+.container {
+    width: 30%;
     padding: variables.$space-xxlarge;
     border-radius: variables.$space-medium;
-    border: 2px solid variables.$color-light-gray;
+    border: variables.$border-default;
     background-color: white;
 }
 
-.actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: variables.$space-xxlarge;
-}
-
 @media only screen and (max-width: 800px) {
-    .form {
-      max-width: 80%;
+    .container {
+      width: 80%;
     }
   }

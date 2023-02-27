@@ -1,0 +1,7 @@
+@use "./variables.scss";
+
+:export {
+    borderThin: variables.$border-thin;
+    borderDefault: variables.$border-default;
+    borderThick: variables.$border-thick;
+}
