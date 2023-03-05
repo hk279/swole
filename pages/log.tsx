@@ -6,32 +6,30 @@ import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
 import spaces from "../styles/spaces.module.scss";
 import styles from "../styles/pages/Log.module.scss";
-import { faEdit, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
 import { useWorkoutActions, useWorkouts } from "../queries/workout";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loading from "../components/_generic/Loading";
 
 const Log: NextPage = () => {
   const router = useRouter();
   const { data: workouts } = useWorkouts();
   const { deleteWorkout } = useWorkoutActions();
 
-  if (workouts == null) {
-    return (
-      <Layout pageTitle="Log">
-        <Flex justifyContent="center" alignItems="center">
-          <FontAwesomeIcon icon={faSpinner} spin size="5x" />
-        </Flex>
-      </Layout>
-    );
-  }
-
   const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this workout?")) {
       deleteWorkout.mutate(id);
     }
   };
+
+  if (workouts == null) {
+    return (
+      <Layout pageTitle="Log">
+        <Loading />
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="Log">

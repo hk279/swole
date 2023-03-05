@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import {
@@ -20,7 +21,15 @@ export default async function handler(
 
   switch (req.method) {
     case "GET":
-      return res.status(200).json(await getSingleWorkout(email, id));
+      const workout = await getSingleWorkout(email, id);
+      if (workout == null) return res.status(404).redirect("/404");
+
+      return res
+        .status(200)
+        .json({
+          ...workout,
+          workout_date: format(workout.workout_date, "yyyy-MM-dd"),
+        });
     case "PUT":
       await updateWorkout(email, id, req.body);
       return res.status(200).end();
