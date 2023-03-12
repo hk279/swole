@@ -1,4 +1,3 @@
-import styles from "../styles/pages/Exercises.module.scss";
 import spaces from "../styles/spaces.module.scss";
 import colors from "../styles/colors.module.scss";
 import { faStar as starEmpty } from "@fortawesome/free-regular-svg-icons";
