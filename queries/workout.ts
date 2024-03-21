@@ -1,7 +1,9 @@
+"use client";
+
 import { Exercise_type } from "@prisma/client";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useRouter } from "next/navigation";
 
 export type Set = {
   weight?: number;
@@ -42,8 +44,8 @@ export const useWorkout = (id: number) =>
 // TODO: Invalidate queries
 // TODO: Use these in workout views
 export const useWorkoutActions = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const createWorkout = useMutation({
     mutationFn: async (data: WorkoutRequest) =>
@@ -51,7 +53,7 @@ export const useWorkoutActions = () => {
     onError: (error) => console.log(error),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
-      router.push("/log");
+      router.push("/private/log");
     },
   });
 
@@ -67,7 +69,7 @@ export const useWorkoutActions = () => {
     onError: (error) => console.log(error),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
-      router.push("/log");
+      router.push("/private/log");
     },
   });
 

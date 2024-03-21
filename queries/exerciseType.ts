@@ -1,6 +1,6 @@
 import { Exercise_type } from "@prisma/client";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export type ExerciseType = Exercise_type & { isFavorite: boolean };
 

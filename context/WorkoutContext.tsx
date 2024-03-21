@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ChangeEvent,
   createContext,
@@ -213,7 +215,7 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
     <WorkoutContext.Provider
       value={{
         isValid,
-        isSaving: createWorkout.isLoading || updateWorkout.isLoading,
+        isSaving: createWorkout.isPending || updateWorkout.isPending,
         exerciseTypes: exerciseTypes ?? [],
         workoutDate,
         changeWorkoutDate,

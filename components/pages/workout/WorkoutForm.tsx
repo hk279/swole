@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "../../../styles/components/pages/workout/WorkoutForm.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { Fragment, useEffect, useRef } from "react";

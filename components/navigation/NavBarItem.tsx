@@ -1,26 +1,33 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/router";
 import styles from "../../styles/components/navigation/NavBarItem.module.scss";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
-    route: string;
-    label: string;
-    icon?: IconDefinition;
+  route: string;
+  label: string;
+  icon?: IconDefinition;
 }
 
 const NavBarItem = ({ route, label, icon }: Props) => {
-    const router = useRouter();
+  const { push } = useRouter();
+  const pathname = usePathname();
+  const className = `${styles.navBarItem} ${
+    pathname === route && styles.active
+  }`;
 
-    return (
-        <li
-            className={`${styles.navBarItem} ${router.pathname === route && styles.active}`}
-            onClick={() => router.push(route)}
-        >
-            {icon && <FontAwesomeIcon className={styles.navBarItemIcon} icon={icon} />}
-            {label}
-        </li>
-    );
+  return (
+    <li className={className} onClick={() => push(route)}>
+      {icon && (
+        <FontAwesomeIcon
+          width={16}
+          className={styles.navBarItemIcon}
+          icon={icon}
+        />
+      )}
+      {label}
+    </li>
+  );
 };
 
 export default NavBarItem;

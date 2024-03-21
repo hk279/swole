@@ -1,16 +1,33 @@
 import { useState, useEffect } from "react";
 
 const useViewport = () => {
-    const [width, setWidth] = useState<number>(0);
+  const [width, setWidth] = useState(0);
 
-    useEffect(() => {
-        setWidth(window.innerWidth);
-        const handleWindowResize = () => setWidth(window.innerWidth);
-        window.addEventListener("resize", handleWindowResize);
-        return () => window.removeEventListener("resize", handleWindowResize);
-    }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
 
-    return width;
-}
+    handleResize();
 
-export default useViewport
+    const debouncedHandleResize = debounce(handleResize, 50);
+
+    window.addEventListener("resize", debouncedHandleResize);
+
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+    };
+  }, []);
+
+  return width;
+};
+
+const debounce = (func: Function, delay: number): (() => void) => {
+  let timeoutId: NodeJS.Timeout;
+  return () => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(), delay);
+  };
+};
+
+export default useViewport;
