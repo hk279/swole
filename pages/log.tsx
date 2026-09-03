@@ -1,21 +1,26 @@
+import { requireSession } from "../lib/pageAuth";
 import type { NextPage } from "next";
 import { Fragment } from "react";
 import Layout from "../components/layout/Layout";
 import { Accordion, AccordionPanel } from "../components/_generic/Accordion";
 import Divider from "../components/_generic/Divider";
 import Flex from "../components/_generic/Flex";
-import spaces from "../styles/spaces.module.scss";
+import { spaces } from "../styles/tokens";
 import styles from "../styles/pages/Log.module.scss";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/_generic/Button";
 import { useRouter } from "next/router";
 import { useWorkoutActions, useWorkouts } from "../queries/workout";
+import { parseDateString } from "../lib/dates";
 import Loading from "../components/_generic/Loading";
 
 const Log: NextPage = () => {
   const router = useRouter();
-  const { data: workouts } = useWorkouts();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useWorkouts();
   const { deleteWorkout } = useWorkoutActions();
+
+  const workouts = data?.pages.flatMap((page) => page.items);
 
   const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this workout?")) {
@@ -23,7 +28,7 @@ const Log: NextPage = () => {
     }
   };
 
-  if (workouts == null) {
+  if (status === "pending" || workouts == null) {
     return (
       <Layout pageTitle="Log">
         <Loading />
@@ -38,7 +43,7 @@ const Log: NextPage = () => {
           {workouts.map((workout) => (
             <AccordionPanel
               key={workout.id}
-              primaryHeader={new Date(
+              primaryHeader={parseDateString(
                 workout.workout_date
               ).toLocaleDateString()}
               secondaryHeader={workout.Exercise.length + " exercises"}
@@ -87,9 +92,22 @@ const Log: NextPage = () => {
             </AccordionPanel>
           ))}
         </Accordion>
+
+        {hasNextPage && (
+          <Flex justifyContent="center">
+            <Button
+              text="Load more"
+              onClick={() => fetchNextPage()}
+              isLoading={isFetchingNextPage}
+              disabled={isFetchingNextPage}
+            />
+          </Flex>
+        )}
       </div>
     </Layout>
   );
 };
+
+export const getServerSideProps = requireSession;
 
 export default Log;

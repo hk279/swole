@@ -1,35 +1,42 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+import {
+  methodNotAllowed,
+  requireUserEmail,
+  withErrorHandling,
+} from "../../../lib/api";
 import {
   getAllExerciseTypes,
   getFavoriteExerciseTypes,
 } from "../../../prisma/queries/exerciseTypes";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const session = await getSession({ req });
-  const email = session?.user?.email;
-
-  if (email == null) return res.status(401).redirect("/login");
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const email = await requireUserEmail(req, res);
+  if (email == null) return;
 
   switch (req.method) {
-    case "GET":
-      const allExerciseTypes = await getAllExerciseTypes();
-      const favoriteExerciseTypes = await getFavoriteExerciseTypes(email);
+    case "GET": {
+      const [allExerciseTypes, favoriteExerciseTypes] = await Promise.all([
+        getAllExerciseTypes(),
+        getFavoriteExerciseTypes(email),
+      ]);
+
+      const favoriteIds = new Set(
+        favoriteExerciseTypes.map((favorite) => favorite.id)
+      );
 
       const exerciseTypes = allExerciseTypes.map((exerciseType) => ({
         id: exerciseType.id,
         name: exerciseType.name,
-        isFavorite:
-          favoriteExerciseTypes.find(
-            (favorite) => favorite.id == exerciseType.id
-          ) != null,
+        isFavorite: favoriteIds.has(exerciseType.id),
       }));
 
-      return res.status(200).json(exerciseTypes);
+      res.status(200).json(exerciseTypes);
+      return;
+    }
     default:
-      return res.status(405).end();
+      methodNotAllowed(res, ["GET"]);
+      return;
   }
-}
+};
+
+export default withErrorHandling(handler);

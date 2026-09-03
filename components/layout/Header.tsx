@@ -6,6 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import Button from "../_generic/Button";
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import { breakpoints } from "../../styles/tokens";
 
 interface Props {
     title?: string;
@@ -15,8 +16,8 @@ const Header = ({ title }: Props) => {
     const width = useViewport();
     const router = useRouter();
 
-    const TAB_NAV_BREAKPOINT = 1200;
-    const HIDE_EMAIL_BREAKPOINT = 800;
+    const TAB_NAV_BREAKPOINT = breakpoints.large;
+    const HIDE_EMAIL_BREAKPOINT = breakpoints.medium;
 
     const { data: session } = useSession({
         required: true,

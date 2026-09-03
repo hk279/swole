@@ -1,31 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+import {
+  methodNotAllowed,
+  parseBody,
+  requireUserEmail,
+  withErrorHandling,
+} from "../../../lib/api";
+import { favoriteRequestSchema } from "../../../lib/schemas";
 import { addFavoriteExerciseType } from "../../../prisma/queries/exerciseTypes";
 
-interface AddFavoriteExerciseRequest extends NextApiRequest {
-  body: {
-    exerciseTypeId: number;
-  };
-}
-
-export default async function handler(
-  req: AddFavoriteExerciseRequest,
-  res: NextApiResponse
-) {
-  const session = await getSession({ req });
-  const email = session?.user?.email;
-
-  if (email == null) return res.status(401).redirect("/login");
-
-  const { exerciseTypeId } = req.body;
-
-  console.log(exerciseTypeId);
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const email = await requireUserEmail(req, res);
+  if (email == null) return;
 
   switch (req.method) {
-    case "POST":
-      await addFavoriteExerciseType(email, exerciseTypeId);
-      return res.status(200).end();
+    case "POST": {
+      const body = parseBody(res, favoriteRequestSchema, req.body);
+      if (body == null) return;
+
+      await addFavoriteExerciseType(email, body.exerciseTypeId);
+      res.status(200).end();
+      return;
+    }
     default:
-      return res.status(405).end();
+      methodNotAllowed(res, ["POST"]);
+      return;
   }
-}
+};
+
+export default withErrorHandling(handler);

@@ -1,63 +1,45 @@
+import { requireSession } from "../lib/pageAuth";
 import type { NextPage } from "next";
-import { useMemo } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 import Layout from "../components/layout/Layout";
 import Loading from "../components/_generic/Loading";
 import useViewport from "../hooks/useViewport";
-import { useWorkouts } from "../queries/workout";
+import { useWorkoutStats } from "../queries/workout";
+
+type AxisTickProps = {
+  x?: number;
+  y?: number;
+  payload?: { value: string | number };
+};
+
+const CustomAxisTick = ({ x, y, payload }: AxisTickProps) => {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#666"
+        transform="rotate(-45)"
+      >
+        {payload?.value}
+      </text>
+    </g>
+  );
+};
 
 const Stats: NextPage = () => {
   const width = useViewport();
-  const { data: workouts } = useWorkouts();
+  const { data } = useWorkoutStats();
 
-  const workoutCountsPerMonth = useMemo(() => {
-    return (
-      // Showing stats only one year back
-      workouts
-        ?.filter((workout) => {
-          const currentDate = new Date();
-          const workoutDate = new Date(workout.workout_date);
-          const oneYearAgo = new Date(
-            currentDate.getFullYear() - 1,
-            currentDate.getMonth(),
-            currentDate.getDate()
-          );
-          return workoutDate.getTime() > oneYearAgo.getTime();
-        })
-        .reverse()
-        .reduce((acc: { month: string; count: number }[], workout) => {
-          const yearMonth = workout.workout_date.slice(0, 7);
-          const monthItem = acc.find((item) => item.month === yearMonth);
-          if (monthItem) {
-            monthItem.count++;
-          } else {
-            acc.push({ month: yearMonth, count: 1 });
-          }
-          return acc;
-        }, []) ?? []
-    );
-  }, [workouts]);
-
-  const CustomAxisTick = ({ x, y, stroke, payload }: any) => {
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text
-          x={0}
-          y={0}
-          dy={16}
-          textAnchor="end"
-          fill="#666"
-          transform="rotate(-45)"
-        >
-          {payload.value}
-        </text>
-      </g>
-    );
-  };
+  // Counting is done in the database now; the page no longer downloads every
+  // workout with every set just to derive twelve numbers.
+  const workoutCountsPerMonth = data?.workoutCountsPerMonth;
 
   return (
     <Layout pageTitle="Stats">
-      {workouts == null ? (
+      {workoutCountsPerMonth == null ? (
         <Loading />
       ) : (
         <>
@@ -78,5 +60,7 @@ const Stats: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = requireSession;
 
 export default Stats;

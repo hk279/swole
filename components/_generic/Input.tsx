@@ -1,9 +1,11 @@
-import classnames from "classnames";
-import { ChangeEvent, ReactElement, useId } from "react";
+import classnames from "classnames/bind";
+import { ChangeEvent, ComponentPropsWithoutRef, ReactElement, useId } from "react";
 import styles from "../../styles/components/_generic/Input.module.scss";
 import { OptionProps } from "./Select";
 
-type Props = JSX.IntrinsicElements["input"] & {
+const cx = classnames.bind(styles);
+
+type Props = ComponentPropsWithoutRef<"input"> & {
   isValid?: boolean;
   children?: ReactElement<OptionProps>[];
 };
@@ -26,10 +28,9 @@ const Input = ({
   children,
 }: Props) => {
   const datalistId = useId();
-  const cx = classnames.bind(styles);
 
   const classNames: string = cx(
-    styles.input,
+    "input",
     { disabled: disabled },
     { invalid: !isValid },
     className

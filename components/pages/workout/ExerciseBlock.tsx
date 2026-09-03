@@ -6,11 +6,11 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import autoAnimate from "@formkit/auto-animate";
 import { useWorkoutContext } from "../../../context/WorkoutContext";
 import Flex from "../../_generic/Flex";
-import spaces from "../../../styles/spaces.module.scss";
-import { Exercise } from "../../../queries/workout";
+import { spaces } from "../../../styles/tokens";
+import { EditableExercise } from "../../../context/WorkoutContext";
 
 type Props = {
-  exercise: Exercise;
+  exercise: EditableExercise;
   exerciseIndex: number;
 };
 
@@ -22,7 +22,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
 
   // Add / Remove set animation
   useEffect(() => {
-    setsAnimationParent.current && autoAnimate(setsAnimationParent.current);
+    if (setsAnimationParent.current) autoAnimate(setsAnimationParent.current);
   }, [setsAnimationParent]);
 
   return (
@@ -40,7 +40,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
             )
             .map((exerciseType) => (
               <SelectOption
-                key={`option-${exerciseIndex}-${exerciseType.id}`}
+                key={`option-${exercise.key}-${exerciseType.id}`}
                 value={exerciseType.id}
                 label={exerciseType.name}
               />
@@ -59,7 +59,7 @@ const ExerciseBlock = ({ exercise, exerciseIndex }: Props) => {
             set={set}
             exerciseIndex={exerciseIndex}
             setIndex={setIndex}
-            key={`${exerciseIndex}-${setIndex}`}
+            key={set.key}
           />
         ))}
       </Flex>

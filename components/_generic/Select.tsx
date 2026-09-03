@@ -1,5 +1,8 @@
 import { ChangeEventHandler, ReactNode } from "react";
+import classnames from "classnames/bind";
 import styles from "../../styles/components/_generic/Select.module.scss";
+
+const cx = classnames.bind(styles);
 
 interface Props {
   children: ReactNode;
@@ -18,7 +21,7 @@ export const Select = ({
     <select
       value={value}
       onChange={(e) => onChange(e)}
-      className={`${styles.select} ${disabled && styles.disabled}`}
+      className={cx("select", { disabled: disabled })}
       disabled={disabled}
     >
       {children}

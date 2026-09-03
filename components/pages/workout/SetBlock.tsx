@@ -4,10 +4,10 @@ import Input from "../../_generic/Input";
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Flex from "../../_generic/Flex";
 import { useWorkoutContext } from "../../../context/WorkoutContext";
-import { Set } from "../../../queries/workout";
+import { EditableSet } from "../../../context/WorkoutContext";
 
 type Props = {
-  set: Set;
+  set: EditableSet;
   exerciseIndex: number;
   setIndex: number;
 };
@@ -17,7 +17,7 @@ const SetBlock = ({ set, exerciseIndex, setIndex }: Props) => {
     useWorkoutContext();
 
   return (
-    <Flex alignItems="center" key={`${exerciseIndex}-${setIndex}`}>
+    <Flex alignItems="center">
       <Input
         value={set.weight ?? ""}
         type="number"

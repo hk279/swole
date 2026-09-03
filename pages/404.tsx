@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
 import Flex from "../components/_generic/Flex";
-import colors from "../styles/colors.module.scss";
+import { colors } from "../styles/tokens";
 import styles from "../styles/pages/404.module.scss";
 
 const NotFound: NextPage = () => {

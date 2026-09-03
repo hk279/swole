@@ -33,10 +33,8 @@ export const AccordionPanel = ({ children, primaryHeader, secondaryHeader, actio
         }
     };
 
-    const getIcon = (): any => {
-        let iconDefinition: IconDefinition;
-
-        iconDefinition = isOpen ? faChevronUp : faChevronDown;
+    const getIcon = () => {
+        const iconDefinition: IconDefinition = isOpen ? faChevronUp : faChevronDown;
 
         return <FontAwesomeIcon icon={iconDefinition} />;
     };

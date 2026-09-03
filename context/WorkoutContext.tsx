@@ -3,28 +3,41 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react";
-import { format, parseISO } from "date-fns";
-import { Exercise, useWorkoutActions, Workout } from "../queries/workout";
+import { todayDateString } from "../lib/dates";
+import { Exercise, Set, useWorkoutActions, Workout } from "../queries/workout";
 import { ExerciseType, useExerciseTypes } from "../queries/exerciseType";
+
+/**
+ * The form works on copies that carry a stable `key`. Reordering or removing an
+ * entry would otherwise shift array indices under React, which reuses the wrong
+ * component state and makes the add/remove animations play on the wrong row.
+ */
+export type EditableSet = Set & { key: string };
+export type EditableExercise = Omit<Exercise, "Set"> & {
+  key: string;
+  Set: EditableSet[];
+};
+
+let keyCounter = 0;
+const nextKey = () => `row-${keyCounter++}`;
 
 interface NewWorkoutContextInterface {
   isValid: boolean;
   isSaving: boolean;
   exerciseTypes: ExerciseType[];
+  hasFavoriteExerciseTypes: boolean;
   workoutDate: string;
   changeWorkoutDate: (event: ChangeEvent<HTMLInputElement>) => void;
-  exercises: Exercise[];
+  exercises: EditableExercise[];
   addExercise: () => void;
   removeExercise: (index: number) => void;
   changeExerciseType: (
     event: ChangeEvent<HTMLSelectElement>,
     exerciseIndex: number
   ) => void;
-  handleExerciseChange: (updatedExercise: Exercise, index: number) => void;
   addSet: (exerciseIndex: number) => void;
   copySet: (exerciseIndex: number, setIndex: number) => void;
   removeSet: (exerciseIndex: number, setIndex: number) => void;
@@ -50,6 +63,29 @@ type Props = {
   children: ReactNode;
 };
 
+/**
+ * A set is complete once it has positive reps and a weight. Zero weight is
+ * allowed and meaningful: it represents a bodyweight set. Validation and the
+ * save payload share this predicate so a set can never pass one and be dropped
+ * by the other.
+ */
+const isCompleteSet = (set: Set) =>
+  set.reps != null &&
+  set.reps > 0 &&
+  set.weight != null &&
+  set.weight >= 0;
+
+/**
+ * Copies the workout coming from the query cache so that editing the form never
+ * mutates the cached entry.
+ */
+const toEditableExercises = (workout: Workout): EditableExercise[] =>
+  workout.Exercise.map((exercise) => ({
+    key: nextKey(),
+    Exercise_type: exercise.Exercise_type,
+    Set: exercise.Set.map((set) => ({ ...set, key: nextKey() })),
+  }));
+
 export const WorkoutProvider = ({ workout, children }: Props) => {
   const { createWorkout, updateWorkout } = useWorkoutActions();
   const { data: exerciseTypes } = useExerciseTypes();
@@ -60,57 +96,68 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
     [exerciseTypes]
   );
 
-  const emptyExercise = {
-    Exercise_type: favoriteExerciseTypes?.[0],
-    Set: [{ weight: undefined, reps: undefined }],
-  };
+  const createEmptyExercise = (): EditableExercise => ({
+    key: nextKey(),
+    Exercise_type: favoriteExerciseTypes[0],
+    Set: [{ weight: undefined, reps: undefined, key: nextKey() }],
+  });
 
-  // TODO: Fix date off-by-one issue
   const [workoutDate, setWorkoutDate] = useState(
-    workout != null ? workout.workout_date : format(new Date(), "yyyy-MM-dd")
+    workout != null ? workout.workout_date : todayDateString()
   );
-  const [exercises, setExercises] = useState(
-    workout != null ? workout.Exercise : [emptyExercise]
+  const [exercises, setExercises] = useState<EditableExercise[]>(() =>
+    workout != null ? toEditableExercises(workout) : [createEmptyExercise()]
   );
-  const [isValid, setIsValid] = useState(false);
 
-  useEffect(() => {
-    if (validateExercises()) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  }, [exercises]);
-
-  const validateExercises = () => {
+  const isValid = useMemo(() => {
     if (exercises.length === 0) return false;
 
-    const hasInvalidInputs = exercises.some((exercise) => {
-      return !!exercise.Set.find(
-        (set) =>
-          set.reps == null ||
-          set.reps <= 0 ||
-          set.weight == null ||
-          set.weight < 0 // Allow 0 weight for now to represent bodyweight exercise set
-      );
-    });
+    return exercises.every(
+      (exercise) =>
+        // An exercise type is required. Without one the payload reached Prisma
+        // as `connect: { id: undefined }` and failed with a 500.
+        exercise.Exercise_type != null &&
+        exercise.Set.length > 0 &&
+        exercise.Set.every(isCompleteSet)
+    );
+  }, [exercises]);
 
-    return !hasInvalidInputs;
-  };
+  /** Replaces a single exercise, leaving every other entry untouched. */
+  const updateExerciseAt = (
+    exerciseIndex: number,
+    update: (exercise: EditableExercise) => EditableExercise
+  ) =>
+    setExercises((current) =>
+      current.map((exercise, index) =>
+        index === exerciseIndex ? update(exercise) : exercise
+      )
+    );
+
+  const updateSetAt = (
+    exerciseIndex: number,
+    setIndex: number,
+    update: (set: EditableSet) => EditableSet
+  ) =>
+    updateExerciseAt(exerciseIndex, (exercise) => ({
+      ...exercise,
+      Set: exercise.Set.map((set, index) =>
+        index === setIndex ? update(set) : set
+      ),
+    }));
 
   const changeWorkoutDate = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) setWorkoutDate(event.target.value);
   };
 
   const addExercise = () => {
-    setExercises([...exercises, emptyExercise]);
+    const newExercise = createEmptyExercise();
+    setExercises((current) => [...current, newExercise]);
   };
 
   const removeExercise = (exerciseIndex: number) => {
-    const updatedExercisesList = exercises.filter(
-      (_, index) => exerciseIndex !== index
+    setExercises((current) =>
+      current.filter((_, index) => exerciseIndex !== index)
     );
-    setExercises(updatedExercisesList);
   };
 
   const changeExerciseType = (
@@ -118,71 +165,75 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
     exerciseIndex: number
   ) => {
     const { value } = event.target;
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Exercise_type =
-      exerciseTypes?.find((type) => type.id === parseInt(value)) ??
+    const selectedType =
+      exerciseTypes?.find((type) => type.id === parseInt(value, 10)) ??
       exerciseTypes?.[0];
-    handleExerciseChange(updatedExercise, exerciseIndex);
-  };
 
-  const handleExerciseChange = (
-    updatedExercise: Exercise,
-    exerciseIndex: number
-  ) => {
-    const newExercisesList = [...exercises];
-    newExercisesList[exerciseIndex] = updatedExercise;
-    setExercises(newExercisesList);
+    updateExerciseAt(exerciseIndex, (exercise) => ({
+      ...exercise,
+      Exercise_type: selectedType,
+    }));
   };
 
   const saveWorkout = () => {
-    // Filter out sets with empty values and exercises with no sets.
-    let validatedExercises = exercises.map((exercise) => ({
-      ...exercise,
-      Set: exercise.Set.filter(
-        (set) => set.weight && set.weight > 0 && set.reps && set.reps > 0
-      ),
-    }));
-    validatedExercises = validatedExercises.filter(
-      (exercise) => exercise.Set.length > 0
-    );
-
-    if (validatedExercises.length > 0) {
-      // TODO: Make a normalization utility function if used more
-      const timezoneNormalizedDate = parseISO(
-        new Date(workoutDate).toISOString()
+    // Drop incomplete sets, then exercises left without any. Uses the same
+    // predicate as isValid, so nothing valid is silently discarded.
+    const validatedExercises = exercises
+      .map((exercise) => ({
+        ...exercise,
+        Set: exercise.Set.filter(isCompleteSet),
+      }))
+      .filter(
+        (exercise) => exercise.Exercise_type != null && exercise.Set.length > 0
       );
-      const requestBody = {
-        workoutDate: timezoneNormalizedDate,
-        exercises: validatedExercises,
-      };
 
-      if (workout?.id != null) {
-        updateWorkout.mutate({ id: workout.id, data: requestBody });
-      } else {
-        createWorkout.mutate(requestBody);
-      }
+    if (validatedExercises.length === 0) return;
+
+    const requestBody = {
+      // Sent as a plain YYYY-MM-DD calendar date; no Date conversion, which is
+      // what used to shift the date by a day across timezones.
+      workoutDate,
+      // Strip the editor-only keys before sending.
+      exercises: validatedExercises.map((exercise) => ({
+        Exercise_type: exercise.Exercise_type,
+        Set: exercise.Set.map((set) => ({
+          weight: set.weight,
+          reps: set.reps,
+        })),
+      })),
+    };
+
+    if (workout?.id != null) {
+      updateWorkout.mutate({ id: workout.id, data: requestBody });
+    } else {
+      createWorkout.mutate(requestBody);
     }
   };
 
   const addSet = (exerciseIndex: number) => {
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Set = [...updatedExercise.Set, {}];
-    handleExerciseChange(updatedExercise, exerciseIndex);
+    updateExerciseAt(exerciseIndex, (exercise) => ({
+      ...exercise,
+      Set: [...exercise.Set, { key: nextKey() }],
+    }));
   };
 
   const copySet = (exerciseIndex: number, setIndex: number) => {
-    const setToCopy = exercises[exerciseIndex].Set[setIndex];
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Set = [...updatedExercise.Set, setToCopy];
-    handleExerciseChange(updatedExercise, exerciseIndex);
+    updateExerciseAt(exerciseIndex, (exercise) => ({
+      ...exercise,
+      // Spread the copied set so the two entries stay independent, and give the
+      // copy its own key.
+      Set: [
+        ...exercise.Set,
+        { ...exercise.Set[setIndex], key: nextKey() },
+      ],
+    }));
   };
 
   const removeSet = (exerciseIndex: number, setIndex: number) => {
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Set = updatedExercise.Set.filter(
-      (_, index) => setIndex !== index
-    );
-    handleExerciseChange(updatedExercise, exerciseIndex);
+    updateExerciseAt(exerciseIndex, (exercise) => ({
+      ...exercise,
+      Set: exercise.Set.filter((_, index) => setIndex !== index),
+    }));
   };
 
   const handleSetWeightChange = (
@@ -191,10 +242,10 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
     setIndex: number
   ) => {
     const { value } = event.target;
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Set[setIndex].weight =
-      value !== "" ? parseFloat(value) : undefined; // TODO: clean up the parsing logic
-    handleExerciseChange(updatedExercise, exerciseIndex);
+    updateSetAt(exerciseIndex, setIndex, (set) => ({
+      ...set,
+      weight: value !== "" ? parseFloat(value) : undefined,
+    }));
   };
 
   const handleSetRepsChange = (
@@ -203,25 +254,25 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
     setIndex: number
   ) => {
     const { value } = event.target;
-    const updatedExercise = exercises[exerciseIndex];
-    updatedExercise.Set[setIndex].reps =
-      value !== "" ? parseInt(value) : undefined; // TODO: clean up the parsing logic
-    handleExerciseChange(updatedExercise, exerciseIndex);
+    updateSetAt(exerciseIndex, setIndex, (set) => ({
+      ...set,
+      reps: value !== "" ? parseInt(value, 10) : undefined,
+    }));
   };
 
   return (
     <WorkoutContext.Provider
       value={{
         isValid,
-        isSaving: createWorkout.isLoading || updateWorkout.isLoading,
+        isSaving: createWorkout.isPending || updateWorkout.isPending,
         exerciseTypes: exerciseTypes ?? [],
+        hasFavoriteExerciseTypes: favoriteExerciseTypes.length > 0,
         workoutDate,
         changeWorkoutDate,
         exercises,
         addExercise,
         removeExercise,
         changeExerciseType,
-        handleExerciseChange,
         addSet,
         copySet,
         removeSet,

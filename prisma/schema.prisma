@@ -1,11 +1,9 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["extendedWhereUnique"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Exercise {
@@ -15,6 +13,9 @@ model Exercise {
   Exercise_type    Exercise_type @relation(fields: [exercise_type_id], references: [id], onUpdate: Cascade, map: "exercises_exercise_type_id_fkey")
   Workout          Workout       @relation(fields: [workout_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "exercises_workout_id_fkey")
   Set              Set[]
+
+  @@index([workout_id])
+  @@index([exercise_type_id])
 }
 
 model Exercise_type {
@@ -30,6 +31,11 @@ model Favorite {
   User             User          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   exercise_type_id Int
   ExerciseType     Exercise_type @relation(fields: [exercise_type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // A user can only favourite an exercise type once. Without this, repeated
+  // clicks on the star wrote duplicate rows.
+  @@unique([user_id, exercise_type_id])
+  @@index([exercise_type_id])
 }
 
 model Set {
@@ -38,6 +44,8 @@ model Set {
   weight      Float
   reps        Int
   Exercise    Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "sets_exercise_id_fkey")
+
+  @@index([exercise_id])
 }
 
 model User {
@@ -58,6 +66,8 @@ model Workout {
   workout_date DateTime   @db.Date
   Exercise     Exercise[]
   User         User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "workouts_user_id_fkey")
+
+  @@index([user_id, workout_date])
 }
 
 model Account {
@@ -78,6 +88,7 @@ model Account {
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -86,6 +97,8 @@ model Session {
   userId       Int      @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {

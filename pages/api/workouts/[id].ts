@@ -1,42 +1,61 @@
-import { format } from "date-fns";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+import { toDateString } from "../../../lib/dates";
+import {
+  methodNotAllowed,
+  parseBody,
+  requireUserEmail,
+  withErrorHandling,
+} from "../../../lib/api";
+import { workoutRequestSchema } from "../../../lib/schemas";
 import {
   deleteWorkout,
   getSingleWorkout,
   updateWorkout,
 } from "../../../prisma/queries/workouts";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const session = await getSession({ req });
-  const email = session?.user?.email;
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const email = await requireUserEmail(req, res);
+  if (email == null) return;
+
   const id = Number(req.query?.id);
 
-  if (email == null) return res.status(401).redirect("/login");
-
-  if (isNaN(id)) return res.status(404).redirect("/404");
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ error: "Invalid workout id" });
+    return;
+  }
 
   switch (req.method) {
-    case "GET":
+    case "GET": {
       const workout = await getSingleWorkout(email, id);
-      if (workout == null) return res.status(404).redirect("/404");
 
-      return res
-        .status(200)
-        .json({
-          ...workout,
-          workout_date: format(workout.workout_date, "yyyy-MM-dd"),
-        });
-    case "PUT":
-      await updateWorkout(email, id, req.body);
-      return res.status(200).end();
+      if (workout == null) {
+        res.status(404).json({ error: "Workout not found" });
+        return;
+      }
+
+      res.status(200).json({
+        ...workout,
+        workout_date: toDateString(workout.workout_date),
+      });
+      return;
+    }
+    case "PUT": {
+      const body = parseBody(res, workoutRequestSchema, req.body);
+      if (body == null) return;
+
+      // Throws NotFoundError (-> 404) when the workout is not the user's.
+      await updateWorkout(email, id, body);
+      res.status(200).end();
+      return;
+    }
     case "DELETE":
       await deleteWorkout(email, id);
-      return res.status(200).end();
+      res.status(200).end();
+      return;
     default:
-      return res.status(405).end();
+      methodNotAllowed(res, ["GET", "PUT", "DELETE"]);
+      return;
   }
-}
+};
+
+export default withErrorHandling(handler);

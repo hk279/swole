@@ -1,3 +1,4 @@
+import { requireSession } from "../../lib/pageAuth";
 import { NextPage } from "next";
 import Layout from "../../components/layout/Layout";
 import WorkoutForm from "../../components/pages/workout/WorkoutForm";
@@ -12,5 +13,7 @@ const NewWorkout: NextPage = () => {
     </WorkoutProvider>
   );
 };
+
+export const getServerSideProps = requireSession;
 
 export default NewWorkout;

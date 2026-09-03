@@ -1,5 +1,8 @@
 import { ReactNode } from "react";
+import classnames from "classnames/bind";
 import styles from "../../styles/components/table/Table.module.scss";
+
+const cx = classnames.bind(styles);
 
 interface Props {
     children: ReactNode | ReactNode[];
@@ -8,7 +11,7 @@ interface Props {
 }
 
 const Table = ({ children, borderless = false, tableStyle = "loose" }: Props) => {
-    const cssClasses = `${styles.table} ${borderless && styles.borderless} ${styles[tableStyle]}`;
+    const cssClasses = cx("table", { borderless: borderless }, tableStyle);
 
     return (
         <table className={cssClasses}>

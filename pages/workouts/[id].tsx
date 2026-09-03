@@ -1,3 +1,4 @@
+import { requireSession } from "../../lib/pageAuth";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout/Layout";
@@ -8,9 +9,15 @@ import { useWorkout } from "../../queries/workout";
 
 const EditWorkout: NextPage = () => {
   const router = useRouter();
-  const id = router.query.id as string;
 
-  const { data: workout } = useWorkout(parseInt(id));
+  // router.query is empty on the first render, so the id stays undefined until
+  // the route has resolved and the query is disabled in the meantime.
+  const id =
+    router.isReady && typeof router.query.id === "string"
+      ? Number(router.query.id)
+      : undefined;
+
+  const { data: workout } = useWorkout(id);
 
   return (
     <Layout pageTitle="Edit Workout">
@@ -24,5 +31,7 @@ const EditWorkout: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = requireSession;
 
 export default EditWorkout;

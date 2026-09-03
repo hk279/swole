@@ -1,5 +1,5 @@
-import spaces from "../styles/spaces.module.scss";
-import colors from "../styles/colors.module.scss";
+import { requireSession } from "../lib/pageAuth";
+import { colors, spaces } from "../styles/tokens";
 import { faStar as starEmpty } from "@fortawesome/free-regular-svg-icons";
 import {
   faInfoCircle,
@@ -85,9 +85,11 @@ const Excercises: NextPage = () => {
                 <Button
                   icon={exerciseType.isFavorite ? starFull : starEmpty}
                   onClick={() => {
-                    exerciseType.isFavorite
-                      ? removeFavorite.mutate(exerciseType.id)
-                      : addFavorite.mutate(exerciseType.id);
+                    if (exerciseType.isFavorite) {
+                      removeFavorite.mutate(exerciseType.id);
+                    } else {
+                      addFavorite.mutate(exerciseType.id);
+                    }
                   }}
                   size="large"
                   link
@@ -100,5 +102,7 @@ const Excercises: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = requireSession;
 
 export default Excercises;

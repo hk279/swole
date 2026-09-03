@@ -8,7 +8,7 @@ interface Props {
     text?: string;
     icon?: IconDefinition;
     className?: string;
-    onClick?: (e: React.MouseEvent<HTMLElement>) => any;
+    onClick?: (e: React.MouseEvent<HTMLElement>) => void;
     primary?: boolean;
     link?: boolean;
     disabled?: boolean;

@@ -1,6 +1,6 @@
-import { ForwardedRef, forwardRef, ReactNode } from "react";
+import { ComponentPropsWithoutRef, ForwardedRef, forwardRef, ReactNode } from "react";
 
-type Props = JSX.IntrinsicElements["div"] & {
+type Props = ComponentPropsWithoutRef<"div"> & {
   children: ReactNode | ReactNode[];
   direction?: "row" | "column";
   gap?: string;

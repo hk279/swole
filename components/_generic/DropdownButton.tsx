@@ -6,7 +6,7 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 // TODO: Close on click outside
 
-var cx = classnames.bind(styles);
+const cx = classnames.bind(styles);
 
 interface Props {
     children: ReactNode;

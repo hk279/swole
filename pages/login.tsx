@@ -1,7 +1,8 @@
+import { redirectIfSignedIn } from "../lib/pageAuth";
 import type { NextPage } from "next";
 import Button from "../components/_generic/Button";
 import styles from "../styles/pages/Login.module.scss";
-import spaces from "../styles/spaces.module.scss";
+import { spaces } from "../styles/tokens";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Flex from "../components/_generic/Flex";
@@ -30,5 +31,7 @@ const Login: NextPage = () => {
     </Flex>
   );
 };
+
+export const getServerSideProps = redirectIfSignedIn;
 
 export default Login;

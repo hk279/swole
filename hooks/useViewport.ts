@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
-const useViewport = () => {
-    const [width, setWidth] = useState<number>(0);
+const subscribe = (onStoreChange: () => void) => {
+    window.addEventListener("resize", onStoreChange);
+    return () => window.removeEventListener("resize", onStoreChange);
+};
 
-    useEffect(() => {
-        setWidth(window.innerWidth);
-        const handleWindowResize = () => setWidth(window.innerWidth);
-        window.addEventListener("resize", handleWindowResize);
-        return () => window.removeEventListener("resize", handleWindowResize);
-    }, []);
+const getSnapshot = () => window.innerWidth;
 
-    return width;
-}
+// Width is 0 on the server so the first paint matches the SSR markup.
+const getServerSnapshot = () => 0;
 
-export default useViewport
+const useViewport = () =>
+    useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+export default useViewport;
