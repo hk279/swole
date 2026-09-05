@@ -36,7 +36,7 @@ interface NewWorkoutContextInterface {
   removeExercise: (index: number) => void;
   changeExerciseType: (
     event: ChangeEvent<HTMLSelectElement>,
-    exerciseIndex: number
+    exerciseIndex: number,
   ) => void;
   addSet: (exerciseIndex: number) => void;
   copySet: (exerciseIndex: number, setIndex: number) => void;
@@ -44,18 +44,18 @@ interface NewWorkoutContextInterface {
   handleSetWeightChange: (
     event: ChangeEvent<HTMLInputElement>,
     exerciseIndex: number,
-    setIndex: number
+    setIndex: number,
   ) => void;
   handleSetRepsChange: (
     event: ChangeEvent<HTMLInputElement>,
     exerciseIndex: number,
-    setIndex: number
+    setIndex: number,
   ) => void;
   saveWorkout: () => void;
 }
 
 export const WorkoutContext = createContext<NewWorkoutContextInterface | null>(
-  null
+  null,
 );
 
 type Props = {
@@ -70,10 +70,7 @@ type Props = {
  * by the other.
  */
 const isCompleteSet = (set: Set) =>
-  set.reps != null &&
-  set.reps > 0 &&
-  set.weight != null &&
-  set.weight >= 0;
+  set.reps != null && set.reps > 0 && set.weight != null && set.weight >= 0;
 
 /**
  * Copies the workout coming from the query cache so that editing the form never
@@ -93,7 +90,7 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
   const favoriteExerciseTypes = useMemo(
     () =>
       exerciseTypes?.filter((exerciseType) => exerciseType.isFavorite) ?? [],
-    [exerciseTypes]
+    [exerciseTypes],
   );
 
   const createEmptyExercise = (): EditableExercise => ({
@@ -103,10 +100,10 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
   });
 
   const [workoutDate, setWorkoutDate] = useState(
-    workout != null ? workout.workout_date : todayDateString()
+    workout != null ? workout.workout_date : todayDateString(),
   );
   const [exercises, setExercises] = useState<EditableExercise[]>(() =>
-    workout != null ? toEditableExercises(workout) : [createEmptyExercise()]
+    workout != null ? toEditableExercises(workout) : [createEmptyExercise()],
   );
 
   const isValid = useMemo(() => {
@@ -114,34 +111,32 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
 
     return exercises.every(
       (exercise) =>
-        // An exercise type is required. Without one the payload reached Prisma
-        // as `connect: { id: undefined }` and failed with a 500.
         exercise.Exercise_type != null &&
         exercise.Set.length > 0 &&
-        exercise.Set.every(isCompleteSet)
+        exercise.Set.every(isCompleteSet),
     );
   }, [exercises]);
 
   /** Replaces a single exercise, leaving every other entry untouched. */
   const updateExerciseAt = (
     exerciseIndex: number,
-    update: (exercise: EditableExercise) => EditableExercise
+    update: (exercise: EditableExercise) => EditableExercise,
   ) =>
     setExercises((current) =>
       current.map((exercise, index) =>
-        index === exerciseIndex ? update(exercise) : exercise
-      )
+        index === exerciseIndex ? update(exercise) : exercise,
+      ),
     );
 
   const updateSetAt = (
     exerciseIndex: number,
     setIndex: number,
-    update: (set: EditableSet) => EditableSet
+    update: (set: EditableSet) => EditableSet,
   ) =>
     updateExerciseAt(exerciseIndex, (exercise) => ({
       ...exercise,
       Set: exercise.Set.map((set, index) =>
-        index === setIndex ? update(set) : set
+        index === setIndex ? update(set) : set,
       ),
     }));
 
@@ -156,13 +151,13 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
 
   const removeExercise = (exerciseIndex: number) => {
     setExercises((current) =>
-      current.filter((_, index) => exerciseIndex !== index)
+      current.filter((_, index) => exerciseIndex !== index),
     );
   };
 
   const changeExerciseType = (
     event: ChangeEvent<HTMLSelectElement>,
-    exerciseIndex: number
+    exerciseIndex: number,
   ) => {
     const { value } = event.target;
     const selectedType =
@@ -184,16 +179,13 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
         Set: exercise.Set.filter(isCompleteSet),
       }))
       .filter(
-        (exercise) => exercise.Exercise_type != null && exercise.Set.length > 0
+        (exercise) => exercise.Exercise_type != null && exercise.Set.length > 0,
       );
 
     if (validatedExercises.length === 0) return;
 
     const requestBody = {
-      // Sent as a plain YYYY-MM-DD calendar date; no Date conversion, which is
-      // what used to shift the date by a day across timezones.
       workoutDate,
-      // Strip the editor-only keys before sending.
       exercises: validatedExercises.map((exercise) => ({
         Exercise_type: exercise.Exercise_type,
         Set: exercise.Set.map((set) => ({
@@ -222,10 +214,7 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
       ...exercise,
       // Spread the copied set so the two entries stay independent, and give the
       // copy its own key.
-      Set: [
-        ...exercise.Set,
-        { ...exercise.Set[setIndex], key: nextKey() },
-      ],
+      Set: [...exercise.Set, { ...exercise.Set[setIndex], key: nextKey() }],
     }));
   };
 
@@ -239,7 +228,7 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
   const handleSetWeightChange = (
     event: ChangeEvent<HTMLInputElement>,
     exerciseIndex: number,
-    setIndex: number
+    setIndex: number,
   ) => {
     const { value } = event.target;
     updateSetAt(exerciseIndex, setIndex, (set) => ({
@@ -251,7 +240,7 @@ export const WorkoutProvider = ({ workout, children }: Props) => {
   const handleSetRepsChange = (
     event: ChangeEvent<HTMLInputElement>,
     exerciseIndex: number,
-    setIndex: number
+    setIndex: number,
   ) => {
     const { value } = event.target;
     updateSetAt(exerciseIndex, setIndex, (set) => ({

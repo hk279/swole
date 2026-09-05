@@ -33,8 +33,6 @@ const Stats: NextPage = () => {
   const width = useViewport();
   const { data } = useWorkoutStats();
 
-  // Counting is done in the database now; the page no longer downloads every
-  // workout with every set just to derive twelve numbers.
   const workoutCountsPerMonth = data?.workoutCountsPerMonth;
 
   return (
